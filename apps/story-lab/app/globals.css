@@ -447,3 +447,20 @@ button.secondary {
     grid-template-columns: 1fr;
   }
 }
+
+
+.production-status {
+  margin: 28px 0 12px;
+}
+
+.job-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.job-list code {
+  color: var(--muted);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
