@@ -1,0 +1,178 @@
+{
+  "id": "universe:lantern-below",
+  "title": "The Lantern Below",
+  "version": "0.1.0",
+  "storyDNA": {
+    "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, but each believes a different story about who left it there.",
+    "themes": ["trust", "memory", "curiosity"],
+    "genres": ["mystery", "adventure"],
+    "tone": ["wonder", "suspense"],
+    "audience": ["young-adult"],
+    "creatorIntent": "Reference universe for validating transmedia preservation across T-NIR compilers."
+  },
+  "canon": [
+    {
+      "id": "fact:lantern-hidden",
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother",
+      "authority": "CANON",
+      "provenance": {
+        "createdBy": "CREATOR",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "entity:lia",
+      "type": "CHARACTER",
+      "name": "Lia",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "entity:leo",
+      "type": "CHARACTER",
+      "name": "Leo",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "entity:grandmother",
+      "type": "CHARACTER",
+      "name": "Grandmother",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "entity:house",
+      "type": "LOCATION",
+      "name": "Old House",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "entity:tunnel",
+      "type": "LOCATION",
+      "name": "Hidden Tunnel",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "entity:lantern",
+      "type": "OBJECT",
+      "name": "Memory Lantern",
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "relationship:siblings",
+      "from": "entity:lia",
+      "type": "siblingOf",
+      "to": "entity:leo",
+      "directed": false,
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "event:001",
+      "type": "DISCOVERY",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:house",
+      "effects": [
+        {
+          "op": "DISCOVER",
+          "entityId": "entity:lantern"
+        }
+      ],
+      "causes": ["event:002"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "event:002",
+      "type": "ACTIVATION",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:house",
+      "effects": [
+        {
+          "op": "REVEAL",
+          "entityId": "entity:tunnel"
+        }
+      ],
+      "causedBy": ["event:001"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    }
+  ],
+  "causalLinks": [
+    {
+      "id": "causal:001-002",
+      "fromEventId": "event:001",
+      "toEventId": "event:002",
+      "type": "ENABLES",
+      "rationale": "The tunnel can only be revealed after the lantern is found."
+    }
+  ],
+  "stories": [
+    {
+      "id": "story:first-light",
+      "title": "First Light",
+      "premise": "Lia and Leo find the Memory Lantern and reveal the hidden tunnel.",
+      "eventIds": ["event:001", "event:002"]
+    }
+  ],
+  "mediaManifests": [
+    {
+      "id": "media:first-light-manga",
+      "targetMedia": "MANGA",
+      "storyId": "story:first-light"
+    },
+    {
+      "id": "media:first-light-webtoon",
+      "targetMedia": "WEBTOON",
+      "storyId": "story:first-light"
+    },
+    {
+      "id": "media:first-light-anime",
+      "targetMedia": "ANIME_EPISODE",
+      "storyId": "story:first-light"
+    }
+  ],
+  "provenance": {
+    "createdBy": "SYSTEM",
+    "createdAt": "2026-09-19T14:30:00Z",
+    "rationale": "T-NIR V0.1 reference fixture."
+  }
+}
