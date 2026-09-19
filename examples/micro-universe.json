@@ -1,7 +1,7 @@
 {
   "id": "universe:lantern-below",
   "title": "The Lantern Below",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "storyDNA": {
     "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, while each carries a false belief about who left it and why.",
     "themes": [
@@ -156,6 +156,37 @@
               ],
               "status": "ACTIVE"
             }
+          ],
+          "revision": 1,
+          "dependsOnBeliefIds": [
+            "belief:lia-father-hid-lantern"
+          ]
+        },
+        {
+          "id": "plan:lia-follow-grandmother-clue",
+          "owner": "entity:lia",
+          "goalId": "goal:lia-find-truth",
+          "status": "DRAFT",
+          "revision": 2,
+          "supersedesPlanId": "plan:lia-investigate",
+          "createdAtEventId": "event:008",
+          "currentStepId": "plan-step:lia-trace-mark",
+          "steps": [
+            {
+              "id": "plan-step:lia-trace-mark",
+              "action": "trace Grandmother's mark deeper into the tunnel",
+              "targetId": "entity:tunnel",
+              "status": "PENDING"
+            },
+            {
+              "id": "plan-step:lia-verify-origin",
+              "action": "verify whether the lantern and tunnel share Grandmother's authorship",
+              "targetId": "entity:lantern",
+              "requires": [
+                "plan-step:lia-trace-mark"
+              ],
+              "status": "PENDING"
+            }
           ]
         }
       ],
@@ -287,6 +318,37 @@
                 "plan-step:leo-test"
               ],
               "status": "ACTIVE"
+            }
+          ],
+          "revision": 1,
+          "dependsOnBeliefIds": [
+            "belief:leo-stranger-trap"
+          ]
+        },
+        {
+          "id": "plan:leo-protect-and-verify",
+          "owner": "entity:leo",
+          "goalId": "goal:leo-protect-lia",
+          "status": "DRAFT",
+          "revision": 2,
+          "supersedesPlanId": "plan:leo-control-risk",
+          "createdAtEventId": "event:008",
+          "currentStepId": "plan-step:leo-stay-close",
+          "steps": [
+            {
+              "id": "plan-step:leo-stay-close",
+              "action": "stay close while Lia traces Grandmother's mark",
+              "targetId": "entity:lia",
+              "status": "PENDING"
+            },
+            {
+              "id": "plan-step:leo-test-safe-route",
+              "action": "verify the next section of the tunnel before both siblings proceed",
+              "targetId": "entity:tunnel",
+              "requires": [
+                "plan-step:leo-stay-close"
+              ],
+              "status": "PENDING"
             }
           ]
         }
@@ -481,6 +543,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:30:00Z"
+      },
+      "time": {
+        "sequence": 1,
+        "branchId": "branch:root"
       }
     },
     {
@@ -508,6 +574,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:31:00Z"
+      },
+      "time": {
+        "sequence": 2,
+        "branchId": "branch:root"
       }
     },
     {
@@ -539,6 +609,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:32:00Z"
+      },
+      "time": {
+        "sequence": 3,
+        "branchId": "branch:root"
       }
     },
     {
@@ -577,6 +651,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:33:00Z"
+      },
+      "time": {
+        "sequence": 4,
+        "branchId": "branch:root"
       }
     },
     {
@@ -611,6 +689,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:34:00Z"
+      },
+      "time": {
+        "sequence": 5,
+        "branchId": "branch:root"
       }
     },
     {
@@ -637,6 +719,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:35:00Z"
+      },
+      "time": {
+        "sequence": 6,
+        "branchId": "branch:root"
       }
     },
     {
@@ -675,6 +761,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:36:00Z"
+      },
+      "time": {
+        "sequence": 7,
+        "branchId": "branch:root"
       }
     },
     {
@@ -710,6 +800,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:37:00Z"
+      },
+      "time": {
+        "sequence": 8,
+        "branchId": "branch:root"
       }
     },
     {
@@ -733,6 +827,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:38:00Z"
+      },
+      "time": {
+        "sequence": 9,
+        "branchId": "branch:descend"
       }
     },
     {
@@ -756,6 +854,10 @@
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:38:00Z"
+      },
+      "time": {
+        "sequence": 9,
+        "branchId": "branch:return"
       }
     }
   ],
@@ -945,7 +1047,7 @@
   "provenance": {
     "createdBy": "SYSTEM",
     "createdAt": "2026-09-19T14:30:00Z",
-    "rationale": "T-NIR V0.3 reference fixture for cognition, agency, formal choice/branching and transmedia validation."
+    "rationale": "T-NIR V0.4 reference fixture for evidence-driven cognition, replanning, executable rules, branching and transmedia validation."
   },
   "choices": [
     {
@@ -1007,13 +1109,22 @@
     {
       "id": "rule:lantern-reveals-passage",
       "domain": "MYSTERY_TECH",
-      "description": "The Memory Lantern can reveal the protected passage only after activation near the sealed cellar wall.",
-      "when": [
-        "entity:lantern is activated",
-        "entity:lantern is near the sealed cellar wall"
+      "description": "The Memory Lantern may reveal the protected passage only after activation and confirmed wall resonance.",
+      "conditions": [
+        {
+          "type": "EVENT_OCCURRED",
+          "eventId": "event:002"
+        },
+        {
+          "type": "EVENT_OCCURRED",
+          "eventId": "event:004"
+        }
       ],
-      "then": [
-        "entity:tunnel may become revealed"
+      "effects": [
+        {
+          "type": "ALLOW_EVENT",
+          "eventId": "event:006"
+        }
       ],
       "authority": "CANON",
       "provenance": {
@@ -1056,6 +1167,68 @@
         "event:009b"
       ],
       "status": "POSSIBLE"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence:grandmother-mark",
+      "discoveredAtEventId": "event:008",
+      "proposition": "The hidden tunnel bears Grandmother's distinctive mark, linking her directly to the passage.",
+      "sourceEntityIds": [
+        "entity:tunnel",
+        "entity:grandmother"
+      ],
+      "strength": 0.9,
+      "affectsBeliefIds": [
+        "belief:lia-father-hid-lantern",
+        "belief:leo-stranger-trap"
+      ]
+    }
+  ],
+  "beliefRevisions": [
+    {
+      "id": "belief-revision:lia-grandmother-evidence",
+      "evidenceId": "evidence:grandmother-mark",
+      "beliefId": "belief:lia-father-hid-lantern",
+      "holder": "entity:lia",
+      "previousConfidence": 0.78,
+      "newConfidence": 0.2,
+      "newTruthRelation": "FALSE",
+      "newStatus": "REVISED",
+      "rationale": "Grandmother's mark creates strong counter-evidence against Lia's father-origin theory."
+    },
+    {
+      "id": "belief-revision:leo-grandmother-evidence",
+      "evidenceId": "evidence:grandmother-mark",
+      "beliefId": "belief:leo-stranger-trap",
+      "holder": "entity:leo",
+      "previousConfidence": 0.67,
+      "newConfidence": 0.25,
+      "newTruthRelation": "FALSE",
+      "newStatus": "REVISED",
+      "rationale": "A family-specific mark makes the stranger-trap theory substantially less plausible."
+    }
+  ],
+  "replanRules": [
+    {
+      "id": "replan-rule:lia-after-mark",
+      "owner": "entity:lia",
+      "goalId": "goal:lia-find-truth",
+      "whenBeliefIdsChanged": [
+        "belief:lia-father-hid-lantern"
+      ],
+      "supersedePlanId": "plan:lia-investigate",
+      "activatePlanId": "plan:lia-follow-grandmother-clue"
+    },
+    {
+      "id": "replan-rule:leo-after-mark",
+      "owner": "entity:leo",
+      "goalId": "goal:leo-protect-lia",
+      "whenBeliefIdsChanged": [
+        "belief:leo-stranger-trap"
+      ],
+      "supersedePlanId": "plan:leo-control-risk",
+      "activatePlanId": "plan:leo-protect-and-verify"
     }
   ]
 }
