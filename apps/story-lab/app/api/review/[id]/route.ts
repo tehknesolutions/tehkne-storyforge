@@ -1,11 +1,15 @@
 import {
-  decideReview,
-  getReviewState,
-  listReviewStates,
+  reviewStore,
   type ReviewDecision
 } from "@/lib/review-store";
 
 export const runtime = "nodejs";
+
+function statusFor(error: unknown): number {
+  return error instanceof Error && error.message === "AUTHENTICATION_REQUIRED"
+    ? 401
+    : 404;
+}
 
 export async function GET(
   request: Request,
@@ -13,24 +17,41 @@ export async function GET(
 ) {
   const { id } = await context.params;
 
-  if (id === "_all") {
+  try {
+    const store = await reviewStore();
+
+    if (id === "_all") {
+      return Response.json({
+        mutationScope: "REVIEW_STATE_ONLY",
+        canonMutationEnabled: false,
+        durability: store.durability,
+        items: await store.list()
+      });
+    }
+
+    const state = await store.get(id);
+    if (!state) {
+      return Response.json(
+        { error: "REVIEW_NOT_FOUND" },
+        { status: 404 }
+      );
+    }
+
     return Response.json({
       mutationScope: "REVIEW_STATE_ONLY",
       canonMutationEnabled: false,
-      items: listReviewStates()
+      durability: store.durability,
+      state
     });
+  } catch (error) {
+    return Response.json(
+      {
+        error: "REVIEW_READ_FAILED",
+        message: error instanceof Error ? error.message : "Unknown error"
+      },
+      { status: statusFor(error) }
+    );
   }
-
-  const state = getReviewState(id);
-  if (!state) {
-    return Response.json({ error: "REVIEW_NOT_FOUND" }, { status: 404 });
-  }
-
-  return Response.json({
-    mutationScope: "REVIEW_STATE_ONLY",
-    canonMutationEnabled: false,
-    state
-  });
 }
 
 export async function POST(
@@ -43,19 +64,34 @@ export async function POST(
     notes?: string;
   };
 
-  if (!payload.decision || !["APPROVE", "EDIT", "REJECT"].includes(payload.decision)) {
-    return Response.json({ error: "INVALID_REVIEW_DECISION" }, { status: 400 });
+  if (
+    !payload.decision ||
+    !["APPROVE", "EDIT", "REJECT"].includes(payload.decision)
+  ) {
+    return Response.json(
+      { error: "INVALID_REVIEW_DECISION" },
+      { status: 400 }
+    );
   }
 
   try {
-    const state = decideReview(id, payload.decision, payload.notes);
+    const store = await reviewStore();
+    const state = await store.decide(id, payload.decision, payload.notes);
+
     return Response.json({
       mutationScope: "REVIEW_STATE_ONLY",
       canonMutationEnabled: false,
+      durability: store.durability,
+      canonCommitAvailable:
+        store.durability === "DURABLE" &&
+        state.status === "APPROVED" &&
+        Boolean(state.updatedAt),
       state,
       nextRequiredStep:
         payload.decision === "APPROVE"
-          ? "EXPLICIT_CANON_COMMIT_NOT_IMPLEMENTED"
+          ? store.durability === "DURABLE"
+            ? "EXPLICIT_CANON_COMMIT_REQUIRED"
+            : "DURABLE_BACKEND_REQUIRED_FOR_CANON_COMMIT"
           : null
     });
   } catch (error) {
@@ -64,7 +100,7 @@ export async function POST(
         error: "REVIEW_UPDATE_FAILED",
         message: error instanceof Error ? error.message : "Unknown error"
       },
-      { status: 404 }
+      { status: statusFor(error) }
     );
   }
 }
