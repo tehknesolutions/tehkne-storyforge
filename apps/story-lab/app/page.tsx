@@ -1,6 +1,6 @@
 "use client";
 
-import { IdeaIntake } from "./idea-intake";
+import { StoryWorkspace } from "./story-workspace";
 import { useI18n } from "./i18n";
 
 const pipeline = [
@@ -64,7 +64,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <IdeaIntake />
+      <StoryWorkspace />
 
       <section className="section-block">
         <div className="section-heading">
