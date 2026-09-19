@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { I18nProvider } from "./i18n";
+import { LanguageSwitcher } from "./language-switcher";
 
 export const metadata: Metadata = {
   title: "TEHKNÉ STORYFORGE — Story Lab",
-  description: "Forge an idea into a universe."
+  description: "Forje uma ideia em um universo."
 };
 
 export default function RootLayout({
@@ -12,8 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        <I18nProvider>
+          <LanguageSwitcher />
+          {children}
+        </I18nProvider>
+      </body>
     </html>
   );
 }
