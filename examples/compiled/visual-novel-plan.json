@@ -4,7 +4,7 @@
   "targetMedia": "VISUAL_NOVEL",
   "source": {
     "universeId": "universe:lantern-below",
-    "universeVersion": "0.4.0",
+    "universeVersion": "0.5.0",
     "storyId": "story:first-light",
     "manifestId": "media:first-light-interactive"
   },
