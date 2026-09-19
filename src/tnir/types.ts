@@ -99,6 +99,18 @@ export interface Belief {
   confidence: number;
   truthRelation: "TRUE" | "FALSE" | "UNKNOWN" | "PARTIAL";
   acquiredAtEventId?: string;
+  revisedAtEventId?: string;
+  status: "ACTIVE" | "REVISED" | "ABANDONED";
+}
+
+export interface KnowledgeItem {
+  id: string;
+  holder: string;
+  proposition: string | Record<string, unknown>;
+  certainty: number;
+  status: "KNOWN" | "SUSPECTED" | "FORGOTTEN";
+  acquiredAtEventId?: string;
+  sourceEntityId?: string;
 }
 
 export interface Goal {
@@ -109,25 +121,75 @@ export interface Goal {
   status: "ACTIVE" | "BLOCKED" | "ACHIEVED" | "ABANDONED" | "FAILED";
   motivatedBy?: string[];
   createdAtEventId?: string;
+  resolvedAtEventId?: string;
+}
+
+export interface PlanStep {
+  id: string;
+  action: string;
+  targetId?: string;
+  requires?: string[];
+  status: "PENDING" | "ACTIVE" | "COMPLETED" | "FAILED" | "SKIPPED";
+  completedAtEventId?: string;
+}
+
+export interface Plan {
+  id: string;
+  owner: string;
+  goalId: string;
+  status: "DRAFT" | "ACTIVE" | "BLOCKED" | "COMPLETED" | "ABANDONED" | "FAILED";
+  steps: PlanStep[];
+  currentStepId?: string;
+  createdAtEventId?: string;
+}
+
+export interface Secret {
+  id: string;
+  about: string[];
+  proposition: string | Record<string, unknown>;
+  knownBy: string[];
+  hiddenFrom: string[];
+  status: "HIDDEN" | "PARTIALLY_REVEALED" | "REVEALED";
+  revealedAtEventId?: string;
+}
+
+export interface CharacterState {
+  atEventId?: string;
+  locationId?: string;
+  physical?: Record<string, unknown>;
+  emotional?: Record<string, number | string | boolean>;
+  social?: Record<string, unknown>;
+  resources?: Record<string, number | string | boolean>;
+  flags?: string[];
+}
+
+export interface Intention {
+  id: string;
+  owner: string;
+  action: string;
+  targetId?: string;
+  goalId?: string;
+  formedAtEventId?: string;
+  status: "ACTIVE" | "FULFILLED" | "ABANDONED" | "BLOCKED";
 }
 
 export interface Character extends Entity {
   type: "CHARACTER";
   traits?: string[];
   values?: string[];
-  beliefs?: Belief[];
-  knowledge?: string[];
+  beliefs: Belief[];
+  knowledge: KnowledgeItem[];
   desires?: string[];
   needs?: string[];
   fears?: string[];
-  intentions?: string[];
-  secrets?: string[];
-  goals?: Goal[];
+  intentions: Intention[];
+  secrets: Secret[];
+  goals: Goal[];
+  plans: Plan[];
   capabilities?: string[];
   resources?: string[];
   limitations?: string[];
-  currentState?: Record<string, unknown>;
-  emotionalState?: Record<string, unknown>;
+  currentState: CharacterState;
   arcIds?: string[];
 }
 
@@ -161,6 +223,19 @@ export interface CausalLink {
   rationale?: string;
 }
 
+export interface KnowledgeEffect {
+  holder: string;
+  op: "LEARN" | "SUSPECT" | "FORGET" | "REVISE_BELIEF";
+  knowledgeId?: string;
+  beliefId?: string;
+}
+
+export interface GoalEffect {
+  owner: string;
+  goalId: string;
+  op: "CREATE" | "BLOCK" | "ACHIEVE" | "FAIL" | "ABANDON" | "REACTIVATE";
+}
+
 export interface NarrativeEvent {
   id: string;
   type: string;
@@ -172,8 +247,8 @@ export interface NarrativeEvent {
   causedBy?: string[];
   causes?: string[];
   time?: Record<string, unknown>;
-  knowledgeEffects?: Array<Record<string, unknown>>;
-  goalEffects?: Array<Record<string, unknown>>;
+  knowledgeEffects?: KnowledgeEffect[];
+  goalEffects?: GoalEffect[];
   canonStatus: CanonAuthority;
   provenance: Provenance;
 }
@@ -238,7 +313,7 @@ export interface Universe {
   version: string;
   storyDNA: StoryDNA;
   canon: CanonFact[];
-  entities: Entity[];
+  entities: Array<Entity | Character>;
   relationships: Relationship[];
   events: NarrativeEvent[];
   causalLinks: CausalLink[];
