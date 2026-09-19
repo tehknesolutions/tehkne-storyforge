@@ -282,8 +282,10 @@ function dialogueFor(
           ? pt
           : genericPt;
 
-  const [speakerId, speakerName, text] =
-    script[eventIndex] ?? script[script.length - 1];
+  const selected = script[eventIndex] ?? script[0];
+  if (!selected) return [];
+
+  const [speakerId, speakerName, text] = selected;
 
   return [
     {
