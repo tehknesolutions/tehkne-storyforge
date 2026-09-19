@@ -1,0 +1,23 @@
+{
+  "artifactType": "ASSERTION_TEST",
+  "source": {
+    "realizationProfileId": "test:assertion-conflict"
+  },
+  "assertions": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother"
+    },
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasCreatedBy",
+      "object": "entity:grandmother"
+    },
+    {
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother"
+    }
+  ]
+}
