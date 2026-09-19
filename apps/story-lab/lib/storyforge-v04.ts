@@ -229,13 +229,6 @@ export function approveSceneRevision(
   }
 
   selected.status = "APPROVED_LOCAL";
-  selected.dialogue = selected.dialogue.map((line) => ({
-    ...line,
-    status:
-      line.status === "REJECTED"
-        ? "REJECTED"
-        : "APPROVED_LOCAL"
-  }));
   next.updatedAt = new Date().toISOString();
   return next;
 }
@@ -249,10 +242,6 @@ export function rejectSceneRevision(
   if (!selected) throw new Error(`SCENE_NOT_FOUND:${sceneId}`);
 
   selected.status = "REJECTED";
-  selected.dialogue = selected.dialogue.map((line) => ({
-    ...line,
-    status: "REJECTED"
-  }));
   next.updatedAt = new Date().toISOString();
   return next;
 }

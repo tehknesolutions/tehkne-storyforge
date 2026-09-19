@@ -55,10 +55,17 @@ const originalEventIds = Object.fromEntries(
 );
 
 authority = approveSceneRevision(authority, "scene:workspace:1");
+const approvedScene1 = selectedSceneRevision(
+  authority,
+  "scene:workspace:1"
+);
 assert(
-  selectedSceneRevision(authority, "scene:workspace:1")?.status ===
-    "APPROVED_LOCAL",
+  approvedScene1?.status === "APPROVED_LOCAL",
   "Scene 1 approval failed."
+);
+assert(
+  approvedScene1?.dialogue[0]?.status === "CANDIDATE",
+  "Approving a scene must not automatically approve its dialogue."
 );
 
 authority = reviseScene(
