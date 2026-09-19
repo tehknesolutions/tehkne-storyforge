@@ -1821,3 +1821,21 @@ button.secondary {
   .manga-page.layout-three_panel .manga-panel:first-child { grid-row: auto; }
   .manga-reader-controls { flex-wrap: wrap; }
 }
+
+
+/* V0.4.6 — Native Anime Storyboard */
+.anime-summary { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:24px; }
+.anime-summary > div { min-width:120px; padding:14px; border:1px solid var(--line); border-radius:12px; background:#0b0d12; }
+.anime-summary small { display:block; color:var(--muted); margin-bottom:6px; }
+.anime-timeline { display:grid; gap:22px; }
+.anime-scene { padding:18px; border:1px solid var(--line); border-radius:16px; background:#090a0f; }
+.anime-scene-head,.anime-shot-head,.anime-production-meta { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+.anime-shot-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:14px; }
+.anime-shot { padding:10px; border:1px solid var(--line); border-radius:10px; background:#11131a; }
+.anime-frame { min-height:180px; margin:10px 0; padding:14px; display:flex; flex-wrap:wrap; gap:6px; align-content:flex-start; background:#1c2029; border:1px solid #353b49; }
+.anime-frame span,.anime-production-meta code { font-size:.65rem; padding:4px 6px; background:#090a0f; color:var(--accent-2); }
+.anime-frame p { width:100%; margin:auto 0; line-height:1.45; text-align:center; }
+.anime-dialogue { padding:8px; border-left:2px solid var(--warning); font-size:.78rem; line-height:1.4; }
+.anime-production-meta { flex-wrap:wrap; margin-top:10px; }
+.anime-trace { margin-top:10px; font-size:.68rem; color:var(--muted); }
+.anime-trace code,.anime-trace small { display:block; overflow-wrap:anywhere; }
