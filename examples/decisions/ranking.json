@@ -1,0 +1,47 @@
+{
+  "policyVersion": "0.1.0",
+  "rankedByActor": {
+    "entity:lia": [
+      {
+        "actionProposalId": "action-proposal:lia-trace-mark",
+        "action": "trace Grandmother's mark deeper into the tunnel",
+        "totalScore": 0.6595,
+        "rationale": [
+          "Directly advances Lia's truth goal.",
+          "Supported by Grandmother-mark evidence.",
+          "Carries moderate physical uncertainty."
+        ]
+      },
+      {
+        "actionProposalId": "action-proposal:lia-return",
+        "action": "return to the house and postpone the investigation",
+        "totalScore": 0.4145,
+        "rationale": [
+          "Highly feasible and low risk.",
+          "Weakly advances Lia's active truth goal."
+        ]
+      }
+    ],
+    "entity:leo": [
+      {
+        "actionProposalId": "action-proposal:leo-follow",
+        "action": "stay close to Lia while verifying the tunnel route",
+        "totalScore": 0.653,
+        "rationale": [
+          "Preserves protective proximity.",
+          "Fits Leo's revised plan.",
+          "Accepts controlled rather than avoided risk."
+        ]
+      },
+      {
+        "actionProposalId": "action-proposal:leo-return",
+        "action": "insist that both siblings return to the house",
+        "totalScore": 0.5875,
+        "rationale": [
+          "Reduces immediate danger.",
+          "Conflicts with Lia's truth-seeking goal and may reduce trust."
+        ]
+      }
+    ]
+  }
+}
