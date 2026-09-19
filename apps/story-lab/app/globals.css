@@ -464,3 +464,19 @@ button.secondary {
   font-size: 0.72rem;
   overflow-wrap: anywhere;
 }
+
+
+.provider-output {
+  margin-top: 20px;
+  max-height: 520px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #090a0f;
+  color: #cbd3df;
+  padding: 18px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
