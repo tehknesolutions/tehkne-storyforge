@@ -1,109 +1,67 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type {
-  NativeVisualNovelRealization,
-  VisualNovelChoiceOption
-} from "@/lib/storyforge-v041";
+import type { NativeVisualNovelRealization } from "@/lib/storyforge-v041";
+import {
+  advanceVisualNovelRuntime,
+  chooseVisualNovelOption,
+  createVisualNovelRuntime,
+  getVisualNovelRuntimeSnapshot,
+  resetVisualNovelRuntime
+} from "@/lib/storyforge-v043";
 import { useI18n } from "./i18n";
 
 type Props = {
   realization: NativeVisualNovelRealization;
 };
 
-type RuntimeState = Record<string, string>;
-
-function applyPatches(
-  current: RuntimeState,
-  patches: Array<{ path: string; value: string }>
-) {
-  const next = { ...current };
-  for (const patch of patches) {
-    next[patch.path] = patch.value;
-  }
-  return next;
-}
-
 export function VisualNovelPlayer({ realization }: Props) {
   const { t } = useI18n();
-  const root = realization.branches[0];
-
-  const initialPath = useMemo(
-    () => [...root.eventIds],
-    [root.eventIds]
+  const [runtime, setRuntime] = useState(() =>
+    createVisualNovelRuntime(realization)
   );
 
-  const [path, setPath] = useState<string[]>(initialPath);
-  const [cursor, setCursor] = useState(0);
-  const [selectedOptionId, setSelectedOptionId] =
-    useState<string | null>(null);
-  const [runtimeState, setRuntimeState] =
-    useState<RuntimeState>({});
-
-  const sceneByEvent = useMemo(
+  const snapshot = useMemo(
     () =>
-      new Map(
-        realization.scenes.map((scene) => [
-          scene.eventId,
-          scene
-        ])
+      getVisualNovelRuntimeSnapshot(
+        realization,
+        runtime
       ),
-    [realization.scenes]
+    [realization, runtime]
   );
 
-  const currentEventId = path[cursor] ?? null;
-  const currentScene =
-    currentEventId
-      ? sceneByEvent.get(currentEventId) ?? null
-      : null;
+  const currentScene = useMemo(
+    () =>
+      snapshot.currentEventId
+        ? realization.scenes.find(
+            (scene) =>
+              scene.eventId === snapshot.currentEventId
+          ) ?? null
+        : null,
+    [realization.scenes, snapshot.currentEventId]
+  );
 
-  const choice =
-    currentEventId
-      ? realization.choices.find(
-          (item) => item.atEventId === currentEventId
-        ) ?? null
-      : null;
-
-  const atChoice =
-    Boolean(choice) && selectedOptionId === null;
-
-  const finished =
-    path.length > 0 &&
-    cursor >= path.length - 1 &&
-    !atChoice;
-
-  function choose(option: VisualNovelChoiceOption) {
-    const branch = realization.branches.find(
-      (item) => item.id === option.branchId
+  function choose(optionId: string) {
+    setRuntime((current) =>
+      chooseVisualNovelOption(
+        realization,
+        current,
+        optionId
+      )
     );
-    const transition = realization.stateTransitions.find(
-      (item) => item.id === option.transitionId
-    );
-
-    if (!branch || !transition) return;
-
-    setSelectedOptionId(option.id);
-    setRuntimeState((current) =>
-      applyPatches(current, transition.patches)
-    );
-    setPath((current) => [
-      ...current,
-      ...branch.eventIds
-    ]);
   }
 
   function next() {
-    if (atChoice || finished) return;
-    setCursor((current) =>
-      Math.min(current + 1, path.length - 1)
+    setRuntime((current) =>
+      advanceVisualNovelRuntime(
+        realization,
+        current
+      )
     );
   }
 
   function restart() {
-    setPath(initialPath);
-    setCursor(0);
-    setSelectedOptionId(null);
-    setRuntimeState({});
+    setRuntime(resetVisualNovelRuntime(realization));
   }
 
   return (
@@ -114,7 +72,8 @@ export function VisualNovelPlayer({ realization }: Props) {
           <h3>{currentScene?.title ?? t("vn.finished")}</h3>
         </div>
         <span className="status candidate">
-          {cursor + 1}/{path.length}
+          {Math.min(runtime.cursor + 1, runtime.path.length)}/
+          {runtime.path.length}
         </span>
       </div>
 
@@ -147,19 +106,21 @@ export function VisualNovelPlayer({ realization }: Props) {
             </p>
           </div>
 
-          {choice && selectedOptionId === null ? (
+          {snapshot.currentChoice ? (
             <div className="vn-player-choice">
-              <strong>{choice.prompt}</strong>
+              <strong>{snapshot.currentChoice.prompt}</strong>
               <div>
-                {choice.options.map((option) => (
-                  <button
-                    type="button"
-                    key={option.id}
-                    onClick={() => choose(option)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+                {snapshot.currentChoice.options.map(
+                  (option) => (
+                    <button
+                      type="button"
+                      key={option.id}
+                      onClick={() => choose(option.id)}
+                    >
+                      {option.label}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           ) : null}
@@ -170,9 +131,9 @@ export function VisualNovelPlayer({ realization }: Props) {
 
       <div className="vn-player-runtime-state">
         <small>{t("vn.runtimeState")}</small>
-        {Object.keys(runtimeState).length ? (
+        {Object.keys(runtime.worldState).length ? (
           <dl>
-            {Object.entries(runtimeState).map(
+            {Object.entries(runtime.worldState).map(
               ([key, value]) => (
                 <div key={key}>
                   <dt>{key}</dt>
@@ -190,9 +151,12 @@ export function VisualNovelPlayer({ realization }: Props) {
         <button
           type="button"
           onClick={next}
-          disabled={atChoice || finished}
+          disabled={
+            snapshot.waitingChoice ||
+            snapshot.finished
+          }
         >
-          {finished ? t("vn.finished") : t("vn.next")}
+          {snapshot.finished ? t("vn.finished") : t("vn.next")}
         </button>
         <button
           type="button"
