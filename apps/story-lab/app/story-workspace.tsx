@@ -470,7 +470,7 @@ export function StoryWorkspace() {
           <h2 id="workspace-title">{t("workspace.title")}</h2>
           <p className="muted">{t("workspace.body")}</p>
         </div>
-        <span className="status candidate">SCENE AUTHORITY V0.4</span>
+        <span className="status candidate">SCENE EXPANSION V0.4.1</span>
       </div>
 
       <div className="workspace-step">
@@ -692,6 +692,7 @@ export function StoryWorkspace() {
                     mediaPlan: null
                   }));
                   setWebtoonV04(null);
+                  setVisualNovelV041(null);
                 }}
               >
                 {target.label}
