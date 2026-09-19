@@ -9,9 +9,9 @@ export async function GET() {
     product: "TEHKNÉ STORYFORGE / Story Lab",
     status: durableBackendConfigured
       ? "durable-backend-configured"
-      : "preview-runtime",
-    storyforge: "0.7.0",
-    storyLab: "0.2.0",
+      : "v0.8-rc-ready-for-provisioning",
+    storyforge: "0.8.0-rc.1",
+    storyLab: "0.3.0-rc.1",
     tnir: "0.5.0",
     tpir: "0.1.0",
     creatorAuthority: true,
@@ -21,6 +21,7 @@ export async function GET() {
       : "EPHEMERAL",
     canonCommitMode: durableBackendConfigured
       ? "EXPLICIT_TRANSACTIONAL"
-      : "DISABLED"
+      : "DISABLED",
+    durableBackendProvisioned: durableBackendConfigured
   });
 }
