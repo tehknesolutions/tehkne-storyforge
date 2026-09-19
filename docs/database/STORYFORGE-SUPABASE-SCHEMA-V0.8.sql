@@ -141,7 +141,8 @@ for insert
 to authenticated
 with check (
   (select auth.uid()) = owner_id
-  and status in ('PENDING','APPROVED','EDIT_REQUIRED','REJECTED')
+  and status = 'PENDING'
+  and decision is null
 );
 
 drop policy if exists storyforge_reviews_update_own on public.storyforge_review_items;
@@ -155,7 +156,12 @@ using (
 )
 with check (
   (select auth.uid()) = owner_id
-  and status in ('PENDING','APPROVED','EDIT_REQUIRED','REJECTED')
+  and (
+    (status = 'PENDING' and decision is null)
+    or (status = 'APPROVED' and decision = 'APPROVE')
+    or (status = 'EDIT_REQUIRED' and decision = 'EDIT')
+    or (status = 'REJECTED' and decision = 'REJECT')
+  )
 );
 
 drop policy if exists storyforge_canon_select_own on public.storyforge_canon_facts;
