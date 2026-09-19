@@ -330,6 +330,8 @@ export function StoryWorkspace() {
     window.localStorage.removeItem(STORAGE_KEY);
     window.localStorage.removeItem(LEGACY_STORAGE_KEY);
     window.localStorage.removeItem(FORGE_STORAGE_KEY);
+    window.localStorage.removeItem(SCENE_AUTHORITY_STORAGE_KEY);
+    window.localStorage.removeItem(V04_WEBTOON_STORAGE_KEY);
   }
 
   function downloadJson(value: unknown, prefix: string) {
@@ -407,7 +409,7 @@ export function StoryWorkspace() {
           <h2 id="workspace-title">{t("workspace.title")}</h2>
           <p className="muted">{t("workspace.body")}</p>
         </div>
-        <span className="status candidate">NARRATIVE FORGE V0.3</span>
+        <span className="status candidate">SCENE AUTHORITY V0.4</span>
       </div>
 
       <div className="workspace-step">
@@ -695,6 +697,7 @@ export function StoryWorkspace() {
           authority={sceneAuthority}
           locale={locale}
           webtoon={webtoonV04}
+          targetMedia={state.targetMedia}
           onChange={(next) => {
             setSceneAuthority(next);
             setWebtoonV04(null);
