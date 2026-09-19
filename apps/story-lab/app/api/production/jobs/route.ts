@@ -1,5 +1,5 @@
 import { productionStore } from "@/lib/production-store";
-import type { ProductionJob } from "../../../../src/production/tpir";
+import type { PreviewProductionJob as ProductionJob } from "@/lib/production-types";
 
 export const runtime = "nodejs";
 
