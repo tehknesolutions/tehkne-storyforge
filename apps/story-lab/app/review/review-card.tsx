@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useI18n } from "../i18n";
 
 type ReviewStatus =
   | "PENDING"
@@ -25,11 +26,10 @@ type ReviewItem = {
 };
 
 export function ReviewCard() {
+  const { t } = useI18n();
   const [items, setItems] = useState<ReviewItem[]>([]);
-  const [durability, setDurability] = useState<"EPHEMERAL" | "DURABLE">(
-    "EPHEMERAL"
-  );
-  const [message, setMessage] = useState("Loading review queue…");
+  const [durability, setDurability] = useState<"EPHEMERAL" | "DURABLE">("EPHEMERAL");
+  const [message, setMessage] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirmations, setConfirmations] = useState<Record<string, string>>({});
 
@@ -38,22 +38,19 @@ export function ReviewCard() {
     const data = await response.json();
 
     if (!response.ok) {
-      setMessage(data.error ?? "Review queue unavailable.");
+      setMessage(data.error ?? t("review.unavailable"));
       return;
     }
 
     setItems(data.items ?? []);
     setDurability(data.durability ?? "EPHEMERAL");
-    setMessage(
-      data.items?.length
-        ? "Creator Authority queue loaded."
-        : "No CanonProposals are waiting for review."
-    );
-  }, []);
+    setMessage(data.items?.length ? t("review.loaded") : t("review.empty"));
+  }, [t]);
 
   useEffect(() => {
+    setMessage(t("review.loading"));
     void load();
-  }, [load]);
+  }, [load, t]);
 
   async function decide(
     item: ReviewItem,
@@ -70,11 +67,10 @@ export function ReviewCard() {
           body: JSON.stringify({ decision })
         }
       );
-
       const data = await response.json();
 
       if (!response.ok || !data.state) {
-        setMessage(data.error ?? "Review update failed.");
+        setMessage(data.error ?? t("review.updateFailed"));
         return;
       }
 
@@ -87,10 +83,10 @@ export function ReviewCard() {
       setDurability(data.durability ?? durability);
       setMessage(
         data.nextRequiredStep === "EXPLICIT_CANON_COMMIT_REQUIRED"
-          ? "Review approved. A separate explicit Canon commit is now available."
+          ? t("review.approvedCommit")
           : data.nextRequiredStep === "DURABLE_BACKEND_REQUIRED_FOR_CANON_COMMIT"
-            ? "Review approved in preview only. Durable backend is required for Canon commit."
-            : "Review state updated. Canon remains unchanged."
+            ? t("review.approvedPreview")
+            : t("review.updated")
       );
     } finally {
       setBusyId(null);
@@ -110,16 +106,15 @@ export function ReviewCard() {
           confirmation: confirmations[item.id] ?? ""
         })
       });
-
       const data = await response.json();
 
       if (!response.ok || !data.canonMutationPerformed) {
-        setMessage(data.error ?? "Canon commit failed.");
+        setMessage(data.error ?? t("review.commitFailed"));
         return;
       }
 
       setMessage(
-        `CANON committed transactionally: ${data.result?.canonFactId ?? "fact created"}.`
+        `${t("review.committed")}: ${data.result?.canonFactId ?? "fact"}.`
       );
       await load();
     } finally {
@@ -131,7 +126,7 @@ export function ReviewCard() {
     <div className="job-list">
       <div className="review-head">
         <span className={`status ${durability === "DURABLE" ? "canon" : "candidate"}`}>
-          REVIEW STORE:{durability}
+          {t("review.store")}:{durability}
         </span>
         <span className="muted">{message}</span>
       </div>
@@ -139,16 +134,14 @@ export function ReviewCard() {
       {items.map((item) => {
         const proposal = item.proposal ?? {};
         const busy = busyId === item.id;
-        const commitReady =
-          durability === "DURABLE" && item.status === "APPROVED";
+        const commitReady = durability === "DURABLE" && item.status === "APPROVED";
 
         return (
           <article className="review-card" key={item.id}>
             <div className="review-head">
               <span
                 className={`status ${
-                  item.status === "PENDING" ||
-                  item.status === "EDIT_REQUIRED"
+                  item.status === "PENDING" || item.status === "EDIT_REQUIRED"
                     ? "candidate"
                     : "canon"
                 }`}
@@ -160,55 +153,40 @@ export function ReviewCard() {
 
             <div className="triple">
               <div>
-                <small>SUBJECT</small>
+                <small>{t("review.subject")}</small>
                 <strong>{String(proposal.subject ?? "—")}</strong>
               </div>
               <div>
-                <small>PREDICATE</small>
+                <small>{t("review.predicate")}</small>
                 <strong>{String(proposal.predicate ?? "—")}</strong>
               </div>
               <div>
-                <small>OBJECT</small>
+                <small>{t("review.object")}</small>
                 <strong>{JSON.stringify(proposal.object ?? null)}</strong>
               </div>
             </div>
 
-            <p>{String(proposal.rationale ?? "No rationale supplied.")}</p>
+            <p>{String(proposal.rationale ?? t("review.noRationale"))}</p>
 
             {item.status !== "COMMITTED" ? (
               <div className="review-actions">
-                <button
-                  className="secondary"
-                  type="button"
-                  disabled={busy}
-                  onClick={() => decide(item, "REJECT")}
-                >
-                  Reject
+                <button className="secondary" type="button" disabled={busy} onClick={() => decide(item, "REJECT")}>
+                  {t("review.reject")}
                 </button>
-                <button
-                  className="secondary"
-                  type="button"
-                  disabled={busy}
-                  onClick={() => decide(item, "EDIT")}
-                >
-                  Edit
+                <button className="secondary" type="button" disabled={busy} onClick={() => decide(item, "EDIT")}>
+                  {t("review.edit")}
                 </button>
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() => decide(item, "APPROVE")}
-                >
-                  Approve review
+                <button type="button" disabled={busy} onClick={() => decide(item, "APPROVE")}>
+                  {t("review.approve")}
                 </button>
               </div>
             ) : null}
 
             {commitReady ? (
               <div className="canon-commit-zone">
-                <div className="eyebrow">EXPLICIT CANON COMMIT</div>
+                <div className="eyebrow">{t("review.commitEyebrow")}</div>
                 <p className="muted">
-                  Type <code>COMMIT TO CANON</code>. This is a separate,
-                  transactional authority action.
+                  {t("review.commitBody")}
                 </p>
                 <input
                   value={confirmations[item.id] ?? ""}
@@ -223,13 +201,10 @@ export function ReviewCard() {
                 />
                 <button
                   type="button"
-                  disabled={
-                    busy ||
-                    confirmations[item.id] !== "COMMIT TO CANON"
-                  }
+                  disabled={busy || confirmations[item.id] !== "COMMIT TO CANON"}
                   onClick={() => commit(item)}
                 >
-                  Commit approved proposal to CANON
+                  {t("review.commitButton")}
                 </button>
               </div>
             ) : null}
@@ -239,7 +214,7 @@ export function ReviewCard() {
 
       {!items.length ? (
         <article className="review-card">
-          <p>No review items are currently available.</p>
+          <p>{t("review.noItems")}</p>
         </article>
       ) : null}
     </div>
