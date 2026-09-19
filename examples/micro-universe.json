@@ -1130,6 +1130,25 @@
       "provenance": {
         "createdBy": "CREATOR",
         "createdAt": "2026-09-19T14:55:00Z"
+      },
+      "expression": {
+        "type": "ALL",
+        "children": [
+          {
+            "type": "ATOM",
+            "condition": {
+              "type": "EVENT_OCCURRED",
+              "eventId": "event:002"
+            }
+          },
+          {
+            "type": "ATOM",
+            "condition": {
+              "type": "EVENT_OCCURRED",
+              "eventId": "event:004"
+            }
+          }
+        ]
       }
     }
   ],
