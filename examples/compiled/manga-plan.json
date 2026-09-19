@@ -1,10 +1,10 @@
 {
   "artifactType": "MEDIA_PLAN",
-  "compilerVersion": "0.1.0",
+  "compilerVersion": "0.2.0",
   "targetMedia": "MANGA",
   "source": {
     "universeId": "universe:lantern-below",
-    "universeVersion": "0.3.0",
+    "universeVersion": "0.4.0",
     "storyId": "story:first-light",
     "manifestId": "media:first-light-manga"
   },
@@ -178,7 +178,10 @@
       "eventIds": [
         "event:002"
       ],
-      "sceneId": "scene:discovery"
+      "sceneId": "scene:discovery",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "page:2:panel:1",
@@ -192,7 +195,10 @@
       "eventIds": [
         "event:004"
       ],
-      "sceneId": "scene:investigation"
+      "sceneId": "scene:investigation",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "page:2:panel:3",
@@ -206,7 +212,10 @@
       "eventIds": [
         "event:006"
       ],
-      "sceneId": "scene:opening"
+      "sceneId": "scene:opening",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "page:3:panel:2",
@@ -220,7 +229,13 @@
       "eventIds": [
         "event:008"
       ],
-      "sceneId": "scene:mark"
+      "sceneId": "scene:mark",
+      "choiceIds": [
+        "choice:after-grandmother-mark"
+      ],
+      "evidenceIds": [
+        "evidence:grandmother-mark"
+      ]
     },
     {
       "unitId": "page:4:panel:2",
