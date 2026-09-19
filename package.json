@@ -9,7 +9,7 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7 && npm run validate:v0.8 && npm run validate:i18n && npm run validate:narrative-forge && npm run validate:scene-authority && npm run validate:scene-expansion && npm run validate:semantic-authority && npm run validate:visual-novel-runtime && npm run validate:workspace-persistence && npm run validate:native-manga",
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7 && npm run validate:v0.8 && npm run validate:i18n && npm run validate:narrative-forge && npm run validate:scene-authority && npm run validate:scene-expansion && npm run validate:semantic-authority && npm run validate:visual-novel-runtime && npm run validate:workspace-persistence && npm run validate:native-manga && npm run validate:native-anime",
     "compile:reference": "node scripts/compile-reference.mjs",
     "validate:compiler": "node scripts/validate-compiler.mjs",
     "validate:runtime-contracts": "node scripts/validate-runtime-contracts.mjs",
@@ -38,7 +38,8 @@
     "validate:semantic-authority": "node scripts/validate-semantic-authority-v042.mjs",
     "validate:visual-novel-runtime": "node scripts/validate-visual-novel-runtime-v043.mjs",
     "validate:workspace-persistence": "node scripts/validate-workspace-persistence-v044.mjs",
-    "validate:native-manga": "node scripts/validate-native-manga-v045.mjs"
+    "validate:native-manga": "node scripts/validate-native-manga-v045.mjs",
+    "validate:native-anime": "node scripts/validate-native-anime-v046.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
