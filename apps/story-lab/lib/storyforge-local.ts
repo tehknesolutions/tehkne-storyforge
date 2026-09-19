@@ -419,7 +419,7 @@ export function createUniverseDraft(storyDNA: StoryDNA, locale: StoryLocale): Un
   const t = L[locale];
   const s = signals(storyDNA.sourceIdea);
 
-  const worldRules = [t.worldRule1, t.worldRule2];
+  const worldRules: string[] = [t.worldRule1, t.worldRule2];
   if (s.mindTransfer && s.cockroach) {
     worldRules.push(
       locale === "pt-BR"
