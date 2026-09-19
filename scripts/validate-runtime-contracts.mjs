@@ -90,7 +90,27 @@ for (const rule of universe.replanRules) {
   }
 }
 
+const validateExpression = (expression, ruleId) => {
+  if (!expression) return;
+  if (expression.type === "ATOM") {
+    const condition = expression.condition;
+    if (condition.type === "EVENT_OCCURRED" && !events.has(condition.eventId)) {
+      errors.push(`worldRule ${ruleId}: unknown expression event ${condition.eventId}`);
+    }
+    if (condition.type === "FACT_EQUALS" && !facts.has(condition.factId)) {
+      errors.push(`worldRule ${ruleId}: unknown expression fact ${condition.factId}`);
+    }
+    return;
+  }
+  if (expression.type === "ALL" || expression.type === "ANY") {
+    for (const child of expression.children) validateExpression(child, ruleId);
+    return;
+  }
+  if (expression.type === "NOT") validateExpression(expression.child, ruleId);
+};
+
 for (const rule of universe.worldRules) {
+  validateExpression(rule.expression, rule.id);
   for (const condition of rule.conditions) {
     if (condition.type === "EVENT_OCCURRED" && !events.has(condition.eventId)) {
       errors.push(`worldRule ${rule.id}: unknown condition event ${condition.eventId}`);
