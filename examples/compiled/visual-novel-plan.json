@@ -1,0 +1,246 @@
+{
+  "artifactType": "MEDIA_PLAN",
+  "compilerVersion": "0.1.0",
+  "targetMedia": "VISUAL_NOVEL",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.3.0",
+    "storyId": "story:first-light",
+    "manifestId": "media:first-light-interactive"
+  },
+  "output": {
+    "kind": "VISUAL_NOVEL_PLAN",
+    "nodes": [
+      {
+        "id": "node:event:001",
+        "source": {
+          "eventId": "event:001",
+          "eventType": "DISCOVERY",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:002",
+        "source": {
+          "eventId": "event:002",
+          "eventType": "ACTIVATION",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:003",
+        "source": {
+          "eventId": "event:003",
+          "eventType": "INSPECTION",
+          "participants": [
+            "entity:lia"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:004",
+        "source": {
+          "eventId": "event:004",
+          "eventType": "REACTION_TEST",
+          "participants": [
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:005",
+        "source": {
+          "eventId": "event:005",
+          "eventType": "SIBLING_CONFLICT",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:006",
+        "source": {
+          "eventId": "event:006",
+          "eventType": "PASSAGE_REVEAL",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:007",
+        "source": {
+          "eventId": "event:007",
+          "eventType": "DECISION",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:house"
+        }
+      },
+      {
+        "id": "node:event:008",
+        "source": {
+          "eventId": "event:008",
+          "eventType": "CLUE_DISCOVERY",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:tunnel"
+        }
+      },
+      {
+        "id": "node:event:009a",
+        "source": {
+          "eventId": "event:009a",
+          "eventType": "BRANCH_DESCEND_TOGETHER",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:tunnel"
+        }
+      },
+      {
+        "id": "node:event:009b",
+        "source": {
+          "eventId": "event:009b",
+          "eventType": "BRANCH_SEAL_AND_RETURN",
+          "participants": [
+            "entity:lia",
+            "entity:leo"
+          ],
+          "locationId": "entity:tunnel"
+        }
+      }
+    ],
+    "choices": [
+      {
+        "id": "choice:after-grandmother-mark",
+        "atEventId": "event:008",
+        "prompt": "What should Lia and Leo do after finding Grandmother's mark?",
+        "options": [
+          {
+            "id": "choice-option:descend",
+            "label": "Descend together",
+            "outcomeEventId": "event:009a",
+            "branchId": "branch:descend",
+            "transitionId": "transition:descend-trust"
+          },
+          {
+            "id": "choice-option:return",
+            "label": "Seal the passage and return",
+            "outcomeEventId": "event:009b",
+            "branchId": "branch:return",
+            "transitionId": "transition:return-defer"
+          }
+        ]
+      }
+    ]
+  },
+  "traceability": [
+    {
+      "unitId": "node:event:001",
+      "eventIds": [
+        "event:001"
+      ]
+    },
+    {
+      "unitId": "node:event:002",
+      "eventIds": [
+        "event:002"
+      ]
+    },
+    {
+      "unitId": "node:event:003",
+      "eventIds": [
+        "event:003"
+      ]
+    },
+    {
+      "unitId": "node:event:004",
+      "eventIds": [
+        "event:004"
+      ]
+    },
+    {
+      "unitId": "node:event:005",
+      "eventIds": [
+        "event:005"
+      ]
+    },
+    {
+      "unitId": "node:event:006",
+      "eventIds": [
+        "event:006"
+      ]
+    },
+    {
+      "unitId": "node:event:007",
+      "eventIds": [
+        "event:007"
+      ]
+    },
+    {
+      "unitId": "node:event:008",
+      "eventIds": [
+        "event:008"
+      ]
+    },
+    {
+      "unitId": "node:event:009a",
+      "eventIds": [
+        "event:009a"
+      ]
+    },
+    {
+      "unitId": "node:event:009b",
+      "eventIds": [
+        "event:009b"
+      ]
+    }
+  ],
+  "validation": {
+    "mappedEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "storyEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "unmappedStoryEventIds": []
+  }
+}
