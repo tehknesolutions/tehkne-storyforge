@@ -9,7 +9,7 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief",
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5",
     "compile:reference": "node scripts/compile-reference.mjs",
     "validate:compiler": "node scripts/validate-compiler.mjs",
     "validate:runtime-contracts": "node scripts/validate-runtime-contracts.mjs",
@@ -17,7 +17,13 @@
     "validate:runtime": "node scripts/validate-runtime.mjs",
     "validate:media": "node scripts/validate-media.mjs",
     "build:brief": "node scripts/build-generation-brief.mjs",
-    "validate:generation-brief": "node scripts/validate-generation-brief.mjs"
+    "validate:generation-brief": "node scripts/validate-generation-brief.mjs",
+    "score:decisions": "node scripts/score-decisions.mjs",
+    "resolve:narrative": "node scripts/resolve-narrative.mjs",
+    "realize:reference": "node scripts/realize-reference.mjs",
+    "simulate:event": "node scripts/simulate-event-proposal.mjs",
+    "review:canon": "node scripts/review-canon-proposal.mjs",
+    "validate:v0.5": "node scripts/validate-v0.5.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
