@@ -1,0 +1,10 @@
+{
+  "reviewVersion": "0.1.0",
+  "proposalId": "canon-proposal:grandmother-authored-lantern",
+  "proposalAuthority": "CANDIDATE",
+  "status": "READY_FOR_CREATOR_REVIEW",
+  "conflictsWithFactIds": [],
+  "rationale": "The existing canon only says Grandmother hid the lantern; authorship is not established and must remain a candidate.",
+  "automaticPromotionAllowed": false,
+  "creatorDecisionRequired": true
+}
