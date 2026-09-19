@@ -76,47 +76,42 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**TEHKNÉ STORYFORGE V0.7 — Safe Preview Runtime**
+**TEHKNÉ STORYFORGE V0.8 RC1 — Durable Creator Authority**
 
 Architecture:
 
 ```text
-STORYFORGE V0.7
-├─ Story Lab V0.2
-├─ T-NIR V0.5 — narrative truth
-└─ T-PIR V0.1 — production state
+STORYFORGE 0.8.0-rc.1
+├─ Story Lab 0.3.0-rc.1
+├─ T-NIR 0.5.0
+└─ T-PIR 0.1.0
 ```
 
-Implemented:
+Implemented in RC1:
 
-- OpenAI Responses adapter v0.2 with strict Structured Outputs and `store: false`;
-- three-gate provider execution: API key + explicit enable + creator access token;
-- server-side assertion classification and CanonProposal fallback;
-- provider generation console;
-- provider capability selection/fallback;
-- EPHEMERAL ProductionJob store with explicit durability reporting;
-- ProductionJob create/read/update APIs;
-- interactive production dashboard;
-- review-state API with CANON mutation disabled;
-- interactive Canon Review UI;
-- playable reference game branch probe;
-- Vercel-ready self-contained Story Lab root;
-- V0.7 safety/deploy-readiness validation gate.
+- Supabase SSR/auth integration isolated behind app adapters;
+- cookie session refresh via Next.js `proxy.ts`;
+- per-request server clients;
+- dual EPHEMERAL/DURABLE ProductionStore;
+- dual EPHEMERAL/DURABLE ReviewStore;
+- generated CanonProposal persistence;
+- explicit two-step Review → Canon authority flow;
+- transactional Canon RPC contract with optimistic locking;
+- RLS-safe database schema candidate;
+- append-only database-generated authority audit;
+- private-by-default signup;
+- no service-role key in Story Lab;
+- Creator Authority audit screen.
 
-Independent audits: **PASS / 0 errors** in two passes.
+Independent RC audits: **PASS / 0 errors** in two passes.
 
-Current safety invariants:
+Release state:
 
-```text
-provider output ≠ CANON
-review approval ≠ CANON commit
-generated asset ≠ CANON
-preview memory ≠ durable storage
-```
+`READY_FOR_PROVISIONING`
 
-Vercel preview is **not yet deployed** because the connected server does not expose the advertised deploy write action in this session.
+Not yet claimed as V0.8 final because the dedicated Supabase project, real migration/advisors/RLS tests, package lock, real build and Vercel deployment are still pending.
 
-Next milestone: **Storyforge V0.8 — durable storage, authentication, transactional Canon commit and deployed preview.**
+Next finalization step: **provision dedicated Storyforge Supabase backend and validate the schema live.**
 
 ## License
 
