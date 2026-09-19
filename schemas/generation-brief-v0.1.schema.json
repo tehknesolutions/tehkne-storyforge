@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tehkne.solutions/storyforge/schemas/generation-brief-v0.1.schema.json",
+  "title": "Storyforge Generation Brief V0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactType","briefVersion","targetMedia","source","storyDNA","authorityContract","authoritativeCanon","units"],
+  "properties": {
+    "artifactType": { "const": "GENERATION_BRIEF" },
+    "briefVersion": { "type": "string", "minLength": 1 },
+    "targetMedia": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["universeId","universeVersion","storyId","manifestId"],
+      "properties": {
+        "universeId": { "type": "string", "pattern": "^universe:" },
+        "universeVersion": { "type": "string" },
+        "storyId": { "type": "string", "pattern": "^story:" },
+        "manifestId": { "type": "string", "pattern": "^media:" }
+      }
+    },
+    "creatorIntent": { "type": "string" },
+    "storyDNA": { "type": "object" },
+    "authorityContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalAuthority","mayInventCanon","newUnapprovedFactsBecome","preserveEventCausality","preserveCharacterKnowledgeBoundaries","preserveTraceability"],
+      "properties": {
+        "canonicalAuthority": { "const": "CANON" },
+        "mayInventCanon": { "const": false },
+        "newUnapprovedFactsBecome": { "const": "CANDIDATE" },
+        "preserveEventCausality": { "const": true },
+        "preserveCharacterKnowledgeBoundaries": { "const": true },
+        "preserveTraceability": { "const": true }
+      }
+    },
+    "authoritativeCanon": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id","subject","predicate","object"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^fact:" },
+          "subject": { "type": "string" },
+          "predicate": { "type": "string" },
+          "object": {}
+        }
+      }
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unitId","source","events"],
+        "properties": {
+          "unitId": { "type": "string", "minLength": 1 },
+          "source": { "type": "object" },
+          "events": { "type": "array", "minItems": 1, "items": { "type": "object" } }
+        }
+      }
+    }
+  }
+}
