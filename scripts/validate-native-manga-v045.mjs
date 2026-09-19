@@ -3,10 +3,12 @@ import fs from "node:fs/promises";
 const read = async (path) =>
   fs.readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const [compiler, profiles, workspace] = await Promise.all([
+const [compiler, profiles, workspace, view, persistence] = await Promise.all([
   read("apps/story-lab/lib/storyforge-v045.ts"),
   read("src/media/profiles.ts"),
-  read("apps/story-lab/app/story-workspace.tsx")
+  read("apps/story-lab/app/story-workspace.tsx"),
+  read("apps/story-lab/app/manga-view.tsx"),
+  read("apps/story-lab/lib/workspace-persistence.ts")
 ]);
 
 const errors = [];
@@ -50,8 +52,24 @@ expect(
 );
 
 expect(
-  workspace.includes('{ id: "MANGA", label: "Mangá" }'),
-  "Story Workspace must expose MANGA as a target"
+  workspace.includes('{ id: "MANGA", label: "Mangá" }') &&
+    workspace.includes("realizeNativeManga(sceneAuthority, locale)") &&
+    workspace.includes("<MangaView"),
+  "Story Workspace must expose, compile and render MANGA"
+);
+
+expect(
+  view.includes('dir="rtl"') &&
+    view.includes("page.pageTurnRole") &&
+    view.includes("panel.trace.sceneRevisionId") &&
+    view.includes("panel.trace.eventId") &&
+    view.includes("panel.balloons.map"),
+  "Manga Reader must render RTL pages, page-turn roles, balloons and provenance"
+);
+
+expect(
+  persistence.includes("mangaRealizationV045?: NativeMangaChapter | null"),
+  "Durable workspace must preserve Native Manga realizations"
 );
 
 if (errors.length) {
