@@ -8,9 +8,9 @@
 
 Release state:
 
-`READY_FOR_PROVISIONING`
+`BACKEND_LIVE__BUILD_AND_DEPLOY_PENDING`
 
-This is an RC, not the final durable release.
+The dedicated Supabase backend is now provisioned and live. This is still an RC because executable build evidence and Vercel preview QA remain pending.
 
 ## Version architecture
 
@@ -252,16 +252,37 @@ Evidence:
 - optimistic locking
 - review + Canon audit triggers
 
+## Live Supabase validation
+
+Dedicated project:
+
+`tehkne-storyforge` / `zbqhxlmalzijnmkljcbt`
+
+Region:
+
+`sa-east-1`
+
+Applied migrations:
+
+- `20260919180048_storyforge_v0_8_durable_authority`
+- `20260919180123_storyforge_v0_8_fk_indexes`
+
+Security Advisor: **0 findings**.
+
+Live RLS / Canon Authority test: **12/12 PASS**.
+
+Cleanup after tests: **0 test users/jobs/reviews/canon/audit remaining**.
+
+Detailed evidence:
+
+`docs/STORYFORGE-V0.8-SUPABASE-LIVE-VALIDATION.md`
+
 ## External blockers before V0.8 final
 
-1. dedicated Storyforge Supabase project not provisioned;
-2. project organization/cost confirmation required;
-3. SQL not applied as a real migration;
-4. Supabase Security/Performance Advisors not run;
-5. two-user RLS isolation test not executed;
-6. package lock not generated;
-7. real `npm install / typecheck / build` not executed;
-8. Vercel preview still not created.
+1. package lock not generated;
+2. real `npm install / typecheck / build` not executed;
+3. Vercel preview still not created;
+4. desktop/mobile browser QA still pending.
 
 ## Finalization criteria
 
