@@ -99,12 +99,28 @@ export function buildClaimLedger(
   storyDNA: StoryDNA,
   narrative: NarrativeDraft
 ): WorkspaceClaim[] {
-  const sourceClaims = storyDNA.sourceFacts.map((fact, index) => ({
+  const literalSegments = storyDNA.sourceIdea
+    .split(/(?<=[.!?])\s+/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+
+  const literalClaims = literalSegments.map((text, index) => ({
+    id: `claim:creator-literal:${index + 1}`,
+    text,
+    authority: "IDEA" as const,
+    createdBy: "CREATOR" as const,
+    rationale:
+      "Trecho literal preservado da entrada do criador; não foi reescrito pelo motor.",
+    sourceText: text
+  }));
+
+  const normalizedClaims = storyDNA.sourceFacts.map((fact, index) => ({
     id: claimId("source", index),
     text: fact,
     authority: "IDEA" as const,
-    createdBy: "CREATOR" as const,
-    rationale: "Extraído diretamente da ideia fornecida pelo criador.",
+    createdBy: "SYSTEM" as const,
+    rationale:
+      "Normalização estrutural de um fato presente na ideia; autoridade continua IDEA, não CANON.",
     sourceText: storyDNA.sourceIdea
   }));
 
@@ -117,7 +133,15 @@ export function buildClaimLedger(
       "Expansão dramatúrgica proposta pelo Storyforge; requer aprovação explícita antes de qualquer promoção."
   }));
 
-  return [...sourceClaims, ...candidateClaims];
+  const seen = new Set<string>();
+  return [...literalClaims, ...normalizedClaims, ...candidateClaims].filter(
+    (claim) => {
+      const key = `${claim.authority}:${claim.text.toLocaleLowerCase("pt-BR")}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }
+  );
 }
 
 function sourceClaimIds(
@@ -510,9 +534,17 @@ export function buildTnirV05Export(input: {
   universe: UniverseDraft;
   narrative: NarrativeDraft;
   scenes: SceneDraft[];
+  claims: WorkspaceClaim[];
   targetMedia: MediaTarget;
 }) {
-  const { storyDNA, universe, narrative, scenes, targetMedia } = input;
+  const {
+    storyDNA,
+    universe,
+    narrative,
+    scenes,
+    claims,
+    targetMedia
+  } = input;
   const now = new Date().toISOString();
   const storyId = "story:workspace-main";
   const branchId = "branch:workspace-root";
@@ -591,18 +623,24 @@ export function buildTnirV05Export(input: {
     }))
   }));
 
-  const canon = storyDNA.sourceFacts.map((fact, index) => ({
-    id: `fact:workspace-source:${index + 1}`,
-    subject: universe.id,
-    predicate: "creatorSourceStatement",
-    object: fact,
-    authority: "IDEA",
-    provenance: {
-      createdBy: "CREATOR",
-      source: storyDNA.sourceIdea,
-      createdAt: now
-    }
-  }));
+  const canon = claims
+    .filter((claim) => claim.authority === "IDEA")
+    .map((claim, index) => ({
+      id: `fact:workspace-source:${index + 1}`,
+      subject: universe.id,
+      predicate:
+        claim.createdBy === "CREATOR"
+          ? "creatorLiteralStatement"
+          : "creatorSourceStatement",
+      object: claim.text,
+      authority: "IDEA",
+      provenance: {
+        createdBy: claim.createdBy,
+        source: claim.sourceText ?? storyDNA.sourceIdea,
+        createdAt: now,
+        rationale: claim.rationale
+      }
+    }));
 
   return {
     id: universe.id.startsWith("universe:")
@@ -709,6 +747,7 @@ export function forgeNarrativeV03(input: {
     universe: input.universe,
     narrative: input.narrative,
     scenes,
+    claims,
     targetMedia: input.targetMedia
   });
 
