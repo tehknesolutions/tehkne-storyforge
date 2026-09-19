@@ -1,4 +1,4 @@
-import type { ProductionJob } from "../../../src/production/tpir";
+import type { PreviewProductionJob as ProductionJob } from "./production-types";
 
 export interface ProductionStore {
   readonly durability: "EPHEMERAL" | "DURABLE";
