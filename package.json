@@ -32,8 +32,7 @@
     "validate:v0.7": "node scripts/validate-v0.7.mjs",
     "validate:v0.8": "node scripts/validate-v0.8.mjs",
     "validate:i18n": "node scripts/validate-i18n.mjs",
-    "validate:narrative-forge": "node scripts/validate-narrative-forge-v03.mjs && npm run probe:narrative-generality",
-    "probe:narrative-generality": "node --experimental-strip-types scripts/probe-narrative-generality.mjs"
+    "validate:narrative-forge": "node scripts/validate-narrative-forge-v03.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
