@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "../i18n";
 
 type AuditItem = {
   id: string;
@@ -13,36 +14,31 @@ type AuditItem = {
 };
 
 export default function AuthorityAuditPage() {
+  const { locale, t } = useI18n();
   const [items, setItems] = useState<AuditItem[]>([]);
-  const [message, setMessage] = useState("Loading authority audit…");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
+    setMessage(t("audit.loading"));
     void fetch("/api/authority-audit", { cache: "no-store" })
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) {
-          setMessage(data.error ?? "Audit unavailable.");
+          setMessage(data.error ?? t("audit.unavailable"));
           return;
         }
         setItems(data.items ?? []);
-        setMessage(
-          data.items?.length
-            ? "Database-generated authority history."
-            : "No authority transitions recorded yet."
-        );
+        setMessage(data.items?.length ? t("audit.loaded") : t("audit.empty"));
       })
-      .catch(() => setMessage("Could not load authority audit."));
-  }, []);
+      .catch(() => setMessage(t("audit.error")));
+  }, [t]);
 
   return (
     <main className="review-shell">
-      <a className="back-link" href="/">← Story Lab</a>
-      <div className="eyebrow">CREATOR AUTHORITY / AUDIT</div>
-      <h1>Authority Audit</h1>
-      <p className="muted review-intro">
-        Review decisions and Canon commits are appended by database triggers.
-        The application has no direct INSERT permission on this log.
-      </p>
+      <a className="back-link" href="/">{t("common.back")}</a>
+      <div className="eyebrow">{t("audit.eyebrow")}</div>
+      <h1>{t("audit.title")}</h1>
+      <p className="muted review-intro">{t("audit.body")}</p>
 
       <p className="muted">{message}</p>
 
@@ -51,11 +47,11 @@ export default function AuthorityAuditPage() {
           <article className="pipeline-card" key={item.id}>
             <span className="step">{item.action}</span>
             <h3>{item.target_type}</h3>
-            <p>
-              {item.from_state ?? "—"} → {item.to_state ?? "—"}
-            </p>
+            <p>{item.from_state ?? "—"} → {item.to_state ?? "—"}</p>
             <code>{item.target_id}</code>
-            <p className="muted">{new Date(item.created_at).toLocaleString()}</p>
+            <p className="muted">
+              {new Date(item.created_at).toLocaleString(locale)}
+            </p>
           </article>
         ))}
       </div>
