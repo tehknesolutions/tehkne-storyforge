@@ -163,9 +163,49 @@ Implemented:
 - production prebuild generality probe using an unrelated story;
 - Vercel deployment with the generality gate: **SUCCESS**.
 
-Checkpoint: `15a428717c1098e2341f2850505e60c4aeffe1da`.
+Checkpoint V0.3: `15a428717c1098e2341f2850505e60c4aeffe1da`.
 
-Next Story Lab checkpoint: **V0.4 — Scene Authority & Revision**.
+### Story Workspace V0.4 — Scene Authority & Revision
+
+Current source checkpoint on `main`:
+
+`e158104c5ca40dbf14adcf9371bf0730f85ef4f8`
+
+V0.4 adds governed scene authoring above the V0.3 Narrative Forge:
+
+```text
+EVENT
+→ stable sceneId
+→ scene revision r1/r2/r3...
+→ select revision
+→ approve / edit / reject / regenerate / alternative
+→ selected revision set
+→ media realization
+```
+
+Implemented:
+
+- stable scene IDs with revision ancestry;
+- scene lifecycle `CANDIDATE / APPROVED_LOCAL / REJECTED / SUPERSEDED`;
+- dialogue authority independent from scene authority;
+- editing creates a new revision instead of mutating history;
+- isolated scene regeneration and explicit alternatives;
+- source claim provenance per scene revision;
+- rejected scenes preserve their source events;
+- selected revisions compile to Webtoon panels with `sceneRevisionId`;
+- selected-revision authority manifest in T-NIR export;
+- local V0.4 persistence;
+- PT-BR / EN / ES editor coverage;
+- static Scene Authority regression gate;
+- executable V0.4 prebuild probe stored outside the Next.js TypeScript include set.
+
+Current deployment state:
+
+`MAIN_READY__VERCEL_BUILD_RATE_LIMITED`
+
+The V0.4 source is on `main`, but Vercel is currently rejecting new builds before execution with `build-rate-limit`. Therefore the last **proven green production deployment remains V0.3**. V0.4 must not be reported as deployed until Vercel actually executes both prebuild probes, completes Next.js/TypeScript compilation and returns SUCCESS.
+
+Tracking: Issue #6 — **Story Workspace V0.4 — Scene Authority & Revision**.
 
 ## License
 
