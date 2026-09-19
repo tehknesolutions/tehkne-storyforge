@@ -6,6 +6,7 @@ const PROTECTED_PREFIXES = [
   "/generate",
   "/production",
   "/review",
+  "/authority-audit",
   "/api/generate",
   "/api/production",
   "/api/review",
