@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "prebuild": "tsx scripts/probe-narrative-generality.ts && tsx scripts/probe-scene-authority-v04.ts && tsx scripts/probe-scene-expansion-v041.ts && tsx scripts/probe-semantic-authority-v042.ts"
+    "prebuild": "tsx scripts/probe-narrative-generality.ts && tsx scripts/probe-scene-authority-v04.ts && tsx scripts/probe-scene-expansion-v041.ts && tsx scripts/probe-semantic-authority-v042.ts && tsx scripts/probe-visual-novel-runtime-v043.ts"
   },
   "dependencies": {
     "next": "16.3.3",

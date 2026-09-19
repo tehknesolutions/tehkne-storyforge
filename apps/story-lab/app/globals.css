@@ -1514,3 +1514,98 @@ button.secondary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+.vn-player {
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #080a0f;
+}
+
+.vn-player-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vn-player-head h3 {
+  margin: 4px 0 0;
+}
+
+.vn-player-scene {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b0d12;
+}
+
+.vn-player-dialogue {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.vn-player-dialogue p {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--accent);
+  background: rgba(166, 255, 203, 0.04);
+}
+
+.vn-player-choice {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--warning);
+  border-radius: 12px;
+  background: rgba(255, 214, 107, 0.04);
+}
+
+.vn-player-choice > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vn-player-runtime-state {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+}
+
+.vn-player-runtime-state dl {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+
+.vn-player-runtime-state dl > div {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.7fr) 1fr;
+  gap: 8px;
+}
+
+.vn-player-runtime-state dt {
+  color: var(--muted);
+}
+
+.vn-player-runtime-state dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+  .vn-player-head {
+    flex-direction: column;
+  }
+
+  .vn-player-runtime-state dl > div {
+    grid-template-columns: 1fr;
+  }
+}

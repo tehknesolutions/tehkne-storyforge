@@ -1,6 +1,7 @@
 "use client";
 
 import type { NativeVisualNovelRealization } from "@/lib/storyforge-v041";
+import { VisualNovelPlayer } from "./visual-novel-player";
 import { useI18n } from "./i18n";
 
 type Props = {
@@ -163,6 +164,8 @@ export function VisualNovelView({ realization, onExport }: Props) {
           </article>
         ))}
       </div>
+
+      <VisualNovelPlayer realization={realization} />
 
       <div className="workspace-actions">
         <button type="button" onClick={onExport}>
