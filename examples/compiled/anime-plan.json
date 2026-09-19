@@ -1,0 +1,268 @@
+{
+  "artifactType": "MEDIA_PLAN",
+  "compilerVersion": "0.1.0",
+  "targetMedia": "ANIME_EPISODE",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.3.0",
+    "storyId": "story:first-light",
+    "manifestId": "media:first-light-anime"
+  },
+  "output": {
+    "kind": "ANIME_STORYBOARD_PLAN",
+    "targetSeconds": 90,
+    "sequences": [
+      {
+        "id": "sequence:1",
+        "sceneId": "scene:discovery",
+        "shots": [
+          {
+            "id": "sequence:1:shot:1",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:001",
+              "eventType": "DISCOVERY",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          },
+          {
+            "id": "sequence:1:shot:2",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:002",
+              "eventType": "ACTIVATION",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sequence:2",
+        "sceneId": "scene:investigation",
+        "shots": [
+          {
+            "id": "sequence:2:shot:1",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:003",
+              "eventType": "INSPECTION",
+              "participants": [
+                "entity:lia"
+              ],
+              "locationId": "entity:house"
+            }
+          },
+          {
+            "id": "sequence:2:shot:2",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:004",
+              "eventType": "REACTION_TEST",
+              "participants": [
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          },
+          {
+            "id": "sequence:2:shot:3",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:005",
+              "eventType": "SIBLING_CONFLICT",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sequence:3",
+        "sceneId": "scene:opening",
+        "shots": [
+          {
+            "id": "sequence:3:shot:1",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:006",
+              "eventType": "PASSAGE_REVEAL",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          },
+          {
+            "id": "sequence:3:shot:2",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:007",
+              "eventType": "DECISION",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:house"
+            }
+          }
+        ]
+      },
+      {
+        "id": "sequence:4",
+        "sceneId": "scene:mark",
+        "shots": [
+          {
+            "id": "sequence:4:shot:1",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:008",
+              "eventType": "CLUE_DISCOVERY",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:tunnel"
+            }
+          },
+          {
+            "id": "sequence:4:shot:2",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:009a",
+              "eventType": "BRANCH_DESCEND_TOGETHER",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:tunnel"
+            }
+          },
+          {
+            "id": "sequence:4:shot:3",
+            "estimatedSeconds": 9,
+            "source": {
+              "eventId": "event:009b",
+              "eventType": "BRANCH_SEAL_AND_RETURN",
+              "participants": [
+                "entity:lia",
+                "entity:leo"
+              ],
+              "locationId": "entity:tunnel"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "traceability": [
+    {
+      "unitId": "sequence:1:shot:1",
+      "eventIds": [
+        "event:001"
+      ],
+      "sceneId": "scene:discovery"
+    },
+    {
+      "unitId": "sequence:1:shot:2",
+      "eventIds": [
+        "event:002"
+      ],
+      "sceneId": "scene:discovery"
+    },
+    {
+      "unitId": "sequence:2:shot:1",
+      "eventIds": [
+        "event:003"
+      ],
+      "sceneId": "scene:investigation"
+    },
+    {
+      "unitId": "sequence:2:shot:2",
+      "eventIds": [
+        "event:004"
+      ],
+      "sceneId": "scene:investigation"
+    },
+    {
+      "unitId": "sequence:2:shot:3",
+      "eventIds": [
+        "event:005"
+      ],
+      "sceneId": "scene:investigation"
+    },
+    {
+      "unitId": "sequence:3:shot:1",
+      "eventIds": [
+        "event:006"
+      ],
+      "sceneId": "scene:opening"
+    },
+    {
+      "unitId": "sequence:3:shot:2",
+      "eventIds": [
+        "event:007"
+      ],
+      "sceneId": "scene:opening"
+    },
+    {
+      "unitId": "sequence:4:shot:1",
+      "eventIds": [
+        "event:008"
+      ],
+      "sceneId": "scene:mark"
+    },
+    {
+      "unitId": "sequence:4:shot:2",
+      "eventIds": [
+        "event:009a"
+      ],
+      "sceneId": "scene:mark"
+    },
+    {
+      "unitId": "sequence:4:shot:3",
+      "eventIds": [
+        "event:009b"
+      ],
+      "sceneId": "scene:mark"
+    }
+  ],
+  "validation": {
+    "mappedEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "storyEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "unmappedStoryEventIds": []
+  }
+}
