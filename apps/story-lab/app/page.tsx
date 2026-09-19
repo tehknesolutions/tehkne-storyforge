@@ -35,6 +35,7 @@ export default function HomePage() {
         </div>
         <div className="status-row">
           <span className="status canon">CANON-FIRST</span>
+          <a className="review-link" href="/game">Play probe</a>
           <a className="review-link" href="/review">Review candidates</a>
           <span className="version">Story Lab 0.1</span>
         </div>
