@@ -32,6 +32,12 @@ import { NarrativeForgeView } from "./narrative-forge-view";
 import { SceneAuthorityEditor } from "./scene-authority-editor";
 import { VisualNovelView } from "./visual-novel-view";
 import { SemanticAuthorityView } from "./semantic-authority-view";
+import { DurableWorkspacePanel } from "./durable-workspace-panel";
+import {
+  DURABLE_WORKSPACE_REF_STORAGE_KEY,
+  type DurableStoryWorkspacePayload,
+  type DurableWorkspaceRef
+} from "@/lib/workspace-persistence";
 import { useI18n } from "./i18n";
 
 const STORAGE_KEY = "tehkne:storyforge:workspace:v0.2";
@@ -108,7 +114,7 @@ function migrate(
 }
 
 export function StoryWorkspace() {
-  const { locale, t } = useI18n();
+  const { locale, setLocale, t } = useI18n();
   const [state, setState] = useState<StoryWorkspaceState>(() => fresh(locale));
   const [forgeV03, setForgeV03] = useState<NarrativeForgeV03 | null>(null);
   const [sceneAuthority, setSceneAuthority] =
@@ -117,6 +123,8 @@ export function StoryWorkspace() {
     useState<V04WebtoonRealization | null>(null);
   const [visualNovelV041, setVisualNovelV041] =
     useState<NativeVisualNovelRealization | null>(null);
+  const [durableRef, setDurableRef] =
+    useState<DurableWorkspaceRef | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -164,6 +172,15 @@ export function StoryWorkspace() {
             JSON.parse(storedVisualNovel) as NativeVisualNovelRealization
           );
         }
+      }
+
+      const storedDurableRef = window.localStorage.getItem(
+        DURABLE_WORKSPACE_REF_STORAGE_KEY
+      );
+      if (storedDurableRef) {
+        setDurableRef(
+          JSON.parse(storedDurableRef) as DurableWorkspaceRef
+        );
       }
     } catch {
       setState(fresh(locale));
@@ -237,6 +254,21 @@ export function StoryWorkspace() {
     }
   }, [visualNovelV041, hydrated]);
 
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (durableRef) {
+      window.localStorage.setItem(
+        DURABLE_WORKSPACE_REF_STORAGE_KEY,
+        JSON.stringify(durableRef)
+      );
+    } else {
+      window.localStorage.removeItem(
+        DURABLE_WORKSPACE_REF_STORAGE_KEY
+      );
+    }
+  }, [durableRef, hydrated]);
+
   const words = useMemo(() => {
     const normalized = state.idea.trim();
     return normalized ? normalized.split(/\s+/).length : 0;
@@ -264,6 +296,28 @@ export function StoryWorkspace() {
     state.narrativeDraft,
     forgeV03
   ]);
+
+  const durablePayload = useMemo<DurableStoryWorkspacePayload>(
+    () => ({
+      workspace: {
+        ...state,
+        updatedAt: new Date().toISOString()
+      },
+      narrativeForgeV03: forgeV03,
+      sceneAuthorityV04: sceneAuthority,
+      webtoonRealizationV04: webtoonV04,
+      visualNovelRealizationV041: visualNovelV041,
+      semanticAssertionLedgerV042: semanticLedgerV042
+    }),
+    [
+      state,
+      forgeV03,
+      sceneAuthority,
+      webtoonV04,
+      visualNovelV041,
+      semanticLedgerV042
+    ]
+  );
 
   function clearAdvancedAuthoring() {
     setForgeV03(null);
@@ -404,6 +458,7 @@ export function StoryWorkspace() {
 
   function reset() {
     clearAdvancedAuthoring();
+    setDurableRef(null);
     setState(fresh(locale));
     window.localStorage.removeItem(STORAGE_KEY);
     window.localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -411,6 +466,20 @@ export function StoryWorkspace() {
     window.localStorage.removeItem(SCENE_AUTHORITY_STORAGE_KEY);
     window.localStorage.removeItem(V04_WEBTOON_STORAGE_KEY);
     window.localStorage.removeItem(V041_VISUAL_NOVEL_STORAGE_KEY);
+    window.localStorage.removeItem(
+      DURABLE_WORKSPACE_REF_STORAGE_KEY
+    );
+  }
+
+  function loadDurableWorkspace(
+    payload: DurableStoryWorkspacePayload
+  ) {
+    setLocale(payload.workspace.locale);
+    setState(payload.workspace);
+    setForgeV03(payload.narrativeForgeV03);
+    setSceneAuthority(payload.sceneAuthorityV04);
+    setWebtoonV04(payload.webtoonRealizationV04);
+    setVisualNovelV041(payload.visualNovelRealizationV041);
   }
 
   function downloadJson(value: unknown, prefix: string) {
@@ -509,6 +578,19 @@ export function StoryWorkspace() {
         </div>
         <span className="status candidate">SEMANTIC AUTHORITY V0.4.2</span>
       </div>
+
+      <DurableWorkspacePanel
+        payload={durablePayload}
+        suggestedTitle={
+          state.universe?.title ??
+          state.storyDNA?.premise ??
+          t("cloud.untitled")
+        }
+        canSave={Boolean(state.idea.trim())}
+        activeRef={durableRef}
+        onActiveRefChange={setDurableRef}
+        onLoad={loadDurableWorkspace}
+      />
 
       <div className="workspace-step">
         <div className="workspace-step-label">01 · {t("workspace.idea")}</div>

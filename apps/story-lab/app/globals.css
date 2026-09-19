@@ -1609,3 +1609,110 @@ button.secondary {
     grid-template-columns: 1fr;
   }
 }
+
+
+.cloud-workspace-panel {
+  margin: 0;
+  padding: clamp(20px, 3vw, 30px) clamp(24px, 4vw, 42px);
+  border-bottom: 1px solid var(--line);
+  background: rgba(7, 10, 15, 0.72);
+}
+
+.cloud-workspace-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.cloud-workspace-head small {
+  color: var(--accent-2);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.cloud-workspace-head h3 {
+  margin: 5px 0 7px;
+}
+
+.cloud-workspace-head p {
+  max-width: 720px;
+  margin: 0;
+}
+
+.cloud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.cloud-message {
+  margin: 12px 0 0;
+  font-size: 0.86rem;
+}
+
+.cloud-message.success {
+  color: var(--accent);
+}
+
+.cloud-message.warning {
+  color: var(--warning);
+}
+
+.cloud-auth-required {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.cloud-auth-required p {
+  margin: 0;
+}
+
+.cloud-workspace-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.cloud-workspace-list > article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #0b0d12;
+}
+
+.cloud-workspace-list > article.active {
+  border-color: var(--accent);
+  background: rgba(166, 255, 203, 0.04);
+}
+
+.cloud-workspace-list article > div {
+  display: grid;
+  gap: 3px;
+}
+
+.cloud-workspace-list span,
+.cloud-workspace-list small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 700px) {
+  .cloud-workspace-head,
+  .cloud-auth-required,
+  .cloud-workspace-list > article {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

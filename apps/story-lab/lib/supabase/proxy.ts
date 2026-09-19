@@ -11,7 +11,8 @@ const PROTECTED_PREFIXES = [
   "/api/production",
   "/api/review",
   "/api/canon",
-  "/api/authority-audit"
+  "/api/authority-audit",
+  "/api/workspace"
 ];
 
 function requiresAuthentication(pathname: string): boolean {
