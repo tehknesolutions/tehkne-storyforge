@@ -74,6 +74,22 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 7. **Provenance** — important facts and generated artifacts must be traceable.
 8. **Transmedia by design** — each medium may reinterpret presentation without silently changing canon.
 
+## Product language policy
+
+TEHKNÉ Solutions official product language order:
+
+```text
+1. PT-BR — official / default / fallback
+2. EN
+3. ES
+```
+
+Story Lab implements a global persistent language switcher and passes the
+selected locale into provider generation. Missing translations always fall
+back to PT-BR.
+
+Policy: `docs/TEHKNE-PRODUCT-I18N-STANDARD.md`
+
 ## Repository status
 
 **TEHKNÉ STORYFORGE V0.8 RC1 — Durable Creator Authority**
