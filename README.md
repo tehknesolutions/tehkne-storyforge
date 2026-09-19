@@ -134,7 +134,38 @@ Supabase durable backend is now live and validated:
 - live RLS / Canon Authority test: **12/12 PASS**;
 - all temporary test users/data cleaned: **0 remaining**.
 
-V0.8 remains RC1 only because package-lock / real npm typecheck+build and Vercel preview QA are still pending.
+V0.8 remains RC1 at the platform level. The Story Lab V0.3 Narrative Forge layer, however, is now deployed and production-build validated on Vercel.
+
+### Story Workspace V0.3 — Narrative Forge
+
+Current creator workflow:
+
+```text
+IDEA
+→ CLAIM LEDGER
+→ EVENTS
+→ SCENES
+→ DIALOGUE
+→ WEBTOON REALIZATION
+→ T-NIR V0.5 EXPORT
+```
+
+Implemented:
+
+- literal creator claims preserved with provenance;
+- normalized source claims kept as `IDEA`;
+- generated expansions kept as `CANDIDATE`;
+- scene/beat/dialogue layer separated from fabula;
+- Webtoon realization at 40 panels for the eight-scene reference structure;
+- panel → scene → event traceability;
+- T-NIR V0.5-compatible export;
+- PT-BR / EN / ES UI for the new authoring layer;
+- production prebuild generality probe using an unrelated story;
+- Vercel deployment with the generality gate: **SUCCESS**.
+
+Checkpoint: `15a428717c1098e2341f2850505e60c4aeffe1da`.
+
+Next Story Lab checkpoint: **V0.4 — Scene Authority & Revision**.
 
 ## License
 
