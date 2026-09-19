@@ -23,9 +23,11 @@ export default function GeneratePage() {
       .then((data) => {
         setStatus(data);
         setResult(
-          data.configured
-            ? "Provider configured. Reference generation is available."
-            : "Provider locked: OPENAI_API_KEY is not configured."
+          data.enabled
+            ? "Provider configured and explicitly enabled. Reference generation is available."
+            : data.configured
+              ? "Provider configured but execution is locked until STORYFORGE_GENERATION_ENABLED=true."
+              : "Provider locked: OPENAI_API_KEY is not configured."
         );
       })
       .catch(() => setResult("Could not read provider status."));
@@ -74,7 +76,7 @@ export default function GeneratePage() {
 
         <button
           type="button"
-          disabled={!status.configured || busy}
+          disabled={!status.enabled || busy}
           onClick={generate}
         >
           {busy ? "Generating…" : "Generate reference Manga panel"}
