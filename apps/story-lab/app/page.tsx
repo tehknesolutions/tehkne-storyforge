@@ -41,7 +41,7 @@ export default function HomePage() {
           <a className="review-link" href="/production">Production</a>
           <a className="review-link" href="/game">Play probe</a>
           <a className="review-link" href="/review">Review candidates</a>
-          <span className="version">Story Lab 0.2</span>
+          <span className="version">Story Lab 0.3 RC1</span>
         </div>
       </header>
 
@@ -56,7 +56,7 @@ export default function HomePage() {
           </p>
         </div>
         <div className="runtime-card">
-          <div className="runtime-title">STORYFORGE V0.7</div>
+          <div className="runtime-title">STORYFORGE V0.8 RC1</div>
           <strong>T-NIR V0.5 · T-PIR V0.1</strong>
           <code>AI → CANDIDATE → REVIEW → CANON</code>
           <span>Automatic canon promotion: OFF</span>
