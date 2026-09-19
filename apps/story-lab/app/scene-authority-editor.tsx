@@ -1,6 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useMemo,
+  useState,
+  type ChangeEvent
+} from "react";
 import {
   approveSceneRevision,
   regenerateScene,
@@ -9,6 +13,7 @@ import {
   selectSceneRevision,
   selectedSceneRevisions,
   updateDialogueLine,
+  type DialogueRevisionStatus,
   type SceneAuthorityWorkspace,
   type SceneRevision,
   type V04WebtoonRealization
@@ -34,39 +39,46 @@ type EditState = {
   dramaticPurpose: string;
   action: string;
   dialogue: string;
-} | null;
+};
 
-function statusClass(status: SceneRevision["status"]) {
+function sceneStatusClass(status: SceneRevision["status"]) {
   return status === "APPROVED_LOCAL" ? "canon" : "candidate";
 }
 
-export function SceneAuthorityEditor({
-  authority,
-  locale,
-  webtoon,
-  targetMedia,
-  onChange,
-  onCompile,
-  onExportAuthority,
-  onExportTnir,
-  onExportWebtoon
-}: Props) {
-  const { t } = useI18n();
-  const [editing, setEditing] = useState<EditState>(null);
+function lineStatusClass(status: DialogueRevisionStatus) {
+  return status === "APPROVED_LOCAL" ? "canon" : "candidate";
+}
 
-  const selected = useMemo(
+export function SceneAuthorityEditor(props: Props) {
+  const {
+    authority,
+    locale,
+    webtoon,
+    targetMedia,
+    onChange,
+    onCompile,
+    onExportAuthority,
+    onExportTnir,
+    onExportWebtoon
+  } = props;
+
+  const { t } = useI18n();
+  const [editing, setEditing] = useState<EditState | null>(null);
+
+  const scenes = useMemo(
     () => selectedSceneRevisions(authority),
     [authority]
   );
 
-  const approvedCount = selected.filter(
+  const approvedCount = scenes.filter(
     (scene) => scene.status === "APPROVED_LOCAL"
   ).length;
-  const rejectedCount = selected.filter(
+
+  const rejectedCount = scenes.filter(
     (scene) => scene.status === "REJECTED"
   ).length;
 
-  function startEdit(scene: SceneRevision) {
+  function beginEdit(scene: SceneRevision) {
     setEditing({
       sceneId: scene.sceneId,
       title: scene.title,
@@ -76,47 +88,96 @@ export function SceneAuthorityEditor({
     });
   }
 
+  function updateEdit(
+    field: keyof Omit<EditState, "sceneId">,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    const value = event.target.value;
+    setEditing((current) =>
+      current ? { ...current, [field]: value } : current
+    );
+  }
+
   function saveEdit(scene: SceneRevision) {
     if (!editing || editing.sceneId !== scene.sceneId) return;
 
-    const dialogue = scene.dialogue.map((line, index) =>
-      index === 0
-        ? {
-            ...line,
-            text: editing.dialogue,
-            status: "CANDIDATE" as const
-          }
-        : line
+    const dialogue = scene.dialogue.map((line, index) => ({
+      ...line,
+      ...(index === 0 ? { text: editing.dialogue } : {}),
+      status:
+        index === 0
+          ? ("CANDIDATE" as const)
+          : line.status
+    }));
+
+    const next = reviseScene(
+      authority,
+      scene.sceneId,
+      {
+        title: editing.title,
+        dramaticPurpose: editing.dramaticPurpose,
+        action: editing.action,
+        dialogue
+      },
+      t("scene.manualRevisionRationale")
     );
 
+    onChange(next);
+    setEditing(null);
+  }
+
+  function approveScene(sceneId: string) {
+    onChange(approveSceneRevision(authority, sceneId));
+  }
+
+  function rejectScene(sceneId: string) {
+    onChange(rejectSceneRevision(authority, sceneId));
+  }
+
+  function regenerate(sceneId: string, alternative = false) {
     onChange(
-      reviseScene(
+      regenerateScene(
         authority,
-        scene.sceneId,
-        {
-          title: editing.title,
-          dramaticPurpose: editing.dramaticPurpose,
-          action: editing.action,
-          dialogue
-        },
-        t("scene.manualRevisionRationale")
+        sceneId,
+        locale,
+        alternative ? { alternative: true } : undefined
       )
     );
-    setEditing(null);
+  }
+
+  function chooseRevision(sceneId: string, revisionId: string) {
+    onChange(selectSceneRevision(authority, sceneId, revisionId));
+  }
+
+  function changeDialogueStatus(
+    sceneId: string,
+    lineId: string,
+    status: DialogueRevisionStatus
+  ) {
+    onChange(
+      updateDialogueLine(
+        authority,
+        sceneId,
+        lineId,
+        { status }
+      )
+    );
   }
 
   return (
     <>
-      <div className="workspace-step scene-authority-shell">
+      <section className="workspace-step scene-authority-shell">
         <div className="workspace-step-label">
           08 · {t("scene.authorityTitle")}
         </div>
-        <p className="muted forge-intro">{t("scene.authorityBody")}</p>
+        <p className="muted forge-intro">
+          {t("scene.authorityBody")}
+        </p>
 
         <div className="scene-authority-summary">
           <div>
             <small>{t("scene.total")}</small>
-            <strong>{selected.length}</strong>
+            <strong>{scenes.length}</strong>
           </div>
           <div>
             <small>{t("scene.approved")}</small>
@@ -133,8 +194,11 @@ export function SceneAuthorityEditor({
         </div>
 
         <div className="scene-revision-list">
-          {selected.map((scene) => {
-            const entry = authority.sceneIndex[scene.sceneId];
+          {scenes.map((scene) => {
+            const indexEntry = authority.sceneIndex[scene.sceneId];
+            const revisionIds = indexEntry?.revisionIds ?? [];
+            const selectedRevisionId =
+              indexEntry?.selectedRevisionId ?? scene.id;
             const isEditing = editing?.sceneId === scene.sceneId;
 
             return (
@@ -149,11 +213,18 @@ export function SceneAuthorityEditor({
                       <code>{scene.sceneId}</code>
                     </div>
                   </div>
+
                   <div className="scene-status-stack">
-                    <span className={`status ${statusClass(scene.status)}`}>
+                    <span
+                      className={`status ${sceneStatusClass(
+                        scene.status
+                      )}`}
+                    >
                       {scene.status}
                     </span>
-                    <span className="revision-pill">r{scene.revision}</span>
+                    <span className="revision-pill">
+                      r{scene.revision}
+                    </span>
                   </div>
                 </div>
 
@@ -165,28 +236,27 @@ export function SceneAuthorityEditor({
                 <div className="revision-history">
                   <small>{t("scene.history")}</small>
                   <div>
-                    {entry?.revisionIds.map((revisionId) => {
-                      const revision = authority.revisions[revisionId];
+                    {revisionIds.map((revisionId) => {
+                      const revision =
+                        authority.revisions[revisionId];
                       if (!revision) return null;
-                      const selectedRevision =
-                        entry?.selectedRevisionId === revisionId;
+
+                      const active =
+                        selectedRevisionId === revisionId;
 
                       return (
                         <button
                           type="button"
                           key={revisionId}
                           className={
-                            selectedRevision
+                            active
                               ? "revision-button active"
                               : "revision-button"
                           }
                           onClick={() =>
-                            onChange(
-                              selectSceneRevision(
-                                authority,
-                                scene.sceneId,
-                                revisionId
-                              )
+                            chooseRevision(
+                              scene.sceneId,
+                              revisionId
                             )
                           }
                         >
@@ -204,10 +274,7 @@ export function SceneAuthorityEditor({
                       <input
                         value={editing.title}
                         onChange={(event) =>
-                          setEditing({
-                            ...editing,
-                            title: event.target.value
-                          })
+                          updateEdit("title", event)
                         }
                       />
                     </label>
@@ -218,10 +285,10 @@ export function SceneAuthorityEditor({
                         rows={3}
                         value={editing.dramaticPurpose}
                         onChange={(event) =>
-                          setEditing({
-                            ...editing,
-                            dramaticPurpose: event.target.value
-                          })
+                          updateEdit(
+                            "dramaticPurpose",
+                            event
+                          )
                         }
                       />
                     </label>
@@ -232,10 +299,7 @@ export function SceneAuthorityEditor({
                         rows={4}
                         value={editing.action}
                         onChange={(event) =>
-                          setEditing({
-                            ...editing,
-                            action: event.target.value
-                          })
+                          updateEdit("action", event)
                         }
                       />
                     </label>
@@ -246,10 +310,7 @@ export function SceneAuthorityEditor({
                         rows={3}
                         value={editing.dialogue}
                         onChange={(event) =>
-                          setEditing({
-                            ...editing,
-                            dialogue: event.target.value
-                          })
+                          updateEdit("dialogue", event)
                         }
                       />
                     </label>
@@ -273,7 +334,9 @@ export function SceneAuthorityEditor({
                 ) : (
                   <>
                     <div className="scene-field">
-                      <small>{t("forge.dramaticPurpose")}</small>
+                      <small>
+                        {t("forge.dramaticPurpose")}
+                      </small>
                       <p>{scene.dramaticPurpose}</p>
                     </div>
 
@@ -283,62 +346,69 @@ export function SceneAuthorityEditor({
                     </div>
 
                     <div className="scene-source-claims">
-                      <small>{t("scene.sourceClaims")}</small>
+                      <small>
+                        {t("scene.sourceClaims")}
+                      </small>
                       <div>
                         {scene.sourceClaimIds.map((claimId) => (
-                          <code key={claimId}>{claimId}</code>
+                          <code key={claimId}>
+                            {claimId}
+                          </code>
                         ))}
                       </div>
                     </div>
 
                     <div className="dialogue-block">
                       <small>{t("forge.dialogue")}</small>
-                      {scene.dialogue.length ? (
+
+                      {scene.dialogue.length > 0 ? (
                         scene.dialogue.map((line) => (
-                          <div className="dialogue-revision-row" key={line.id}>
+                          <div
+                            className="dialogue-revision-row"
+                            key={line.id}
+                          >
                             <p>
-                              <strong>{line.speakerName}:</strong> {line.text}
+                              <strong>
+                                {line.speakerName}:
+                              </strong>{" "}
+                              {line.text}
                             </p>
+
                             <div>
                               <span
-                                className={`status ${
-                                  line.status === "APPROVED_LOCAL"
-                                    ? "canon"
-                                    : "candidate"
-                                }`}
+                                className={`status ${lineStatusClass(
+                                  line.status
+                                )}`}
                               >
                                 {line.status}
                               </span>
-                              {line.status !== "APPROVED_LOCAL" ? (
+
+                              {line.status !==
+                              "APPROVED_LOCAL" ? (
                                 <button
                                   className="micro-button"
                                   type="button"
                                   onClick={() =>
-                                    onChange(
-                                      updateDialogueLine(
-                                        authority,
-                                        scene.sceneId,
-                                        line.id,
-                                        { status: "APPROVED_LOCAL" }
-                                      )
+                                    changeDialogueStatus(
+                                      scene.sceneId,
+                                      line.id,
+                                      "APPROVED_LOCAL"
                                     )
                                   }
                                 >
                                   {t("scene.approveLine")}
                                 </button>
                               ) : null}
+
                               {line.status !== "REJECTED" ? (
                                 <button
                                   className="micro-button secondary"
                                   type="button"
                                   onClick={() =>
-                                    onChange(
-                                      updateDialogueLine(
-                                        authority,
-                                        scene.sceneId,
-                                        line.id,
-                                        { status: "REJECTED" }
-                                      )
+                                    changeDialogueStatus(
+                                      scene.sceneId,
+                                      line.id,
+                                      "REJECTED"
                                     )
                                   }
                                 >
@@ -349,7 +419,9 @@ export function SceneAuthorityEditor({
                           </div>
                         ))
                       ) : (
-                        <p className="muted">{t("scene.noDialogue")}</p>
+                        <p className="muted">
+                          {t("scene.noDialogue")}
+                        </p>
                       )}
                     </div>
                   </>
@@ -360,9 +432,7 @@ export function SceneAuthorityEditor({
                     <button
                       type="button"
                       onClick={() =>
-                        onChange(
-                          approveSceneRevision(authority, scene.sceneId)
-                        )
+                        approveScene(scene.sceneId)
                       }
                     >
                       {t("scene.approve")}
@@ -372,7 +442,7 @@ export function SceneAuthorityEditor({
                   <button
                     className="secondary"
                     type="button"
-                    onClick={() => startEdit(scene)}
+                    onClick={() => beginEdit(scene)}
                   >
                     {t("scene.edit")}
                   </button>
@@ -381,13 +451,7 @@ export function SceneAuthorityEditor({
                     className="secondary"
                     type="button"
                     onClick={() =>
-                      onChange(
-                        regenerateScene(
-                          authority,
-                          scene.sceneId,
-                          locale
-                        )
-                      )
+                      regenerate(scene.sceneId)
                     }
                   >
                     {t("scene.regenerate")}
@@ -397,14 +461,7 @@ export function SceneAuthorityEditor({
                     className="secondary"
                     type="button"
                     onClick={() =>
-                      onChange(
-                        regenerateScene(
-                          authority,
-                          scene.sceneId,
-                          locale,
-                          { alternative: true }
-                        )
-                      )
+                      regenerate(scene.sceneId, true)
                     }
                   >
                     {t("scene.alternative")}
@@ -415,9 +472,7 @@ export function SceneAuthorityEditor({
                       className="danger-button"
                       type="button"
                       onClick={() =>
-                        onChange(
-                          rejectSceneRevision(authority, scene.sceneId)
-                        )
+                        rejectScene(scene.sceneId)
                       }
                     >
                       {t("scene.reject")}
@@ -443,10 +498,10 @@ export function SceneAuthorityEditor({
             {t("scene.compileSelected")}
           </button>
         </div>
-      </div>
+      </section>
 
       {webtoon ? (
-        <div className="workspace-step">
+        <section className="workspace-step">
           <div className="workspace-step-label">
             09 · {t("scene.selectedRealization")}
           </div>
@@ -461,10 +516,16 @@ export function SceneAuthorityEditor({
               <strong>{webtoon.panelCount}</strong>
             </div>
             <div>
-              <small>{t("scene.selectedRevisions")}</small>
-              <strong>{webtoon.selectedSceneRevisionIds.length}</strong>
+              <small>
+                {t("scene.selectedRevisions")}
+              </small>
+              <strong>
+                {webtoon.selectedSceneRevisionIds.length}
+              </strong>
             </div>
-            <span className="status candidate">{webtoon.authority}</span>
+            <span className="status candidate">
+              {webtoon.authority}
+            </span>
           </div>
 
           <div className="webtoon-panel-list">
@@ -472,39 +533,53 @@ export function SceneAuthorityEditor({
               <article key={panel.id}>
                 <div className="review-head">
                   <span className="step">
-                    {String(panel.index).padStart(2, "0")}
+                    {String(panel.index).padStart(
+                      2,
+                      "0"
+                    )}
                   </span>
                   <code>{panel.kind}</code>
                 </div>
+
                 <p>{panel.visualIntent}</p>
+
                 {panel.text ? (
                   <blockquote>
                     {panel.speakerName ? (
-                      <strong>{panel.speakerName}: </strong>
+                      <strong>
+                        {panel.speakerName}:{" "}
+                      </strong>
                     ) : null}
                     {panel.text}
                   </blockquote>
                 ) : null}
+
                 <div className="panel-meta">
                   <span>{panel.eventId}</span>
                   <span>{panel.sceneRevisionId}</span>
                   <span>
-                    {t("forge.scrollGap")}: {panel.scrollGapAfter}px
+                    {t("forge.scrollGap")}:{" "}
+                    {panel.scrollGapAfter}px
                   </span>
                 </div>
               </article>
             ))}
           </div>
-        </div>
+        </section>
       ) : null}
 
-      <div className="workspace-step">
+      <section className="workspace-step">
         <div className="workspace-step-label">
           10 · {t("scene.exports")}
         </div>
-        <p className="muted forge-intro">{t("scene.exportsBody")}</p>
+        <p className="muted forge-intro">
+          {t("scene.exportsBody")}
+        </p>
         <div className="workspace-actions">
-          <button type="button" onClick={onExportAuthority}>
+          <button
+            type="button"
+            onClick={onExportAuthority}
+          >
             {t("scene.exportAuthority")}
           </button>
           <button
@@ -524,7 +599,7 @@ export function SceneAuthorityEditor({
             </button>
           ) : null}
         </div>
-      </div>
+      </section>
     </>
   );
 }
