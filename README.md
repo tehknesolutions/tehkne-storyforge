@@ -76,25 +76,39 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**T-NIR V0.3 — Executable Narrative Semantics + Deterministic Media Plans**
+**T-NIR V0.4 — Deterministic Narrative Runtime + Canon-Safe Generation**
 
 Implemented:
 
 - character cognition and agency: Belief, Knowledge, Goal, Intention, Plan, Secret and CharacterState;
+- evidence-driven BeliefRevision;
+- belief-dependent Plan revisions and deterministic ReplanRules;
 - explicit Choice / ChoiceOption;
-- StateTransition;
-- WorldRule;
-- NarrativeBranch;
-- JSON Schema V0.1–V0.3;
-- semantic integrity validation;
+- StateTransition and branch-state reduction;
+- executable WorldRule conditions/effects;
+- NarrativeBranch with temporal sequencing;
+- JSON Schema V0.1–V0.4;
+- semantic, runtime-contract, canon/timeline and media validation;
 - first-class Manga, Webtoon, Manhwa, Manhua, Light Novel and Anime profiles;
 - deterministic Media Plan compiler;
-- traceability from media units back to source Events;
-- compiled fixtures for Prose, Manga, Webtoon, Anime Episode and Visual Novel.
+- formal traceability contract back to Events, Choices, Rules and Evidence;
+- runtime snapshots for both reference branches;
+- Generation Brief compiler with Creator Authority guardrails.
 
-Reference result: **10/10 story events mapped in every current compiler target, 0 unmapped events.**
+Reference audit: **PASS / 0 errors**.
 
-Next research/engineering milestone: T-NIR V0.4 — rule execution, belief revision, replanning, branch-state reduction, canon/timeline validation and the first generative layer above deterministic Media Plans.
+Current transmedia preservation:
+
+- Prose: 10/10 story events mapped;
+- Manga: 10/10;
+- Webtoon: 10/10;
+- Anime Episode: 10/10;
+- Visual Novel: 10/10;
+- unmapped events: **0**.
+
+Generation contract: `mayInventCanon = false`; new unapproved facts become `CANDIDATE`.
+
+Next research/engineering milestone: **T-NIR V0.5 — decision scoring, rule expression engine, plan repair, model adapters and first realized media outputs.**
 
 ## License
 
