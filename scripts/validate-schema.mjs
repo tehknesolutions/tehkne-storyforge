@@ -3,7 +3,7 @@ import process from "node:process";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-const schemaPath = new URL("../schemas/tnir-v0.2.schema.json", import.meta.url);
+const schemaPath = new URL("../schemas/tnir-v0.3.schema.json", import.meta.url);
 const samplePath = process.argv[2]
   ? new URL(`../${process.argv[2]}`, import.meta.url)
   : new URL("../examples/micro-universe.json", import.meta.url);
