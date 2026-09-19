@@ -36,6 +36,7 @@
   ],
   "exclude": [
     "node_modules",
-    "scripts/probe-scene-authority-v04.ts"
+    "scripts/probe-scene-authority-v04.ts",
+    "scripts/probe-scene-expansion-v041.ts"
   ]
 }
