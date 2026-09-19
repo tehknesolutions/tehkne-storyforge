@@ -169,7 +169,7 @@ export function SceneAuthorityEditor({
                       const revision = authority.revisions[revisionId];
                       if (!revision) return null;
                       const selectedRevision =
-                        entry.selectedRevisionId === revisionId;
+                        entry?.selectedRevisionId === revisionId;
 
                       return (
                         <button
