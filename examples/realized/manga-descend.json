@@ -1,0 +1,291 @@
+{
+  "artifactType": "REALIZED_MEDIA",
+  "realizationVersion": "0.1.0",
+  "targetMedia": "MANGA",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.5.0",
+    "realizationProfileId": "realization:manga-descend",
+    "storyId": "story:first-light"
+  },
+  "output": {
+    "kind": "MANGA_PANEL_SCRIPT",
+    "readingDirection": "RIGHT_TO_LEFT",
+    "selectedBranchId": "branch:descend",
+    "chapter": {
+      "id": "chapter:1",
+      "title": "First Light",
+      "pages": [
+        {
+          "page": 1,
+          "sourceEventId": "event:001",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "MEDIUM_TWO_SHOT",
+              "visualDirection": "Lia and Leo find the Memory Lantern inside the old chest.",
+              "dialogue": [
+                {
+                  "speaker": "Lia",
+                  "text": "This was hidden here for a reason."
+                },
+                {
+                  "speaker": "Leo",
+                  "text": "Or hidden because we were not supposed to find it."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:001"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "sourceEventId": "event:002",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "CLOSE_UP",
+              "visualDirection": "When the lantern activates, it emits a pattern of light.",
+              "dialogue": [],
+              "sfx": [
+                "HUM"
+              ],
+              "trace": {
+                "eventIds": [
+                  "event:002"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 3,
+          "sourceEventId": "event:003",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "INSERT_CLOSE_UP",
+              "visualDirection": "Lia studies the lantern and finds an engraving.",
+              "dialogue": [
+                {
+                  "speaker": "Lia",
+                  "text": "I thought Dad might have left this."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:003"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 4,
+          "sourceEventId": "event:004",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "MEDIUM_SHOT",
+              "visualDirection": "Leo moves the lantern near the wall beside the cellar stairs.",
+              "dialogue": [
+                {
+                  "speaker": "Leo",
+                  "text": "It reacts to the wall."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:004"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 5,
+          "sourceEventId": "event:005",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "SHOT_REVERSE_SHOT",
+              "visualDirection": "Their different explanations turn into an argument: Lia wants answers, while Leo treats the unknown as a risk.",
+              "dialogue": [
+                {
+                  "speaker": "Leo",
+                  "text": "Finding something does not mean we have to follow it."
+                },
+                {
+                  "speaker": "Lia",
+                  "text": "And being afraid of it does not mean we should stop."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:005"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 6,
+          "sourceEventId": "event:006",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "WIDE_REVEAL",
+              "visualDirection": "The concealed passage opens and reveals the hidden tunnel.",
+              "dialogue": [
+                {
+                  "speaker": "Lia",
+                  "text": "There really is a passage."
+                }
+              ],
+              "sfx": [
+                "RUMBLE"
+              ],
+              "trace": {
+                "eventIds": [
+                  "event:006"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 7,
+          "sourceEventId": "event:007",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "MEDIUM_TWO_SHOT",
+              "visualDirection": "Lia decides to enter.",
+              "dialogue": [],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:007"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 8,
+          "sourceEventId": "event:008",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "INSERT_CLOSE_UP",
+              "visualDirection": "Inside the tunnel they discover Grandmother's mark.",
+              "dialogue": [
+                {
+                  "speaker": "Lia",
+                  "text": "That mark is Grandmother's."
+                },
+                {
+                  "speaker": "Leo",
+                  "text": "Then my trap theory just got a lot weaker."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:008"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "page": 9,
+          "sourceEventId": "event:009a",
+          "panels": [
+            {
+              "panel": 1,
+              "framing": "WIDE_BACK_SHOT",
+              "visualDirection": "They choose to continue deeper together.",
+              "dialogue": [
+                {
+                  "speaker": "Leo",
+                  "text": "Together."
+                },
+                {
+                  "speaker": "Lia",
+                  "text": "Together."
+                }
+              ],
+              "sfx": [],
+              "trace": {
+                "eventIds": [
+                  "event:009a"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "assertions": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:lantern-hidden"
+    },
+    {
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:tunnel-protected"
+    }
+  ],
+  "traceability": [
+    {
+      "sourceEventId": "event:001",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:002",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:003",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:004",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:005",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:006",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:007",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:008",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:009a",
+      "sourceBranchId": "branch:descend"
+    }
+  ]
+}
