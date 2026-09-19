@@ -488,14 +488,21 @@ export function SceneAuthorityEditor(props: Props) {
           <p className="muted">
             {targetMedia === "WEBTOON"
               ? t("scene.compileBody")
-              : t("scene.webtoonOnly")}
+              : targetMedia === "VISUAL_NOVEL"
+                ? t("scene.compileVisualNovelBody")
+                : t("scene.nativeMediaUnsupported")}
           </p>
           <button
             type="button"
             onClick={onCompile}
-            disabled={targetMedia !== "WEBTOON"}
+            disabled={
+              targetMedia !== "WEBTOON" &&
+              targetMedia !== "VISUAL_NOVEL"
+            }
           >
-            {t("scene.compileSelected")}
+            {targetMedia === "VISUAL_NOVEL"
+              ? t("scene.compileVisualNovel")
+              : t("scene.compileSelected")}
           </button>
         </div>
       </section>

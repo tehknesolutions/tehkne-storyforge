@@ -14,14 +14,19 @@ import {
   type NarrativeForgeV03
 } from "@/lib/storyforge-v03";
 import {
-  buildV04TnirExport,
   createSceneAuthorityWorkspace,
   realizeWebtoonFromSelectedRevisions,
   type SceneAuthorityWorkspace,
   type V04WebtoonRealization
 } from "@/lib/storyforge-v04";
+import {
+  buildV041TnirExport,
+  realizeNativeVisualNovel,
+  type NativeVisualNovelRealization
+} from "@/lib/storyforge-v041";
 import { NarrativeForgeView } from "./narrative-forge-view";
 import { SceneAuthorityEditor } from "./scene-authority-editor";
+import { VisualNovelView } from "./visual-novel-view";
 import { useI18n } from "./i18n";
 
 const STORAGE_KEY = "tehkne:storyforge:workspace:v0.2";
@@ -31,6 +36,8 @@ const SCENE_AUTHORITY_STORAGE_KEY =
   "tehkne:storyforge:scene-authority:v0.4";
 const V04_WEBTOON_STORAGE_KEY =
   "tehkne:storyforge:webtoon-realization:v0.4";
+const V041_VISUAL_NOVEL_STORAGE_KEY =
+  "tehkne:storyforge:visual-novel-realization:v0.4.1";
 
 const targets: Array<{ id: MediaTarget; label: string }> = [
   { id: "PROSE_SHORT", label: "Conto / Short Story" },
@@ -103,6 +110,8 @@ export function StoryWorkspace() {
     useState<SceneAuthorityWorkspace | null>(null);
   const [webtoonV04, setWebtoonV04] =
     useState<V04WebtoonRealization | null>(null);
+  const [visualNovelV041, setVisualNovelV041] =
+    useState<NativeVisualNovelRealization | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -139,6 +148,15 @@ export function StoryWorkspace() {
         if (storedWebtoon) {
           setWebtoonV04(
             JSON.parse(storedWebtoon) as V04WebtoonRealization
+          );
+        }
+
+        const storedVisualNovel = window.localStorage.getItem(
+          V041_VISUAL_NOVEL_STORAGE_KEY
+        );
+        if (storedVisualNovel) {
+          setVisualNovelV041(
+            JSON.parse(storedVisualNovel) as NativeVisualNovelRealization
           );
         }
       }
@@ -201,6 +219,19 @@ export function StoryWorkspace() {
     }
   }, [webtoonV04, hydrated]);
 
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (visualNovelV041) {
+      window.localStorage.setItem(
+        V041_VISUAL_NOVEL_STORAGE_KEY,
+        JSON.stringify(visualNovelV041)
+      );
+    } else {
+      window.localStorage.removeItem(V041_VISUAL_NOVEL_STORAGE_KEY);
+    }
+  }, [visualNovelV041, hydrated]);
+
   const words = useMemo(() => {
     const normalized = state.idea.trim();
     return normalized ? normalized.split(/\s+/).length : 0;
@@ -210,6 +241,7 @@ export function StoryWorkspace() {
     setForgeV03(null);
     setSceneAuthority(null);
     setWebtoonV04(null);
+    setVisualNovelV041(null);
   }
 
   function forge() {
@@ -297,6 +329,7 @@ export function StoryWorkspace() {
       (current) => current ?? createSceneAuthorityWorkspace(advanced)
     );
     setWebtoonV04(null);
+    setVisualNovelV041(null);
     setState((current) => ({
       ...current,
       mediaPlan:
@@ -318,10 +351,27 @@ export function StoryWorkspace() {
       setWebtoonV04(
         realizeWebtoonFromSelectedRevisions(sceneAuthority, locale)
       );
+      setVisualNovelV041(null);
+      return;
+    }
+
+    if (
+      state.targetMedia === "VISUAL_NOVEL" &&
+      state.narrativeDraft
+    ) {
+      setVisualNovelV041(
+        realizeNativeVisualNovel(
+          sceneAuthority,
+          state.narrativeDraft,
+          locale
+        )
+      );
+      setWebtoonV04(null);
       return;
     }
 
     setWebtoonV04(null);
+    setVisualNovelV041(null);
   }
 
   function reset() {
@@ -332,6 +382,7 @@ export function StoryWorkspace() {
     window.localStorage.removeItem(FORGE_STORAGE_KEY);
     window.localStorage.removeItem(SCENE_AUTHORITY_STORAGE_KEY);
     window.localStorage.removeItem(V04_WEBTOON_STORAGE_KEY);
+    window.localStorage.removeItem(V041_VISUAL_NOVEL_STORAGE_KEY);
   }
 
   function downloadJson(value: unknown, prefix: string) {
@@ -355,7 +406,8 @@ export function StoryWorkspace() {
         },
         narrativeForgeV03: forgeV03,
         sceneAuthorityV04: sceneAuthority,
-        webtoonRealizationV04: webtoonV04
+        webtoonRealizationV04: webtoonV04,
+        visualNovelRealizationV041: visualNovelV041
       },
       "storyforge-workspace"
     );
@@ -381,15 +433,16 @@ export function StoryWorkspace() {
     }
 
     downloadJson(
-      buildV04TnirExport({
+      buildV041TnirExport({
         storyDNA: state.storyDNA,
         universe: state.universe,
         narrative: state.narrativeDraft,
         forgeV03,
         sceneAuthority,
-        targetMedia: state.targetMedia
+        targetMedia: state.targetMedia,
+        locale
       }),
-      "storyforge-tnir-v0.5-scene-revisions"
+      "storyforge-tnir-v0.5-scene-expansion"
     );
   }
 
@@ -398,6 +451,14 @@ export function StoryWorkspace() {
     downloadJson(
       webtoonV04,
       "storyforge-webtoon-v0.4-episode-001"
+    );
+  }
+
+  function exportVisualNovelV041() {
+    if (!visualNovelV041) return;
+    downloadJson(
+      visualNovelV041,
+      "storyforge-visual-novel-v0.4.1"
     );
   }
 
@@ -701,11 +762,19 @@ export function StoryWorkspace() {
           onChange={(next) => {
             setSceneAuthority(next);
             setWebtoonV04(null);
+            setVisualNovelV041(null);
           }}
           onCompile={compileSelectedSceneRevisions}
           onExportAuthority={exportSceneAuthority}
           onExportTnir={exportTnirV04}
           onExportWebtoon={exportWebtoonV04}
+        />
+      ) : null}
+
+      {visualNovelV041 ? (
+        <VisualNovelView
+          realization={visualNovelV041}
+          onExport={exportVisualNovelV041}
         />
       ) : null}
 
