@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tehkne.solutions/storyforge/schemas/media-artifact-v0.1.schema.json",
+  "title": "Storyforge Media Plan Artifact V0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactType", "compilerVersion", "targetMedia", "source", "output", "traceability", "validation"],
+  "properties": {
+    "artifactType": { "const": "MEDIA_PLAN" },
+    "compilerVersion": { "type": "string", "minLength": 1 },
+    "targetMedia": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["universeId", "universeVersion", "storyId", "manifestId"],
+      "properties": {
+        "universeId": { "type": "string", "pattern": "^universe:" },
+        "universeVersion": { "type": "string" },
+        "storyId": { "type": "string", "pattern": "^story:" },
+        "manifestId": { "type": "string", "pattern": "^media:" }
+      }
+    },
+    "output": { "type": "object" },
+    "traceability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unitId", "eventIds"],
+        "properties": {
+          "unitId": { "type": "string", "minLength": 1 },
+          "eventIds": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^event:" } },
+          "sceneId": { "type": "string", "pattern": "^scene:" },
+          "canonFactIds": { "type": "array", "items": { "type": "string", "pattern": "^fact:" } },
+          "choiceIds": { "type": "array", "items": { "type": "string", "pattern": "^choice:" } },
+          "ruleIds": { "type": "array", "items": { "type": "string", "pattern": "^rule:" } },
+          "evidenceIds": { "type": "array", "items": { "type": "string", "pattern": "^evidence:" } }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mappedEventIds", "storyEventIds", "unmappedStoryEventIds"],
+      "properties": {
+        "mappedEventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "storyEventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "unmappedStoryEventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } }
+      }
+    }
+  }
+}
