@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "prebuild": "tsx scripts/probe-narrative-generality.ts"
+    "prebuild": "tsx scripts/probe-narrative-generality.ts && tsx scripts/probe-scene-authority-v04.ts"
   },
   "dependencies": {
     "next": "16.3.3",
