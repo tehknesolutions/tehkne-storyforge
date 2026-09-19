@@ -1,11 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-const EXAMPLE =
-  "Two siblings discover an object that reveals a hidden passage beneath their home.";
+import { useI18n } from "./i18n";
 
 export function IdeaIntake() {
+  const { t } = useI18n();
   const [idea, setIdea] = useState("");
   const normalized = idea.trim();
   const wordCount = useMemo(
@@ -15,31 +14,28 @@ export function IdeaIntake() {
 
   return (
     <section className="intake-card" aria-labelledby="intake-title">
-      <div className="eyebrow">ALEF / INTENTION</div>
-      <h2 id="intake-title">What do you imagine?</h2>
-      <p className="muted">
-        Start with a fragment, premise, dream, character, scene or world rule.
-        Nothing becomes canon until you approve it.
-      </p>
+      <div className="eyebrow">{t("idea.eyebrow")}</div>
+      <h2 id="intake-title">{t("idea.title")}</h2>
+      <p className="muted">{t("idea.body")}</p>
 
       <textarea
         value={idea}
         onChange={(event) => setIdea(event.target.value)}
-        placeholder={EXAMPLE}
+        placeholder={t("idea.placeholder")}
         rows={7}
-        aria-label="Creative idea"
+        aria-label={t("idea.aria")}
       />
 
       <div className="intake-footer">
-        <span>{wordCount} words</span>
+        <span>{wordCount} {t("idea.words")}</span>
         <button type="button" disabled={!normalized}>
-          Forge Story DNA
+          {t("idea.forge")}
         </button>
       </div>
 
       {normalized ? (
         <div className="candidate-preview">
-          <span className="status candidate">CANDIDATE</span>
+          <span className="status candidate">{t("idea.candidate")}</span>
           <p>{normalized}</p>
         </div>
       ) : null}
