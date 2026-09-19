@@ -535,3 +535,42 @@ button.secondary {
 .auth-card {
   max-width: 620px;
 }
+
+
+.language-switcher {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 100;
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(9, 10, 15, 0.94);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.35);
+}
+
+.language-switcher button {
+  min-width: 48px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.language-switcher button.active {
+  border-color: var(--accent);
+  background: rgba(166, 255, 203, 0.1);
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .language-switcher {
+    right: 10px;
+    bottom: 10px;
+  }
+}
