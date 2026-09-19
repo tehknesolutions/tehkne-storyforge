@@ -13,24 +13,12 @@ import {
   forgeNarrativeV03,
   type NarrativeForgeV03
 } from "@/lib/storyforge-v03";
-import {
-  buildV04TnirExport,
-  createSceneAuthorityWorkspace,
-  realizeWebtoonFromSelectedRevisions,
-  type SceneAuthorityWorkspace,
-  type V04WebtoonRealization
-} from "@/lib/storyforge-v04";
 import { NarrativeForgeView } from "./narrative-forge-view";
-import { SceneAuthorityEditor } from "./scene-authority-editor";
 import { useI18n } from "./i18n";
 
 const STORAGE_KEY = "tehkne:storyforge:workspace:v0.2";
 const LEGACY_STORAGE_KEY = "tehkne:storyforge:workspace:v0.1";
 const FORGE_STORAGE_KEY = "tehkne:storyforge:narrative-forge:v0.3";
-const SCENE_AUTHORITY_STORAGE_KEY =
-  "tehkne:storyforge:scene-authority:v0.4";
-const V04_WEBTOON_STORAGE_KEY =
-  "tehkne:storyforge:webtoon-realization:v0.4";
 
 const targets: Array<{ id: MediaTarget; label: string }> = [
   { id: "PROSE_SHORT", label: "Conto / Short Story" },
@@ -99,10 +87,6 @@ export function StoryWorkspace() {
   const { locale, t } = useI18n();
   const [state, setState] = useState<StoryWorkspaceState>(() => fresh(locale));
   const [forgeV03, setForgeV03] = useState<NarrativeForgeV03 | null>(null);
-  const [sceneAuthority, setSceneAuthority] =
-    useState<SceneAuthorityWorkspace | null>(null);
-  const [webtoonV04, setWebtoonV04] =
-    useState<V04WebtoonRealization | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -121,26 +105,7 @@ export function StoryWorkspace() {
 
       const advanced = window.localStorage.getItem(FORGE_STORAGE_KEY);
       if (advanced) {
-        const parsedForge = JSON.parse(advanced) as NarrativeForgeV03;
-        setForgeV03(parsedForge);
-
-        const storedAuthority = window.localStorage.getItem(
-          SCENE_AUTHORITY_STORAGE_KEY
-        );
-        setSceneAuthority(
-          storedAuthority
-            ? (JSON.parse(storedAuthority) as SceneAuthorityWorkspace)
-            : createSceneAuthorityWorkspace(parsedForge)
-        );
-
-        const storedWebtoon = window.localStorage.getItem(
-          V04_WEBTOON_STORAGE_KEY
-        );
-        if (storedWebtoon) {
-          setWebtoonV04(
-            JSON.parse(storedWebtoon) as V04WebtoonRealization
-          );
-        }
+        setForgeV03(JSON.parse(advanced) as NarrativeForgeV03);
       }
     } catch {
       setState(fresh(locale));
@@ -175,48 +140,16 @@ export function StoryWorkspace() {
     }
   }, [forgeV03, hydrated]);
 
-  useEffect(() => {
-    if (!hydrated) return;
-
-    if (sceneAuthority) {
-      window.localStorage.setItem(
-        SCENE_AUTHORITY_STORAGE_KEY,
-        JSON.stringify(sceneAuthority)
-      );
-    } else {
-      window.localStorage.removeItem(SCENE_AUTHORITY_STORAGE_KEY);
-    }
-  }, [sceneAuthority, hydrated]);
-
-  useEffect(() => {
-    if (!hydrated) return;
-
-    if (webtoonV04) {
-      window.localStorage.setItem(
-        V04_WEBTOON_STORAGE_KEY,
-        JSON.stringify(webtoonV04)
-      );
-    } else {
-      window.localStorage.removeItem(V04_WEBTOON_STORAGE_KEY);
-    }
-  }, [webtoonV04, hydrated]);
-
   const words = useMemo(() => {
     const normalized = state.idea.trim();
     return normalized ? normalized.split(/\s+/).length : 0;
   }, [state.idea]);
 
-  function clearAdvancedAuthoring() {
-    setForgeV03(null);
-    setSceneAuthority(null);
-    setWebtoonV04(null);
-  }
-
   function forge() {
     const idea = state.idea.trim();
     if (!idea) return;
 
-    clearAdvancedAuthoring();
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       storyDNA: forgeStoryDNA(idea, locale),
@@ -231,7 +164,7 @@ export function StoryWorkspace() {
     const approved = { ...state.storyDNA, status: "APPROVED_LOCAL" as const };
     const universe = createUniverseDraft(approved, locale);
 
-    clearAdvancedAuthoring();
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       storyDNA: approved,
@@ -254,7 +187,7 @@ export function StoryWorkspace() {
       locale
     );
 
-    clearAdvancedAuthoring();
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       universe,
@@ -266,7 +199,7 @@ export function StoryWorkspace() {
   function approveNarrative() {
     if (!state.narrativeDraft) return;
 
-    clearAdvancedAuthoring();
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       narrativeDraft: current.narrativeDraft
@@ -282,21 +215,15 @@ export function StoryWorkspace() {
   function compile() {
     if (!state.storyDNA || !state.universe || !state.narrativeDraft) return;
 
-    const advanced =
-      forgeV03 ??
-      forgeNarrativeV03({
-        storyDNA: state.storyDNA,
-        universe: state.universe,
-        narrative: state.narrativeDraft,
-        targetMedia: state.targetMedia,
-        locale
-      });
+    const advanced = forgeNarrativeV03({
+      storyDNA: state.storyDNA,
+      universe: state.universe,
+      narrative: state.narrativeDraft,
+      targetMedia: state.targetMedia,
+      locale
+    });
 
     setForgeV03(advanced);
-    setSceneAuthority(
-      (current) => current ?? createSceneAuthorityWorkspace(advanced)
-    );
-    setWebtoonV04(null);
     setState((current) => ({
       ...current,
       mediaPlan:
@@ -311,27 +238,12 @@ export function StoryWorkspace() {
     }));
   }
 
-  function compileSelectedSceneRevisions() {
-    if (!sceneAuthority) return;
-
-    if (state.targetMedia === "WEBTOON") {
-      setWebtoonV04(
-        realizeWebtoonFromSelectedRevisions(sceneAuthority, locale)
-      );
-      return;
-    }
-
-    setWebtoonV04(null);
-  }
-
   function reset() {
-    clearAdvancedAuthoring();
+    setForgeV03(null);
     setState(fresh(locale));
     window.localStorage.removeItem(STORAGE_KEY);
     window.localStorage.removeItem(LEGACY_STORAGE_KEY);
     window.localStorage.removeItem(FORGE_STORAGE_KEY);
-    window.localStorage.removeItem(SCENE_AUTHORITY_STORAGE_KEY);
-    window.localStorage.removeItem(V04_WEBTOON_STORAGE_KEY);
   }
 
   function downloadJson(value: unknown, prefix: string) {
@@ -353,52 +265,25 @@ export function StoryWorkspace() {
           ...state,
           updatedAt: new Date().toISOString()
         },
-        narrativeForgeV03: forgeV03,
-        sceneAuthorityV04: sceneAuthority,
-        webtoonRealizationV04: webtoonV04
+        narrativeForgeV03: forgeV03
       },
       "storyforge-workspace"
     );
   }
 
-  function exportSceneAuthority() {
-    if (!sceneAuthority) return;
-    downloadJson(
-      sceneAuthority,
-      "storyforge-scene-authority-v0.4"
-    );
+  function exportForge() {
+    if (!forgeV03) return;
+    downloadJson(forgeV03, "storyforge-narrative-forge-v0.3");
   }
 
-  function exportTnirV04() {
-    if (
-      !forgeV03 ||
-      !sceneAuthority ||
-      !state.storyDNA ||
-      !state.universe ||
-      !state.narrativeDraft
-    ) {
-      return;
-    }
-
-    downloadJson(
-      buildV04TnirExport({
-        storyDNA: state.storyDNA,
-        universe: state.universe,
-        narrative: state.narrativeDraft,
-        forgeV03,
-        sceneAuthority,
-        targetMedia: state.targetMedia
-      }),
-      "storyforge-tnir-v0.5-scene-revisions"
-    );
+  function exportTnir() {
+    if (!forgeV03) return;
+    downloadJson(forgeV03.tnir, "storyforge-tnir-v0.5");
   }
 
-  function exportWebtoonV04() {
-    if (!webtoonV04) return;
-    downloadJson(
-      webtoonV04,
-      "storyforge-webtoon-v0.4-episode-001"
-    );
+  function exportWebtoon() {
+    if (!forgeV03?.webtoon) return;
+    downloadJson(forgeV03.webtoon, "storyforge-webtoon-episode-001");
   }
 
   return (
@@ -409,7 +294,7 @@ export function StoryWorkspace() {
           <h2 id="workspace-title">{t("workspace.title")}</h2>
           <p className="muted">{t("workspace.body")}</p>
         </div>
-        <span className="status candidate">SCENE AUTHORITY V0.4</span>
+        <span className="status candidate">NARRATIVE FORGE V0.3</span>
       </div>
 
       <div className="workspace-step">
@@ -630,7 +515,7 @@ export function StoryWorkspace() {
                     targetMedia: target.id,
                     mediaPlan: null
                   }));
-                  setWebtoonV04(null);
+                  setForgeV03(null);
                 }}
               >
                 {target.label}
@@ -689,23 +574,11 @@ export function StoryWorkspace() {
       ) : null}
 
       {forgeV03 ? (
-        <NarrativeForgeView forge={forgeV03} />
-      ) : null}
-
-      {forgeV03 && sceneAuthority ? (
-        <SceneAuthorityEditor
-          authority={sceneAuthority}
-          locale={locale}
-          webtoon={webtoonV04}
-          targetMedia={state.targetMedia}
-          onChange={(next) => {
-            setSceneAuthority(next);
-            setWebtoonV04(null);
-          }}
-          onCompile={compileSelectedSceneRevisions}
-          onExportAuthority={exportSceneAuthority}
-          onExportTnir={exportTnirV04}
-          onExportWebtoon={exportWebtoonV04}
+        <NarrativeForgeView
+          forge={forgeV03}
+          onExportForge={exportForge}
+          onExportTnir={exportTnir}
+          onExportWebtoon={exportWebtoon}
         />
       ) : null}
 
