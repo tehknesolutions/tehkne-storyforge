@@ -107,11 +107,18 @@ Independent RC audits: **PASS / 0 errors** in two passes.
 
 Release state:
 
-`READY_FOR_PROVISIONING`
+`BACKEND_LIVE__BUILD_AND_DEPLOY_PENDING`
 
-Not yet claimed as V0.8 final because the dedicated Supabase project, real migration/advisors/RLS tests, package lock, real build and Vercel deployment are still pending.
+Supabase durable backend is now live and validated:
 
-Next finalization step: **provision dedicated Storyforge Supabase backend and validate the schema live.**
+- dedicated project `tehkne-storyforge`;
+- `ACTIVE_HEALTHY` in `sa-east-1`;
+- Security Advisor: **0 findings**;
+- unindexed foreign-key findings fixed;
+- live RLS / Canon Authority test: **12/12 PASS**;
+- all temporary test users/data cleaned: **0 remaining**.
+
+V0.8 remains RC1 only because package-lock / real npm typecheck+build and Vercel preview QA are still pending.
 
 ## License
 
