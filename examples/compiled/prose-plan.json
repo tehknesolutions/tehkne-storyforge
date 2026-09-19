@@ -1,0 +1,195 @@
+{
+  "artifactType": "MEDIA_PLAN",
+  "compilerVersion": "0.1.0",
+  "targetMedia": "PROSE_SHORT",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.3.0",
+    "storyId": "story:first-light",
+    "manifestId": "media:first-light-prose"
+  },
+  "output": {
+    "kind": "PROSE_PLAN",
+    "sections": [
+      {
+        "id": "section:1",
+        "title": "The Chest",
+        "dramaticPurpose": "Introduce the object and divergent interpretations.",
+        "sourceEvents": [
+          {
+            "eventId": "event:001",
+            "eventType": "DISCOVERY",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          },
+          {
+            "eventId": "event:002",
+            "eventType": "ACTIVATION",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          }
+        ]
+      },
+      {
+        "id": "section:2",
+        "title": "Two Theories",
+        "dramaticPurpose": "Turn different beliefs into conflicting action.",
+        "sourceEvents": [
+          {
+            "eventId": "event:003",
+            "eventType": "INSPECTION",
+            "participants": [
+              "entity:lia"
+            ],
+            "locationId": "entity:house"
+          },
+          {
+            "eventId": "event:004",
+            "eventType": "REACTION_TEST",
+            "participants": [
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          },
+          {
+            "eventId": "event:005",
+            "eventType": "SIBLING_CONFLICT",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          }
+        ]
+      },
+      {
+        "id": "section:3",
+        "title": "The Wall Opens",
+        "dramaticPurpose": "Force a shared decision despite disagreement.",
+        "sourceEvents": [
+          {
+            "eventId": "event:006",
+            "eventType": "PASSAGE_REVEAL",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          },
+          {
+            "eventId": "event:007",
+            "eventType": "DECISION",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:house"
+          }
+        ]
+      },
+      {
+        "id": "section:4",
+        "title": "Grandmother's Mark",
+        "dramaticPurpose": "Reveal evidence that destabilizes both false beliefs and creates the branch.",
+        "sourceEvents": [
+          {
+            "eventId": "event:008",
+            "eventType": "CLUE_DISCOVERY",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:tunnel"
+          },
+          {
+            "eventId": "event:009a",
+            "eventType": "BRANCH_DESCEND_TOGETHER",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:tunnel"
+          },
+          {
+            "eventId": "event:009b",
+            "eventType": "BRANCH_SEAL_AND_RETURN",
+            "participants": [
+              "entity:lia",
+              "entity:leo"
+            ],
+            "locationId": "entity:tunnel"
+          }
+        ]
+      }
+    ]
+  },
+  "traceability": [
+    {
+      "unitId": "section:1",
+      "eventIds": [
+        "event:001",
+        "event:002"
+      ],
+      "sceneId": "scene:discovery"
+    },
+    {
+      "unitId": "section:2",
+      "eventIds": [
+        "event:003",
+        "event:004",
+        "event:005"
+      ],
+      "sceneId": "scene:investigation"
+    },
+    {
+      "unitId": "section:3",
+      "eventIds": [
+        "event:006",
+        "event:007"
+      ],
+      "sceneId": "scene:opening"
+    },
+    {
+      "unitId": "section:4",
+      "eventIds": [
+        "event:008",
+        "event:009a",
+        "event:009b"
+      ],
+      "sceneId": "scene:mark"
+    }
+  ],
+  "validation": {
+    "mappedEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "storyEventIds": [
+      "event:001",
+      "event:002",
+      "event:003",
+      "event:004",
+      "event:005",
+      "event:006",
+      "event:007",
+      "event:008",
+      "event:009a",
+      "event:009b"
+    ],
+    "unmappedStoryEventIds": []
+  }
+}
