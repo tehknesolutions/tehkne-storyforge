@@ -507,3 +507,31 @@ button.secondary {
   border-color: var(--accent-2);
   box-shadow: 0 0 0 3px rgba(135, 167, 255, 0.1);
 }
+
+
+.canon-commit-zone {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--warning);
+  border-radius: 14px;
+  background: rgba(255, 214, 107, 0.04);
+}
+
+.canon-commit-zone input {
+  width: 100%;
+  margin: 10px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #090a0f;
+  color: var(--text);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.canon-commit-zone input:focus {
+  border-color: var(--warning);
+}
+
+.auth-card {
+  max-width: 620px;
+}
