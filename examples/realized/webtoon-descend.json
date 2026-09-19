@@ -1,0 +1,237 @@
+{
+  "artifactType": "REALIZED_MEDIA",
+  "realizationVersion": "0.1.0",
+  "targetMedia": "WEBTOON",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.5.0",
+    "realizationProfileId": "realization:webtoon-descend",
+    "storyId": "story:first-light"
+  },
+  "output": {
+    "kind": "WEBTOON_SCROLL_SCRIPT",
+    "readingDirection": "VERTICAL_SCROLL",
+    "selectedBranchId": "branch:descend",
+    "episode": {
+      "id": "episode:1",
+      "title": "First Light",
+      "panels": [
+        {
+          "panel": 1,
+          "sourceEventId": "event:001",
+          "verticalRole": "OPEN",
+          "visualDirection": "Lia and Leo find the Memory Lantern inside the old chest.",
+          "dialogue": [
+            {
+              "speaker": "Lia",
+              "text": "This was hidden here for a reason."
+            },
+            {
+              "speaker": "Leo",
+              "text": "Or hidden because we were not supposed to find it."
+            }
+          ],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:001"
+            ]
+          }
+        },
+        {
+          "panel": 2,
+          "sourceEventId": "event:002",
+          "verticalRole": "FLOW",
+          "visualDirection": "The lantern activates and emits a pattern of light.",
+          "dialogue": [],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:002"
+            ]
+          }
+        },
+        {
+          "panel": 3,
+          "sourceEventId": "event:003",
+          "verticalRole": "FLOW",
+          "visualDirection": "Lia studies the lantern and finds an engraving.",
+          "dialogue": [],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:003"
+            ]
+          }
+        },
+        {
+          "panel": 4,
+          "sourceEventId": "event:004",
+          "verticalRole": "FLOW",
+          "visualDirection": "Leo moves the lantern near the wall; the wall responds.",
+          "dialogue": [
+            {
+              "speaker": "Leo",
+              "text": "It reacts to the wall."
+            }
+          ],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:004"
+            ]
+          }
+        },
+        {
+          "panel": 5,
+          "sourceEventId": "event:005",
+          "verticalRole": "FLOW",
+          "visualDirection": "Their different explanations become a sibling conflict.",
+          "dialogue": [
+            {
+              "speaker": "Leo",
+              "text": "Finding something does not mean we have to follow it."
+            },
+            {
+              "speaker": "Lia",
+              "text": "And being afraid of it does not mean we should stop."
+            }
+          ],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:005"
+            ]
+          }
+        },
+        {
+          "panel": 6,
+          "sourceEventId": "event:006",
+          "verticalRole": "REVEAL",
+          "visualDirection": "The concealed passage opens and reveals the hidden tunnel.",
+          "dialogue": [
+            {
+              "speaker": "Lia",
+              "text": "There really is a passage."
+            }
+          ],
+          "gapAfter": "LONG",
+          "trace": {
+            "eventIds": [
+              "event:006"
+            ]
+          }
+        },
+        {
+          "panel": 7,
+          "sourceEventId": "event:007",
+          "verticalRole": "FLOW",
+          "visualDirection": "Lia enters and Leo follows.",
+          "dialogue": [],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:007"
+            ]
+          }
+        },
+        {
+          "panel": 8,
+          "sourceEventId": "event:008",
+          "verticalRole": "PAUSE_AND_DISCOVER",
+          "visualDirection": "They discover Grandmother's mark inside the tunnel.",
+          "dialogue": [
+            {
+              "speaker": "Lia",
+              "text": "That mark is Grandmother's."
+            },
+            {
+              "speaker": "Leo",
+              "text": "Then my trap theory just got a lot weaker."
+            }
+          ],
+          "gapAfter": "LONG",
+          "trace": {
+            "eventIds": [
+              "event:008"
+            ]
+          }
+        },
+        {
+          "panel": 9,
+          "sourceEventId": "event:009a",
+          "verticalRole": "EPISODE_HOOK",
+          "visualDirection": "They continue deeper together.",
+          "dialogue": [
+            {
+              "speaker": "Leo",
+              "text": "Together."
+            },
+            {
+              "speaker": "Lia",
+              "text": "Together."
+            }
+          ],
+          "gapAfter": "STANDARD",
+          "trace": {
+            "eventIds": [
+              "event:009a"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "assertions": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:lantern-hidden"
+    },
+    {
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:tunnel-protected"
+    }
+  ],
+  "traceability": [
+    {
+      "sourceEventId": "event:001",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:002",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:003",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:004",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:005",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:006",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:007",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:008",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:009a",
+      "sourceBranchId": "branch:descend"
+    }
+  ]
+}
