@@ -76,53 +76,53 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**T-NIR V0.5 — Decision, Narrative Resolution & Governed Media Realization**
+**TEHKNÉ STORYFORGE V0.6 — Production Foundation**
+
+Architecture:
+
+```text
+STORYFORGE V0.6
+├─ T-NIR V0.5 — narrative core
+└─ T-PIR V0.1 — production core
+```
 
 Implemented:
 
-- evidence-driven character cognition and deterministic replanning;
-- composable WorldRule expressions: `ATOM / ALL / ANY / NOT`;
-- ActionProposal + deterministic DecisionScore;
-- EventProposal simulation without canon mutation;
-- creator-gated CanonProposal workflow;
-- linear vs interactive Narrative Resolution;
-- model-agnostic ModelAdapter contract;
-- deterministic Media Plans with traceability;
-- first realized Prose, Manga, Webtoon and Anime outputs;
-- output assertion classification: CANON_RESTATEMENT / UNSUPPORTED_NEW_FACT / CANON_CONTRADICTION;
-- comprehensive `validate-v0.5.mjs` gate.
+- provider/adapter registry with environment gates;
+- first OpenAI Responses structured-output adapter;
+- generated assertion gate;
+- creator-gated CanonReviewBatch;
+- multimodal asset and continuity contracts;
+- VoiceProfile / Speech / Audio contracts;
+- provider-agnostic image and speech adapter interfaces;
+- T-PIR ProductionJob / ProductionRun / ProductionManifest;
+- game JSON export;
+- Story Lab Next.js foundation;
+- Canon Review screen;
+- V0.6 production authority validation gate.
 
-Reference audits: **PASS / 0 errors** in two independent repository audits.
+Independent V0.6 audits: **PASS / 0 errors**.
 
-Current compiler preservation:
-
-- Prose: 10/10 source events mapped;
-- Manga: 10/10;
-- Webtoon: 10/10;
-- Anime Episode: 10/10;
-- Visual Novel: 10/10;
-- unmapped events: **0**.
-
-Current linear realization uses `branch:descend`:
-
-- Prose: readable realized narrative;
-- Manga: 9 RTL pages;
-- Webtoon: 9 vertical panels with scroll pacing;
-- Anime: 9 shots / 90 seconds.
-
-Creator Authority remains enforced:
+Provider authority:
 
 ```text
-generated inference
-→ CANDIDATE
+provider output
+→ assertions
+→ assertion gate
+→ CANDIDATE CanonProposal
 → creator review
-→ approve / edit / reject
-→ CANON
+→ CANON only after explicit approval
 ```
 
-Automatic canon promotion is not allowed.
+Generated assets are **not canon by default**.
 
-Next research/engineering milestone: **T-NIR V0.6 — provider adapters, structured generation, multimodal assets and Story Lab application foundation.**
+Story Lab foundation routes:
+
+- `/`
+- `/review`
+- `/api/health`
+
+Next milestone: **Storyforge V0.7 — authenticated providers, production jobs, real generation and deployable preview.**
 
 ## License
 
