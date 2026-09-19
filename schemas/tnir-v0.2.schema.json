@@ -1,0 +1,453 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tehkne.solutions/storyforge/schemas/tnir-v0.2.schema.json",
+  "title": "T-NIR Universe V0.2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "version",
+    "storyDNA",
+    "canon",
+    "entities",
+    "relationships",
+    "events",
+    "causalLinks",
+    "stories",
+    "mediaManifests",
+    "provenance"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^universe:" },
+    "title": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "storyDNA": { "$ref": "#/$defs/storyDNA" },
+    "canon": { "type": "array", "items": { "$ref": "#/$defs/canonFact" } },
+    "entities": { "type": "array", "items": { "$ref": "#/$defs/entity" } },
+    "relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } },
+    "events": { "type": "array", "items": { "$ref": "#/$defs/event" } },
+    "causalLinks": { "type": "array", "items": { "$ref": "#/$defs/causalLink" } },
+    "stories": { "type": "array", "items": { "$ref": "#/$defs/story" } },
+    "mediaManifests": { "type": "array", "items": { "$ref": "#/$defs/mediaManifest" } },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "$defs": {
+    "authority": {
+      "type": "string",
+      "enum": [
+        "IDEA",
+        "CANDIDATE",
+        "APPROVED",
+        "CANON",
+        "DEPRECATED",
+        "CONTRADICTED",
+        "RETCON",
+        "ALTERNATE_TIMELINE",
+        "NON_CANON"
+      ]
+    },
+    "mediaTarget": {
+      "type": "string",
+      "enum": [
+        "PROSE_SHORT",
+        "NOVEL",
+        "LIGHT_NOVEL",
+        "SCREENPLAY",
+        "GAME",
+        "VISUAL_NOVEL",
+        "COMIC",
+        "MANGA",
+        "MANHWA",
+        "MANHUA",
+        "WEBTOON",
+        "VERTICAL_COMIC",
+        "MOTION_COMIC",
+        "ANIMATION",
+        "ANIME_SHORT",
+        "ANIME_EPISODE",
+        "ANIME_SERIES",
+        "AUDIO_DRAMA"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdBy", "createdAt"],
+      "properties": {
+        "createdBy": { "type": "string", "enum": ["CREATOR", "AI", "IMPORT", "SYSTEM"] },
+        "source": { "type": "string" },
+        "sourceVersion": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "approvedBy": { "type": "string" },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rationale": { "type": "string" }
+      }
+    },
+    "storyDNA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["premise", "themes", "genres", "tone"],
+      "properties": {
+        "premise": { "type": "string", "minLength": 1 },
+        "themes": { "type": "array", "items": { "type": "string" } },
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "tone": { "type": "array", "items": { "type": "string" } },
+        "audience": { "type": "array", "items": { "type": "string" } },
+        "emotionalPromise": { "type": "array", "items": { "type": "string" } },
+        "aestheticDirection": { "type": "array", "items": { "type": "string" } },
+        "creatorIntent": { "type": "string" },
+        "inspirations": { "type": "array", "items": { "type": "string" } },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "forbiddenDirections": { "type": "array", "items": { "type": "string" } },
+        "narrativeQuestions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "entity": {
+      "oneOf": [
+        { "$ref": "#/$defs/character" },
+        { "$ref": "#/$defs/nonCharacterEntity" }
+      ]
+    },
+    "nonCharacterEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "canonStatus", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^entity:" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "CREATURE",
+            "LOCATION",
+            "OBJECT",
+            "ORGANIZATION",
+            "FACTION",
+            "SPECIES",
+            "CULTURE",
+            "TECHNOLOGY",
+            "POWER",
+            "CONCEPT",
+            "ARTIFACT"
+          ]
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "attributes": { "type": "object" },
+        "canonStatus": { "$ref": "#/$defs/authority" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "name",
+        "canonStatus",
+        "provenance",
+        "beliefs",
+        "knowledge",
+        "intentions",
+        "secrets",
+        "goals",
+        "plans",
+        "currentState"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^entity:" },
+        "type": { "const": "CHARACTER" },
+        "name": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "attributes": { "type": "object" },
+        "canonStatus": { "$ref": "#/$defs/authority" },
+        "provenance": { "$ref": "#/$defs/provenance" },
+        "traits": { "type": "array", "items": { "type": "string" } },
+        "values": { "type": "array", "items": { "type": "string" } },
+        "beliefs": { "type": "array", "items": { "$ref": "#/$defs/belief" } },
+        "knowledge": { "type": "array", "items": { "$ref": "#/$defs/knowledgeItem" } },
+        "desires": { "type": "array", "items": { "type": "string" } },
+        "needs": { "type": "array", "items": { "type": "string" } },
+        "fears": { "type": "array", "items": { "type": "string" } },
+        "intentions": { "type": "array", "items": { "$ref": "#/$defs/intention" } },
+        "secrets": { "type": "array", "items": { "$ref": "#/$defs/secret" } },
+        "goals": { "type": "array", "items": { "$ref": "#/$defs/goal" } },
+        "plans": { "type": "array", "items": { "$ref": "#/$defs/plan" } },
+        "capabilities": { "type": "array", "items": { "type": "string" } },
+        "resources": { "type": "array", "items": { "type": "string" } },
+        "limitations": { "type": "array", "items": { "type": "string" } },
+        "currentState": { "$ref": "#/$defs/characterState" },
+        "arcIds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "belief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "holder", "claim", "confidence", "truthRelation", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^belief:" },
+        "holder": { "type": "string", "pattern": "^entity:" },
+        "claim": {},
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "truthRelation": { "type": "string", "enum": ["TRUE", "FALSE", "UNKNOWN", "PARTIAL"] },
+        "acquiredAtEventId": { "type": "string", "pattern": "^event:" },
+        "revisedAtEventId": { "type": "string", "pattern": "^event:" },
+        "status": { "type": "string", "enum": ["ACTIVE", "REVISED", "ABANDONED"] }
+      }
+    },
+    "knowledgeItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "holder", "proposition", "certainty", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^knowledge:" },
+        "holder": { "type": "string", "pattern": "^entity:" },
+        "proposition": {},
+        "certainty": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": { "type": "string", "enum": ["KNOWN", "SUSPECTED", "FORGOTTEN"] },
+        "acquiredAtEventId": { "type": "string", "pattern": "^event:" },
+        "sourceEntityId": { "type": "string", "pattern": "^entity:" }
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner", "desiredState", "priority", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^goal:" },
+        "owner": { "type": "string", "pattern": "^entity:" },
+        "desiredState": { "type": "object" },
+        "priority": { "type": "number", "minimum": 0, "maximum": 1 },
+        "status": { "type": "string", "enum": ["ACTIVE", "BLOCKED", "ACHIEVED", "ABANDONED", "FAILED"] },
+        "motivatedBy": { "type": "array", "items": { "type": "string" } },
+        "createdAtEventId": { "type": "string", "pattern": "^event:" },
+        "resolvedAtEventId": { "type": "string", "pattern": "^event:" }
+      }
+    },
+    "planStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "action", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^plan-step:" },
+        "action": { "type": "string", "minLength": 1 },
+        "targetId": { "type": "string" },
+        "requires": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["PENDING", "ACTIVE", "COMPLETED", "FAILED", "SKIPPED"] },
+        "completedAtEventId": { "type": "string", "pattern": "^event:" }
+      }
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner", "goalId", "status", "steps"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^plan:" },
+        "owner": { "type": "string", "pattern": "^entity:" },
+        "goalId": { "type": "string", "pattern": "^goal:" },
+        "status": { "type": "string", "enum": ["DRAFT", "ACTIVE", "BLOCKED", "COMPLETED", "ABANDONED", "FAILED"] },
+        "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/planStep" } },
+        "currentStepId": { "type": "string", "pattern": "^plan-step:" },
+        "createdAtEventId": { "type": "string", "pattern": "^event:" }
+      }
+    },
+    "secret": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "about", "proposition", "knownBy", "hiddenFrom", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^secret:" },
+        "about": { "type": "array", "items": { "type": "string" } },
+        "proposition": {},
+        "knownBy": { "type": "array", "items": { "type": "string", "pattern": "^entity:" } },
+        "hiddenFrom": { "type": "array", "items": { "type": "string", "pattern": "^entity:" } },
+        "status": { "type": "string", "enum": ["HIDDEN", "PARTIALLY_REVEALED", "REVEALED"] },
+        "revealedAtEventId": { "type": "string", "pattern": "^event:" }
+      }
+    },
+    "characterState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "atEventId": { "type": "string", "pattern": "^event:" },
+        "locationId": { "type": "string", "pattern": "^entity:" },
+        "physical": { "type": "object" },
+        "emotional": { "type": "object" },
+        "social": { "type": "object" },
+        "resources": { "type": "object" },
+        "flags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "intention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "owner", "action", "status"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^intention:" },
+        "owner": { "type": "string", "pattern": "^entity:" },
+        "action": { "type": "string", "minLength": 1 },
+        "targetId": { "type": "string" },
+        "goalId": { "type": "string", "pattern": "^goal:" },
+        "formedAtEventId": { "type": "string", "pattern": "^event:" },
+        "status": { "type": "string", "enum": ["ACTIVE", "FULFILLED", "ABANDONED", "BLOCKED"] }
+      }
+    },
+    "canonFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "predicate", "object", "authority", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^fact:" },
+        "subject": { "type": "string" },
+        "predicate": { "type": "string", "minLength": 1 },
+        "object": {},
+        "authority": { "$ref": "#/$defs/authority" },
+        "validFromEventId": { "type": "string", "pattern": "^event:" },
+        "validUntilEventId": { "type": "string", "pattern": "^event:" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "from", "type", "to", "directed", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^relationship:" },
+        "from": { "type": "string", "pattern": "^entity:" },
+        "type": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "pattern": "^entity:" },
+        "directed": { "type": "boolean" },
+        "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "validFromEventId": { "type": "string", "pattern": "^event:" },
+        "validUntilEventId": { "type": "string", "pattern": "^event:" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "knowledgeEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["holder", "op"],
+      "properties": {
+        "holder": { "type": "string", "pattern": "^entity:" },
+        "op": { "type": "string", "enum": ["LEARN", "SUSPECT", "FORGET", "REVISE_BELIEF"] },
+        "knowledgeId": { "type": "string", "pattern": "^knowledge:" },
+        "beliefId": { "type": "string", "pattern": "^belief:" }
+      }
+    },
+    "goalEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "goalId", "op"],
+      "properties": {
+        "owner": { "type": "string", "pattern": "^entity:" },
+        "goalId": { "type": "string", "pattern": "^goal:" },
+        "op": { "type": "string", "enum": ["CREATE", "BLOCK", "ACHIEVE", "FAIL", "ABANDON", "REACTIVATE"] }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "participants", "effects", "canonStatus", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^event:" },
+        "type": { "type": "string", "minLength": 1 },
+        "participants": { "type": "array", "items": { "type": "string", "pattern": "^entity:" } },
+        "locationId": { "type": "string", "pattern": "^entity:" },
+        "preconditions": { "type": "array", "items": { "type": "object" } },
+        "actions": { "type": "array", "items": { "type": "object" } },
+        "effects": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+        "causedBy": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "causes": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "time": { "type": "object" },
+        "knowledgeEffects": { "type": "array", "items": { "$ref": "#/$defs/knowledgeEffect" } },
+        "goalEffects": { "type": "array", "items": { "$ref": "#/$defs/goalEffect" } },
+        "canonStatus": { "$ref": "#/$defs/authority" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "causalLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fromEventId", "toEventId", "type"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^causal:" },
+        "fromEventId": { "type": "string", "pattern": "^event:" },
+        "toEventId": { "type": "string", "pattern": "^event:" },
+        "type": {
+          "type": "string",
+          "enum": ["ENABLES", "CAUSES", "MOTIVATES", "PREVENTS", "REVEALS", "INVALIDATES", "TRIGGERS", "RESOLVES"]
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^beat:" },
+        "type": {
+          "type": "string",
+          "enum": ["REVELATION", "DECISION", "REACTION", "ATTACK", "DISCOVERY", "REVERSAL", "SETUP", "PAYOFF", "SILENCE", "CUSTOM"]
+        },
+        "purpose": { "type": "string" },
+        "eventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "eventIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^scene:" },
+        "title": { "type": "string" },
+        "povEntityId": { "type": "string", "pattern": "^entity:" },
+        "locationId": { "type": "string", "pattern": "^entity:" },
+        "eventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "dramaticPurpose": { "type": "string" },
+        "informationRevealed": { "type": "array", "items": { "type": "string" } },
+        "informationWithheld": { "type": "array", "items": { "type": "string" } },
+        "beats": { "type": "array", "items": { "$ref": "#/$defs/beat" } },
+        "mediaAnnotations": { "type": "object" }
+      }
+    },
+    "story": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "eventIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^story:" },
+        "title": { "type": "string", "minLength": 1 },
+        "premise": { "type": "string" },
+        "eventIds": { "type": "array", "items": { "type": "string", "pattern": "^event:" } },
+        "scenes": { "type": "array", "items": { "$ref": "#/$defs/scene" } },
+        "arcIds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "mediaManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "targetMedia", "storyId"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^media:" },
+        "targetMedia": { "$ref": "#/$defs/mediaTarget" },
+        "storyId": { "type": "string", "pattern": "^story:" },
+        "audience": { "type": "array", "items": { "type": "string" } },
+        "format": { "type": "object" },
+        "targetLength": { "type": "object" },
+        "visualStyle": { "type": "object" },
+        "interactionModel": { "type": "object" },
+        "pacingProfile": { "type": "object" },
+        "contentConstraints": { "type": "array", "items": { "type": "string" } },
+        "assetRequirements": { "type": "array", "items": { "type": "string" } },
+        "compilerConfig": { "type": "object" }
+      }
+    }
+  }
+}
