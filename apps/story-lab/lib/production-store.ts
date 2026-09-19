@@ -69,9 +69,7 @@ function toInsert(job: ProductionJob) {
     realization_profile_id: job.source.realizationProfileId ?? null,
     provider_id: job.providerId ?? null,
     adapter_id: job.adapterId ?? null,
-    asset_requests: job.assetRequests ?? [],
-    created_at: job.createdAt,
-    updated_at: job.updatedAt
+    asset_requests: job.assetRequests ?? []
   };
 }
 
