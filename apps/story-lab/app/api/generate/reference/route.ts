@@ -162,23 +162,36 @@ function classify(assertion: ProviderAssertion) {
   };
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
   const generationEnabled =
     process.env.STORYFORGE_GENERATION_ENABLED === "true";
+  const accessToken = process.env.STORYFORGE_GENERATION_ACCESS_TOKEN;
 
-  if (!apiKey || !generationEnabled) {
+  if (!apiKey || !generationEnabled || !accessToken) {
     return Response.json(
       {
         error: "PROVIDER_NOT_ENABLED",
         provider: "provider:openai:text",
         missingEnvironment: [
           ...(apiKey ? [] : ["OPENAI_API_KEY"]),
-          ...(generationEnabled ? [] : ["STORYFORGE_GENERATION_ENABLED=true"])
+          ...(generationEnabled ? [] : ["STORYFORGE_GENERATION_ENABLED=true"]),
+          ...(accessToken ? [] : ["STORYFORGE_GENERATION_ACCESS_TOKEN"])
         ],
         canonMutationEnabled: false
       },
       { status: 503 }
+    );
+  }
+
+  const providedToken = request.headers.get("x-storyforge-generation-token");
+  if (!providedToken || providedToken !== accessToken) {
+    return Response.json(
+      {
+        error: "GENERATION_ACCESS_DENIED",
+        canonMutationEnabled: false
+      },
+      { status: 401 }
     );
   }
 
