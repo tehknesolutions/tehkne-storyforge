@@ -234,7 +234,7 @@ const chronology = [...occurredEvents]
   .map((event) => event.id);
 
 const output = {
-  runtimeVersion: "0.4.0",
+  runtimeVersion: "0.5.0",
   source: {
     universeId: universe.id,
     universeVersion: universe.version
