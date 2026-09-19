@@ -370,11 +370,18 @@ export type RuleEffect =
   | { type: "DENY_EVENT"; eventId: string; reason: string }
   | { type: "SET_STATE"; targetId: string; path: string; value: unknown };
 
+export type RuleExpression =
+  | { type: "ATOM"; condition: RuleCondition }
+  | { type: "ALL"; children: RuleExpression[] }
+  | { type: "ANY"; children: RuleExpression[] }
+  | { type: "NOT"; child: RuleExpression };
+
 export interface WorldRule {
   id: string;
   domain: string;
   description: string;
   conditions: RuleCondition[];
+  expression?: RuleExpression;
   effects: RuleEffect[];
   authority: CanonAuthority;
   provenance: Provenance;
