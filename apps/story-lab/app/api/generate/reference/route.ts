@@ -1,3 +1,6 @@
+import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { requireAuthenticatedContext } from "@/lib/auth";
+
 export const runtime = "nodejs";
 
 const CANON = [
@@ -261,6 +264,9 @@ export async function POST(request: Request) {
   }
 
   const raw = (await response.json()) as Record<string, unknown>;
+  const providerResponseId =
+    typeof raw.id === "string" ? raw.id : crypto.randomUUID();
+
   const parsed = JSON.parse(outputText(raw)) as {
     output: { kind: string; contentJson: string };
     assertions: ProviderAssertion[];
@@ -283,7 +289,7 @@ export async function POST(request: Request) {
       (finding) => finding.classification === "UNSUPPORTED_NEW_FACT"
     )
     .map((finding, index) => ({
-      id: `canon-proposal:server:reference:${index + 1}`,
+      id: `canon-proposal:server:${providerResponseId}:${index + 1}`,
       subject: finding.assertion.subject,
       predicate: finding.assertion.predicate,
       object: finding.assertion.object,
@@ -294,7 +300,7 @@ export async function POST(request: Request) {
     }));
 
   const providerProposals = parsed.canonProposals.map((proposal, index) => ({
-    id: `canon-proposal:provider:reference:${index + 1}`,
+    id: `canon-proposal:provider:${providerResponseId}:${index + 1}`,
     subject: proposal.subject,
     predicate: proposal.predicate,
     object: parseJson(proposal.objectJson),
@@ -303,8 +309,59 @@ export async function POST(request: Request) {
     authority: "CANDIDATE"
   }));
 
+  const dedupedProposals = [
+    ...new Map(
+      [...serverProposals, ...providerProposals].map((proposal) => [
+        JSON.stringify([
+          proposal.subject,
+          proposal.predicate,
+          proposal.object
+        ]),
+        proposal
+      ])
+    ).values()
+  ];
+
+  let reviewPersistence: "EPHEMERAL" | "DURABLE" = "EPHEMERAL";
+
+  if (isSupabaseConfigured() && dedupedProposals.length > 0) {
+    try {
+      const { supabase } = await requireAuthenticatedContext();
+      const rows = dedupedProposals.map((proposal) => ({
+        id: proposal.id,
+        universe_id: "universe:lantern-below",
+        universe_version: "0.5.0",
+        source_artifact_id: `artifact:provider:${providerResponseId}`,
+        proposal,
+        status: "PENDING"
+      }));
+
+      const { error } = await supabase
+        .from("storyforge_review_items")
+        .insert(rows);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      reviewPersistence = "DURABLE";
+    } catch (error) {
+      return Response.json(
+        {
+          error: "CANON_PROPOSAL_PERSISTENCE_FAILED",
+          message: error instanceof Error ? error.message : "Unknown error",
+          providerResponseId,
+          generatedOutputPreserved: false,
+          canonMutationEnabled: false
+        },
+        { status: 500 }
+      );
+    }
+  }
+
   return Response.json({
     provider: "provider:openai:text",
+    providerResponseId,
     adapter: "openai:responses:v0.2",
     model,
     storeResponses: false,
@@ -313,11 +370,11 @@ export async function POST(request: Request) {
       content: parseJson(parsed.output.contentJson)
     },
     findings,
-    canonProposals: [...serverProposals, ...providerProposals],
+    canonProposals: dedupedProposals,
+    reviewPersistence,
     reviewRequired:
       contradictions.length > 0 ||
-      serverProposals.length > 0 ||
-      providerProposals.length > 0,
+      dedupedProposals.length > 0,
     canonMutationEnabled: false
   });
 }
