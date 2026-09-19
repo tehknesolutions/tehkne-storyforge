@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tehkne.solutions/storyforge/schemas/tnir-v0.1.schema.json",
+  "title": "T-NIR Universe V0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "version",
+    "storyDNA",
+    "canon",
+    "entities",
+    "relationships",
+    "events",
+    "causalLinks",
+    "stories",
+    "mediaManifests",
+    "provenance"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^universe:" },
+    "title": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "storyDNA": { "$ref": "#/$defs/storyDNA" },
+    "canon": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/canonFact" }
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entity" }
+    },
+    "relationships": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relationship" }
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "causalLinks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/causalLink" }
+    },
+    "stories": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/story" }
+    },
+    "mediaManifests": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/mediaManifest" }
+    },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "$defs": {
+    "authority": {
+      "type": "string",
+      "enum": [
+        "IDEA",
+        "CANDIDATE",
+        "APPROVED",
+        "CANON",
+        "DEPRECATED",
+        "CONTRADICTED",
+        "RETCON",
+        "ALTERNATE_TIMELINE",
+        "NON_CANON"
+      ]
+    },
+    "mediaTarget": {
+      "type": "string",
+      "enum": [
+        "PROSE_SHORT",
+        "NOVEL",
+        "LIGHT_NOVEL",
+        "SCREENPLAY",
+        "GAME",
+        "VISUAL_NOVEL",
+        "COMIC",
+        "MANGA",
+        "MANHWA",
+        "MANHUA",
+        "WEBTOON",
+        "VERTICAL_COMIC",
+        "MOTION_COMIC",
+        "ANIMATION",
+        "ANIME_SHORT",
+        "ANIME_EPISODE",
+        "ANIME_SERIES",
+        "AUDIO_DRAMA"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdBy", "createdAt"],
+      "properties": {
+        "createdBy": {
+          "type": "string",
+          "enum": ["CREATOR", "AI", "IMPORT", "SYSTEM"]
+        },
+        "source": { "type": "string" },
+        "sourceVersion": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "approvedBy": { "type": "string" },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rationale": { "type": "string" }
+      }
+    },
+    "storyDNA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["premise", "themes", "genres", "tone"],
+      "properties": {
+        "premise": { "type": "string", "minLength": 1 },
+        "themes": { "type": "array", "items": { "type": "string" } },
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "tone": { "type": "array", "items": { "type": "string" } },
+        "audience": { "type": "array", "items": { "type": "string" } },
+        "emotionalPromise": { "type": "array", "items": { "type": "string" } },
+        "aestheticDirection": { "type": "array", "items": { "type": "string" } },
+        "creatorIntent": { "type": "string" },
+        "inspirations": { "type": "array", "items": { "type": "string" } },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "forbiddenDirections": { "type": "array", "items": { "type": "string" } },
+        "narrativeQuestions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "type", "name", "canonStatus", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^entity:" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "CHARACTER",
+            "CREATURE",
+            "LOCATION",
+            "OBJECT",
+            "ORGANIZATION",
+            "FACTION",
+            "SPECIES",
+            "CULTURE",
+            "TECHNOLOGY",
+            "POWER",
+            "CONCEPT",
+            "ARTIFACT"
+          ]
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "attributes": { "type": "object" },
+        "canonStatus": { "$ref": "#/$defs/authority" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "canonFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "subject", "predicate", "object", "authority", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^fact:" },
+        "subject": { "type": "string" },
+        "predicate": { "type": "string", "minLength": 1 },
+        "object": {},
+        "authority": { "$ref": "#/$defs/authority" },
+        "validFromEventId": { "type": "string" },
+        "validUntilEventId": { "type": "string" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "from", "type", "to", "directed", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^relationship:" },
+        "from": { "type": "string" },
+        "type": { "type": "string" },
+        "to": { "type": "string" },
+        "directed": { "type": "boolean" },
+        "intensity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "validFromEventId": { "type": "string" },
+        "validUntilEventId": { "type": "string" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "participants", "effects", "canonStatus", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^event:" },
+        "type": { "type": "string", "minLength": 1 },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "locationId": { "type": "string" },
+        "preconditions": { "type": "array", "items": { "type": "object" } },
+        "actions": { "type": "array", "items": { "type": "object" } },
+        "effects": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "object" }
+        },
+        "causedBy": { "type": "array", "items": { "type": "string" } },
+        "causes": { "type": "array", "items": { "type": "string" } },
+        "time": { "type": "object" },
+        "knowledgeEffects": { "type": "array", "items": { "type": "object" } },
+        "goalEffects": { "type": "array", "items": { "type": "object" } },
+        "canonStatus": { "$ref": "#/$defs/authority" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "causalLink": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "fromEventId", "toEventId", "type"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^causal:" },
+        "fromEventId": { "type": "string" },
+        "toEventId": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "ENABLES",
+            "CAUSES",
+            "MOTIVATES",
+            "PREVENTS",
+            "REVEALS",
+            "INVALIDATES",
+            "TRIGGERS",
+            "RESOLVES"
+          ]
+        },
+        "rationale": { "type": "string" }
+      }
+    },
+    "story": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "title", "eventIds"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^story:" },
+        "title": { "type": "string", "minLength": 1 },
+        "premise": { "type": "string" },
+        "eventIds": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "mediaManifest": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "targetMedia", "storyId"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^media:" },
+        "targetMedia": { "$ref": "#/$defs/mediaTarget" },
+        "storyId": { "type": "string" }
+      }
+    }
+  }
+}
