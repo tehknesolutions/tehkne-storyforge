@@ -16,14 +16,19 @@ interface OpenAIResponsesAdapterOptions {
 interface StructuredGeneration {
   output: {
     kind: string;
-    content: unknown;
+    contentJson: string;
   };
-  assertions: GeneratedAssertion[];
+  assertions: Array<{
+    subject: string;
+    predicate: string;
+    objectJson: string;
+    sourceUnitId: string;
+  }>;
   canonProposals: Array<{
     subject: string;
     predicate: string;
-    object: unknown;
-    sourceUnitId?: string;
+    objectJson: string;
+    sourceUnitId: string;
     rationale: string;
   }>;
 }
@@ -37,9 +42,9 @@ const RESPONSE_SCHEMA = {
       additionalProperties: false,
       properties: {
         kind: { type: "string" },
-        content: {}
+        contentJson: { type: "string" }
       },
-      required: ["kind", "content"]
+      required: ["kind", "contentJson"]
     },
     assertions: {
       type: "array",
@@ -49,10 +54,10 @@ const RESPONSE_SCHEMA = {
         properties: {
           subject: { type: "string" },
           predicate: { type: "string" },
-          object: {},
+          objectJson: { type: "string" },
           sourceUnitId: { type: "string" }
         },
-        required: ["subject", "predicate", "object", "sourceUnitId"]
+        required: ["subject", "predicate", "objectJson", "sourceUnitId"]
       }
     },
     canonProposals: {
@@ -63,16 +68,24 @@ const RESPONSE_SCHEMA = {
         properties: {
           subject: { type: "string" },
           predicate: { type: "string" },
-          object: {},
+          objectJson: { type: "string" },
           sourceUnitId: { type: "string" },
           rationale: { type: "string" }
         },
-        required: ["subject", "predicate", "object", "rationale"]
+        required: ["subject", "predicate", "objectJson", "sourceUnitId", "rationale"]
       }
     }
   },
   required: ["output", "assertions", "canonProposals"]
 } as const;
+
+function parseJsonValue(value: string): unknown {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
 
 function extractResponseText(response: Record<string, unknown>): string {
   if (typeof response.output_text === "string") return response.output_text;
@@ -103,7 +116,7 @@ function extractResponseText(response: Record<string, unknown>): string {
 }
 
 export class OpenAIResponsesAdapter implements ModelAdapter {
-  readonly id = "openai:responses:v0.1";
+  readonly id = "openai:responses:v0.2";
   readonly capabilities: MediaTarget[] = [
     "PROSE_SHORT",
     "NOVEL",
@@ -152,6 +165,7 @@ export class OpenAIResponsesAdapter implements ModelAdapter {
       "Any new factual claim not supported by supplied canon must be returned as a canonProposal.",
       "Preserve character knowledge boundaries and event causality.",
       "Every assertion must include a sourceUnitId from the request.",
+      "Encode output.contentJson and all objectJson fields as valid JSON strings.",
       "Return only the requested structured output."
     ].join("\n");
 
@@ -163,6 +177,7 @@ export class OpenAIResponsesAdapter implements ModelAdapter {
       },
       body: JSON.stringify({
         model: this.#model,
+        store: false,
         input: [
           { role: "system", content: system },
           {
@@ -195,12 +210,23 @@ export class OpenAIResponsesAdapter implements ModelAdapter {
     const raw = (await response.json()) as Record<string, unknown>;
     const parsed = JSON.parse(extractResponseText(raw)) as StructuredGeneration;
 
+    const assertions: GeneratedAssertion[] = parsed.assertions.map((assertion) => ({
+      subject: assertion.subject,
+      predicate: assertion.predicate,
+      object: parseJsonValue(assertion.objectJson),
+      sourceUnitId: assertion.sourceUnitId
+    }));
+
     const canonProposals: CanonProposal[] = parsed.canonProposals.map(
       (proposal, index) => ({
         id: `canon-proposal:model:${request.requestId}:${index + 1}`,
         subject: proposal.subject,
         predicate: proposal.predicate,
-        object: proposal.object as string | number | boolean | Record<string, unknown>,
+        object: parseJsonValue(proposal.objectJson) as
+          | string
+          | number
+          | boolean
+          | Record<string, unknown>,
         authority: "CANDIDATE",
         proposedFromArtifactId: `artifact:model:${request.requestId}`,
         conflictsWithFactIds: [],
@@ -213,8 +239,11 @@ export class OpenAIResponsesAdapter implements ModelAdapter {
       adapterId: this.id,
       artifactId: `artifact:model:${request.requestId}`,
       targetMedia: request.targetMedia,
-      output: parsed.output,
-      assertions: parsed.assertions,
+      output: {
+        kind: parsed.output.kind,
+        content: parseJsonValue(parsed.output.contentJson)
+      },
+      assertions,
       canonProposals,
       traceability: request.units.map((unit) => unit.source)
     };
