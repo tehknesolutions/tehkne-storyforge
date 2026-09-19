@@ -1,21 +1,21 @@
+"use client";
+
 import { ReviewCard } from "./review-card";
+import { useI18n } from "../i18n";
 
 export default function ReviewPage() {
+  const { t } = useI18n();
+
   return (
     <main className="review-shell">
-      <a className="back-link" href="/">← Story Lab</a>
-      <div className="eyebrow">CREATOR AUTHORITY</div>
-      <h1>Canon Review</h1>
-      <p className="muted review-intro">
-        Generated assertions never cross into canon automatically. Review,
-        edit, approve or reject each candidate.
-      </p>
+      <a className="back-link" href="/">{t("common.back")}</a>
+      <div className="eyebrow">{t("review.eyebrow")}</div>
+      <h1>{t("review.title")}</h1>
+      <p className="muted review-intro">{t("review.body")}</p>
 
       <ReviewCard />
 
-      <p className="muted footnote">
-        Preview review state is ephemeral. Canon mutation is disabled.
-      </p>
+      <p className="muted footnote">{t("review.footnote")}</p>
     </main>
   );
 }
