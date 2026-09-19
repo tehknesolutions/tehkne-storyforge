@@ -198,6 +198,20 @@ export async function POST(request: Request) {
     );
   }
 
+  if (isSupabaseConfigured()) {
+    try {
+      await requireAuthenticatedContext();
+    } catch {
+      return Response.json(
+        {
+          error: "AUTHENTICATION_REQUIRED",
+          canonMutationEnabled: false
+        },
+        { status: 401 }
+      );
+    }
+  }
+
   const model = process.env.STORYFORGE_OPENAI_MODEL ?? "gpt-5.6";
 
   const response = await fetch("https://api.openai.com/v1/responses", {
