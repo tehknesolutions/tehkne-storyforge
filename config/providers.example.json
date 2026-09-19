@@ -1,0 +1,40 @@
+{
+  "version": "0.1.0",
+  "providers": [
+    {
+      "id": "provider:openai:text",
+      "displayName": "OpenAI — Responses API",
+      "kind": "TEXT",
+      "adapterId": "openai:responses:v0.1",
+      "capabilities": [
+        "PROSE_SHORT",
+        "NOVEL",
+        "LIGHT_NOVEL",
+        "SCREENPLAY",
+        "GAME",
+        "VISUAL_NOVEL",
+        "COMIC",
+        "MANGA",
+        "MANHWA",
+        "MANHUA",
+        "WEBTOON",
+        "VERTICAL_COMIC",
+        "MOTION_COMIC",
+        "ANIMATION",
+        "ANIME_SHORT",
+        "ANIME_EPISODE",
+        "ANIME_SERIES",
+        "AUDIO_DRAMA"
+      ],
+      "requiresEnvironment": [
+        "OPENAI_API_KEY"
+      ],
+      "enabled": false,
+      "metadata": {
+        "api": "responses",
+        "structuredOutput": true,
+        "authority": "CANDIDATE_ONLY"
+      }
+    }
+  ]
+}
