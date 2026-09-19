@@ -1,0 +1,69 @@
+{
+  "artifactType": "REALIZED_MEDIA",
+  "realizationVersion": "0.1.0",
+  "targetMedia": "PROSE_SHORT",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.5.0",
+    "realizationProfileId": "realization:prose-descend",
+    "storyId": "story:first-light"
+  },
+  "output": {
+    "kind": "PROSE_REALIZATION",
+    "format": "markdown",
+    "selectedBranchId": "branch:descend",
+    "text": "# First Light\n\nLia and Leo's discovery begins with the Memory Lantern, an object hidden inside an old chest. They do not agree on what that discovery means. Lia approaches it as a question that can be answered; Leo approaches it as a danger that has not yet been understood.\n\nLia and Leo find the Memory Lantern inside the old chest. Lia's curiosity immediately turns the discovery into a question she wants answered. “This was hidden here for a reason.” Lia says. “Or hidden because we were not supposed to find it.” Leo says.\n\nWhen the lantern activates, it emits a pattern of light. Neither sibling yet knows what the pattern means.\n\nLia studies the lantern and finds an engraving. She still suspects that their father may have hidden it. “I thought Dad might have left this.” Lia says.\n\nLeo moves the lantern near the wall beside the cellar stairs. The wall responds to the lantern, confirming that the object is connected to something in the house. “It reacts to the wall.” Leo says.\n\nTheir different explanations turn into an argument: Lia wants answers, while Leo treats the unknown as a risk. His protective goal becomes explicit even while he disagrees with her. “Finding something does not mean we have to follow it.” Leo says. “And being afraid of it does not mean we should stop.” Lia says.\n\nThe concealed passage opens and reveals the hidden tunnel. The discovery changes the question from whether the lantern has a purpose to what waits along the path it reveals. “There really is a passage.” Lia says.\n\nLia decides to enter. Leo follows her rather than letting her investigate alone.\n\nInside the tunnel they discover Grandmother's mark. The evidence weakens Lia's belief that their father hid the lantern and Leo's belief that a stranger left it as a trap. Their plans shift: Lia now wants to follow Grandmother's clue, while Leo chooses to stay close and verify the route. “That mark is Grandmother's.” Lia says. “Then my trap theory just got a lot weaker.” Leo says.\n\nThey choose to continue deeper together. The choice does not solve the family mystery, but it increases their trust as they move forward. “Together.” Leo says. “Together.” Lia says.\n\nThe tunnel still holds the larger answer. Grandmother's connection is evidence, not a complete explanation. The siblings move deeper without pretending the mystery has already been solved."
+  },
+  "assertions": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:lantern-hidden"
+    },
+    {
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother",
+      "authorityBasis": "fact:tunnel-protected"
+    }
+  ],
+  "traceability": [
+    {
+      "sourceEventId": "event:001",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:002",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:003",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:004",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:005",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:006",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:007",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:008",
+      "sourceBranchId": "branch:root"
+    },
+    {
+      "sourceEventId": "event:009a",
+      "sourceBranchId": "branch:descend"
+    }
+  ]
+}
