@@ -13,13 +13,14 @@ import {
   type SceneRevision,
   type V04WebtoonRealization
 } from "@/lib/storyforge-v04";
-import type { StoryLocale } from "@/lib/storyforge-local";
+import type { MediaTarget, StoryLocale } from "@/lib/storyforge-local";
 import { useI18n } from "./i18n";
 
 type Props = {
   authority: SceneAuthorityWorkspace;
   locale: StoryLocale;
   webtoon: V04WebtoonRealization | null;
+  targetMedia: MediaTarget;
   onChange: (next: SceneAuthorityWorkspace) => void;
   onCompile: () => void;
   onExportAuthority: () => void;
@@ -43,6 +44,7 @@ export function SceneAuthorityEditor({
   authority,
   locale,
   webtoon,
+  targetMedia,
   onChange,
   onCompile,
   onExportAuthority,
@@ -428,8 +430,16 @@ export function SceneAuthorityEditor({
         </div>
 
         <div className="scene-compile-zone">
-          <p className="muted">{t("scene.compileBody")}</p>
-          <button type="button" onClick={onCompile}>
+          <p className="muted">
+            {targetMedia === "WEBTOON"
+              ? t("scene.compileBody")
+              : t("scene.webtoonOnly")}
+          </p>
+          <button
+            type="button"
+            onClick={onCompile}
+            disabled={targetMedia !== "WEBTOON"}
+          >
             {t("scene.compileSelected")}
           </button>
         </div>
