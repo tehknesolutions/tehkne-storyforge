@@ -304,6 +304,62 @@ export interface ReplanRule {
   activatePlanId: string;
 }
 
+export interface ActionProposal {
+  id: string;
+  actorId: string;
+  action: string;
+  targetId?: string;
+  goalId?: string;
+  planId?: string;
+  planStepId?: string;
+  expectedEffects?: Array<Record<string, unknown>>;
+  provenance: Provenance;
+}
+
+export interface DecisionScore {
+  id: string;
+  actionProposalId: string;
+  goalAlignment: number;
+  beliefSupport: number;
+  valueAlignment: number;
+  feasibility: number;
+  risk: number;
+  relationshipImpact: number;
+  dramaticPressure: number;
+  totalScore: number;
+  rationale: string[];
+}
+
+export interface EventProposal {
+  id: string;
+  sourceActionProposalId: string;
+  proposedEvent: NarrativeEvent;
+  authority: "CANDIDATE";
+  validationNotes: string[];
+}
+
+export interface CanonProposal {
+  id: string;
+  subject: string;
+  predicate: string;
+  object: string | number | boolean | Record<string, unknown>;
+  authority: "CANDIDATE";
+  proposedFromArtifactId?: string;
+  proposedFromEventId?: string;
+  conflictsWithFactIds: string[];
+  rationale: string;
+}
+
+export interface RealizationProfile {
+  id: string;
+  targetMedia: MediaTarget;
+  storyId: string;
+  mode: "LINEAR" | "INTERACTIVE";
+  selectedBranchId?: string;
+  includeRootBranch: boolean;
+  styleProfileId?: string;
+}
+
 export type RuleCondition =
   | { type: "EVENT_OCCURRED"; eventId: string }
   | { type: "FACT_EQUALS"; factId: string }
@@ -419,6 +475,11 @@ export interface Universe {
   evidence: Evidence[];
   beliefRevisions: BeliefRevision[];
   replanRules: ReplanRule[];
+  actionProposals: ActionProposal[];
+  decisionScores: DecisionScore[];
+  eventProposals: EventProposal[];
+  canonProposals: CanonProposal[];
+  realizationProfiles: RealizationProfile[];
   worldRules: WorldRule[];
   branches: NarrativeBranch[];
   stories: Story[];
