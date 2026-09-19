@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "../i18n";
 
 type Job = {
   id: string;
@@ -10,9 +11,10 @@ type Job = {
 };
 
 export default function ProductionPage() {
+  const { t } = useI18n();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [durability, setDurability] = useState("UNKNOWN");
-  const [message, setMessage] = useState("Loading preview store…");
+  const [message, setMessage] = useState("");
 
   async function load() {
     const response = await fetch("/api/production/jobs", { cache: "no-store" });
@@ -26,14 +28,15 @@ export default function ProductionPage() {
     setDurability(data.durability ?? "UNKNOWN");
     setMessage(
       data.productionSafe
-        ? "Durable production store connected."
-        : "Preview storage only — jobs may disappear when the serverless instance is recycled."
+        ? t("production.durable")
+        : t("production.preview")
     );
   }
 
   useEffect(() => {
+    setMessage(t("production.loading"));
     void load();
-  }, []);
+  }, [t]);
 
   async function createReferenceJob() {
     const id = `production-job:manga:${Date.now()}`;
@@ -55,7 +58,7 @@ export default function ProductionPage() {
     });
 
     if (!response.ok) {
-      setMessage("Could not create preview job.");
+      setMessage(t("production.createError"));
       return;
     }
 
@@ -64,18 +67,15 @@ export default function ProductionPage() {
 
   return (
     <main className="review-shell">
-      <a className="back-link" href="/">← Story Lab</a>
-      <div className="eyebrow">T-PIR / PRODUCTION</div>
-      <h1>Production Jobs</h1>
-      <p className="muted review-intro">
-        Preview orchestration for media production. Durable persistence is
-        required before production release.
-      </p>
+      <a className="back-link" href="/">{t("common.back")}</a>
+      <div className="eyebrow">{t("production.eyebrow")}</div>
+      <h1>{t("production.title")}</h1>
+      <p className="muted review-intro">{t("production.body")}</p>
 
       <div className="review-head production-status">
-        <span className="status candidate">STORE:{durability}</span>
+        <span className="status candidate">{t("production.store")}:{durability}</span>
         <button type="button" onClick={createReferenceJob}>
-          Queue Manga reference job
+          {t("production.queue")}
         </button>
       </div>
 
@@ -91,7 +91,7 @@ export default function ProductionPage() {
           </article>
         )) : (
           <article className="review-card">
-            <p>No preview jobs queued.</p>
+            <p>{t("production.empty")}</p>
           </article>
         )}
       </div>
