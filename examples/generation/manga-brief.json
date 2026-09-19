@@ -1,0 +1,533 @@
+{
+  "artifactType": "GENERATION_BRIEF",
+  "briefVersion": "0.1.0",
+  "targetMedia": "MANGA",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.4.0",
+    "storyId": "story:first-light",
+    "manifestId": "media:first-light-manga"
+  },
+  "creatorIntent": "Reference universe for validating character cognition and transmedia preservation across T-NIR compilers.",
+  "storyDNA": {
+    "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, while each carries a false belief about who left it and why.",
+    "themes": [
+      "trust",
+      "memory",
+      "curiosity",
+      "family truth"
+    ],
+    "genres": [
+      "mystery",
+      "adventure"
+    ],
+    "tone": [
+      "wonder",
+      "suspense"
+    ],
+    "audience": [
+      "young-adult"
+    ],
+    "emotionalPromise": [
+      "discovery",
+      "sibling tension",
+      "earned trust"
+    ]
+  },
+  "authorityContract": {
+    "canonicalAuthority": "CANON",
+    "mayInventCanon": false,
+    "newUnapprovedFactsBecome": "CANDIDATE",
+    "preserveEventCausality": true,
+    "preserveCharacterKnowledgeBoundaries": true,
+    "preserveTraceability": true
+  },
+  "authoritativeCanon": [
+    {
+      "id": "fact:lantern-hidden",
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:grandmother"
+    },
+    {
+      "id": "fact:tunnel-protected",
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother"
+    }
+  ],
+  "units": [
+    {
+      "unitId": "page:1:panel:1",
+      "source": {
+        "eventIds": [
+          "event:001"
+        ],
+        "sceneId": "scene:discovery"
+      },
+      "events": [
+        {
+          "id": "event:001",
+          "type": "DISCOVERY",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "DISCOVER",
+              "entityId": "entity:lantern"
+            }
+          ],
+          "knowledgeEffects": [
+            {
+              "holder": "entity:lia",
+              "op": "LEARN",
+              "knowledgeId": "knowledge:lia-lantern-found"
+            },
+            {
+              "holder": "entity:leo",
+              "op": "LEARN",
+              "knowledgeId": "knowledge:leo-lantern-found"
+            }
+          ],
+          "goalEffects": [
+            {
+              "owner": "entity:lia",
+              "goalId": "goal:lia-find-truth",
+              "op": "CREATE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "page:1:panel:2",
+      "source": {
+        "eventIds": [
+          "event:002"
+        ],
+        "sceneId": "scene:discovery",
+        "ruleIds": [
+          "rule:lantern-reveals-passage"
+        ]
+      },
+      "events": [
+        {
+          "id": "event:002",
+          "type": "ACTIVATION",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "EMIT_LIGHT_PATTERN",
+              "entityId": "entity:lantern"
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:2:panel:1",
+      "source": {
+        "eventIds": [
+          "event:003"
+        ],
+        "sceneId": "scene:investigation"
+      },
+      "events": [
+        {
+          "id": "event:003",
+          "type": "INSPECTION",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [
+            {
+              "op": "INSPECT",
+              "targetId": "entity:lantern"
+            }
+          ],
+          "effects": [
+            {
+              "op": "FIND_ENGRAVING",
+              "entityId": "entity:lantern"
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:2:panel:2",
+      "source": {
+        "eventIds": [
+          "event:004"
+        ],
+        "sceneId": "scene:investigation",
+        "ruleIds": [
+          "rule:lantern-reveals-passage"
+        ]
+      },
+      "events": [
+        {
+          "id": "event:004",
+          "type": "REACTION_TEST",
+          "participants": [
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [
+            {
+              "op": "MOVE_LANTERN_NEAR_WALL",
+              "targetId": "entity:lantern"
+            }
+          ],
+          "effects": [
+            {
+              "op": "WALL_RESONANCE",
+              "locationId": "entity:house"
+            }
+          ],
+          "knowledgeEffects": [
+            {
+              "holder": "entity:leo",
+              "op": "LEARN",
+              "knowledgeId": "knowledge:leo-lantern-reacts"
+            }
+          ],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:2:panel:3",
+      "source": {
+        "eventIds": [
+          "event:005"
+        ],
+        "sceneId": "scene:investigation"
+      },
+      "events": [
+        {
+          "id": "event:005",
+          "type": "SIBLING_CONFLICT",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "RAISE_TENSION",
+              "relationshipId": "relationship:siblings"
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": [
+            {
+              "owner": "entity:leo",
+              "goalId": "goal:leo-protect-lia",
+              "op": "CREATE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "unitId": "page:3:panel:1",
+      "source": {
+        "eventIds": [
+          "event:006"
+        ],
+        "sceneId": "scene:opening",
+        "ruleIds": [
+          "rule:lantern-reveals-passage"
+        ]
+      },
+      "events": [
+        {
+          "id": "event:006",
+          "type": "PASSAGE_REVEAL",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "REVEAL",
+              "entityId": "entity:tunnel"
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:3:panel:2",
+      "source": {
+        "eventIds": [
+          "event:007"
+        ],
+        "sceneId": "scene:opening"
+      },
+      "events": [
+        {
+          "id": "event:007",
+          "type": "DECISION",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:house",
+            "type": "LOCATION",
+            "name": "Old House"
+          },
+          "actions": [
+            {
+              "op": "ENTER",
+              "actorId": "entity:lia",
+              "targetId": "entity:tunnel"
+            },
+            {
+              "op": "FOLLOW",
+              "actorId": "entity:leo",
+              "targetId": "entity:lia"
+            }
+          ],
+          "effects": [
+            {
+              "op": "MOVE_PARTICIPANTS",
+              "locationId": "entity:tunnel"
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:4:panel:1",
+      "source": {
+        "eventIds": [
+          "event:008"
+        ],
+        "sceneId": "scene:mark",
+        "choiceIds": [
+          "choice:after-grandmother-mark"
+        ],
+        "evidenceIds": [
+          "evidence:grandmother-mark"
+        ]
+      },
+      "events": [
+        {
+          "id": "event:008",
+          "type": "CLUE_DISCOVERY",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:tunnel",
+            "type": "LOCATION",
+            "name": "Hidden Tunnel"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "DISCOVER_SYMBOL",
+              "sourceEntityId": "entity:tunnel",
+              "symbolOwnerId": "entity:grandmother"
+            }
+          ],
+          "knowledgeEffects": [
+            {
+              "holder": "entity:lia",
+              "op": "LEARN",
+              "knowledgeId": "knowledge:lia-grandmother-mark"
+            }
+          ],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:4:panel:2",
+      "source": {
+        "eventIds": [
+          "event:009a"
+        ],
+        "sceneId": "scene:mark"
+      },
+      "events": [
+        {
+          "id": "event:009a",
+          "type": "BRANCH_DESCEND_TOGETHER",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:tunnel",
+            "type": "LOCATION",
+            "name": "Hidden Tunnel"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "CONTINUE_DEEPER",
+              "trustDelta": 0.1
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    },
+    {
+      "unitId": "page:4:panel:3",
+      "source": {
+        "eventIds": [
+          "event:009b"
+        ],
+        "sceneId": "scene:mark"
+      },
+      "events": [
+        {
+          "id": "event:009b",
+          "type": "BRANCH_SEAL_AND_RETURN",
+          "participants": [
+            {
+              "id": "entity:lia",
+              "type": "CHARACTER",
+              "name": "Lia"
+            },
+            {
+              "id": "entity:leo",
+              "type": "CHARACTER",
+              "name": "Leo"
+            }
+          ],
+          "location": {
+            "id": "entity:tunnel",
+            "type": "LOCATION",
+            "name": "Hidden Tunnel"
+          },
+          "actions": [],
+          "effects": [
+            {
+              "op": "RETURN_TO_HOUSE",
+              "mysteryDeferred": true
+            }
+          ],
+          "knowledgeEffects": [],
+          "goalEffects": []
+        }
+      ]
+    }
+  ]
+}
