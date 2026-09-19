@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useI18n } from "../i18n";
 
 export default function LoginPage() {
+  const { t } = useI18n();
   const [backend, setBackend] = useState<"UNKNOWN" | "EPHEMERAL" | "DURABLE">(
     "UNKNOWN"
   );
   const [signupEnabled, setSignupEnabled] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("Checking backend…");
+  const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
+    setMessage(t("login.checking"));
     void fetch("/api/auth/status", { cache: "no-store" })
       .then((response) => response.json())
       .then((data) => {
@@ -21,17 +24,17 @@ export default function LoginPage() {
         setMessage(
           data.backend === "DURABLE"
             ? data.authenticated
-              ? "A session is already active."
-              : "Durable authentication is available."
-            : "Supabase is not configured. Story Lab is running in preview mode."
+              ? t("login.sessionActive")
+              : t("login.durableAvailable")
+            : t("login.previewMode")
         );
       })
-      .catch(() => setMessage("Could not read authentication status."));
-  }, []);
+      .catch(() => setMessage(t("login.statusError")));
+  }, [t]);
 
   async function submit(mode: "sign-in" | "sign-up") {
     setBusy(true);
-    setMessage(mode === "sign-in" ? "Signing in…" : "Creating account…");
+    setMessage(mode === "sign-in" ? t("login.signingIn") : t("login.creating"));
 
     try {
       const response = await fetch(`/api/auth/${mode}`, {
@@ -42,7 +45,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.message ?? data.error ?? "Authentication failed.");
+        setMessage(data.message ?? t("login.failed"));
         return;
       }
 
@@ -53,8 +56,8 @@ export default function LoginPage() {
 
       setMessage(
         data.sessionCreated
-          ? "Account created and session started."
-          : "Account created. Check your email if confirmation is required."
+          ? t("login.createdSession")
+          : t("login.createdConfirm")
       );
     } finally {
       setBusy(false);
@@ -63,22 +66,18 @@ export default function LoginPage() {
 
   return (
     <main className="review-shell">
-      <a className="back-link" href="/">← Story Lab</a>
-      <div className="eyebrow">CREATOR IDENTITY</div>
-      <h1>Sign in</h1>
-      <p className="muted review-intro">
-        Durable Creator Authority requires an authenticated Supabase session.
-      </p>
+      <a className="back-link" href="/">{t("common.back")}</a>
+      <div className="eyebrow">{t("login.eyebrow")}</div>
+      <h1>{t("login.title")}</h1>
+      <p className="muted review-intro">{t("login.body")}</p>
 
       <article className="review-card auth-card">
-        <span
-          className={`status ${backend === "DURABLE" ? "canon" : "candidate"}`}
-        >
+        <span className={`status ${backend === "DURABLE" ? "canon" : "candidate"}`}>
           BACKEND:{backend}
         </span>
 
         <label className="provider-token-field">
-          <span>Email</span>
+          <span>{t("login.email")}</span>
           <input
             type="email"
             value={email}
@@ -88,7 +87,7 @@ export default function LoginPage() {
         </label>
 
         <label className="provider-token-field">
-          <span>Password</span>
+          <span>{t("login.password")}</span>
           <input
             type="password"
             value={password}
@@ -105,7 +104,7 @@ export default function LoginPage() {
               disabled={busy || backend !== "DURABLE"}
               onClick={() => submit("sign-up")}
             >
-              Create account
+              {t("login.create")}
             </button>
           ) : null}
 
@@ -114,7 +113,7 @@ export default function LoginPage() {
             disabled={busy || backend !== "DURABLE" || !email || password.length < 8}
             onClick={() => submit("sign-in")}
           >
-            Sign in
+            {t("login.signIn")}
           </button>
         </div>
 
