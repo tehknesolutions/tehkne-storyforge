@@ -1,0 +1,32 @@
+{
+  "output": {
+    "kind": "MANGA_PANEL_SCRIPT",
+    "content": {
+      "unitId": "page:4:panel:1",
+      "visualDirection": "Lia and Leo discover Grandmother's mark in the tunnel."
+    }
+  },
+  "assertions": [
+    {
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
+      "object": "entity:grandmother",
+      "sourceUnitId": "page:4:panel:1"
+    },
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasCreatedBy",
+      "object": "entity:grandmother",
+      "sourceUnitId": "page:4:panel:1"
+    }
+  ],
+  "canonProposals": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasCreatedBy",
+      "object": "entity:grandmother",
+      "sourceUnitId": "page:4:panel:1",
+      "rationale": "The generated panel implies authorship, which is not established by current canon."
+    }
+  ]
+}
