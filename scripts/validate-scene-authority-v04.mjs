@@ -70,6 +70,26 @@ expect(
   "Previous revisions are not preserved as SUPERSEDED"
 );
 
+const approveStart = core.indexOf("export function approveSceneRevision");
+const rejectStart = core.indexOf("export function rejectSceneRevision");
+const selectStart = core.indexOf("export function selectSceneRevision");
+const approveBlock = core.slice(approveStart, rejectStart);
+const rejectBlock = core.slice(rejectStart, selectStart);
+
+expect(
+  approveStart >= 0 &&
+    rejectStart > approveStart &&
+    !approveBlock.includes("selected.dialogue ="),
+  "Approving a scene must not automatically approve dialogue lines"
+);
+
+expect(
+  rejectStart >= 0 &&
+    selectStart > rejectStart &&
+    !rejectBlock.includes("selected.dialogue ="),
+  "Rejecting a scene must not automatically reject dialogue lines"
+);
+
 expect(
   editor.includes("approveSceneRevision") &&
     editor.includes("rejectSceneRevision") &&
