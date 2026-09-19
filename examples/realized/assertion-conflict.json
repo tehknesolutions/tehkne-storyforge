@@ -1,0 +1,13 @@
+{
+  "artifactType": "ASSERTION_TEST",
+  "source": {
+    "realizationProfileId": "test:hard-conflict"
+  },
+  "assertions": [
+    {
+      "subject": "entity:lantern",
+      "predicate": "wasHiddenBy",
+      "object": "entity:father"
+    }
+  ]
+}
