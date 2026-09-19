@@ -9,7 +9,9 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics"
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:compiler",
+    "compile:reference": "node scripts/compile-reference.mjs",
+    "validate:compiler": "node scripts/validate-compiler.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -23,4 +25,4 @@
   "engines": {
     "node": ">=22"
   }
-}\n
+}
