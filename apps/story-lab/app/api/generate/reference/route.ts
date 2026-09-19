@@ -164,12 +164,18 @@ function classify(assertion: ProviderAssertion) {
 
 export async function POST() {
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  const generationEnabled =
+    process.env.STORYFORGE_GENERATION_ENABLED === "true";
+
+  if (!apiKey || !generationEnabled) {
     return Response.json(
       {
-        error: "PROVIDER_NOT_CONFIGURED",
+        error: "PROVIDER_NOT_ENABLED",
         provider: "provider:openai:text",
-        missingEnvironment: ["OPENAI_API_KEY"],
+        missingEnvironment: [
+          ...(apiKey ? [] : ["OPENAI_API_KEY"]),
+          ...(generationEnabled ? [] : ["STORYFORGE_GENERATION_ENABLED=true"])
+        ],
         canonMutationEnabled: false
       },
       { status: 503 }
@@ -259,6 +265,31 @@ export async function POST() {
     (finding) => finding.classification === "CANON_CONTRADICTION"
   );
 
+  const serverProposals = findings
+    .filter(
+      (finding) => finding.classification === "UNSUPPORTED_NEW_FACT"
+    )
+    .map((finding, index) => ({
+      id: `canon-proposal:server:reference:${index + 1}`,
+      subject: finding.assertion.subject,
+      predicate: finding.assertion.predicate,
+      object: finding.assertion.object,
+      sourceUnitId: finding.assertion.sourceUnitId,
+      rationale:
+        "Server assertion gate classified this generated claim as unsupported by current CANON.",
+      authority: "CANDIDATE"
+    }));
+
+  const providerProposals = parsed.canonProposals.map((proposal, index) => ({
+    id: `canon-proposal:provider:reference:${index + 1}`,
+    subject: proposal.subject,
+    predicate: proposal.predicate,
+    object: parseJson(proposal.objectJson),
+    sourceUnitId: proposal.sourceUnitId,
+    rationale: proposal.rationale,
+    authority: "CANDIDATE"
+  }));
+
   return Response.json({
     provider: "provider:openai:text",
     adapter: "openai:responses:v0.2",
@@ -269,21 +300,11 @@ export async function POST() {
       content: parseJson(parsed.output.contentJson)
     },
     findings,
-    canonProposals: parsed.canonProposals.map((proposal, index) => ({
-      id: `canon-proposal:provider:reference:${index + 1}`,
-      subject: proposal.subject,
-      predicate: proposal.predicate,
-      object: parseJson(proposal.objectJson),
-      sourceUnitId: proposal.sourceUnitId,
-      rationale: proposal.rationale,
-      authority: "CANDIDATE"
-    })),
+    canonProposals: [...serverProposals, ...providerProposals],
     reviewRequired:
       contradictions.length > 0 ||
-      parsed.canonProposals.length > 0 ||
-      findings.some(
-        (finding) => finding.classification === "UNSUPPORTED_NEW_FACT"
-      ),
+      serverProposals.length > 0 ||
+      providerProposals.length > 0,
     canonMutationEnabled: false
   });
 }
