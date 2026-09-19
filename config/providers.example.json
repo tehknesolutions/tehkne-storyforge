@@ -5,7 +5,7 @@
       "id": "provider:openai:text",
       "displayName": "OpenAI — Responses API",
       "kind": "TEXT",
-      "adapterId": "openai:responses:v0.1",
+      "adapterId": "openai:responses:v0.2",
       "capabilities": [
         "PROSE_SHORT",
         "NOVEL",
