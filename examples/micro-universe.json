@@ -1316,7 +1316,7 @@
       "risk": 0.55,
       "relationshipImpact": 0.1,
       "dramaticPressure": 0.85,
-      "totalScore": 0.79,
+      "totalScore": 0.6595,
       "rationale": [
         "Directly advances Lia's truth goal.",
         "Supported by Grandmother-mark evidence.",
@@ -1333,7 +1333,7 @@
       "risk": 0.1,
       "relationshipImpact": 0.05,
       "dramaticPressure": 0.35,
-      "totalScore": 0.48,
+      "totalScore": 0.4145,
       "rationale": [
         "Highly feasible and low risk.",
         "Weakly advances Lia's active truth goal."
@@ -1349,7 +1349,7 @@
       "risk": 0.45,
       "relationshipImpact": 0.2,
       "dramaticPressure": 0.8,
-      "totalScore": 0.79,
+      "totalScore": 0.653,
       "rationale": [
         "Preserves protective proximity.",
         "Fits Leo's revised plan.",
@@ -1366,7 +1366,7 @@
       "risk": 0.1,
       "relationshipImpact": -0.2,
       "dramaticPressure": 0.4,
-      "totalScore": 0.57,
+      "totalScore": 0.5875,
       "rationale": [
         "Reduces immediate danger.",
         "Conflicts with Lia's truth-seeking goal and may reduce trust."
