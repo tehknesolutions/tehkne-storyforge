@@ -9,10 +9,16 @@ import {
   type MediaTarget,
   type StoryWorkspaceState
 } from "@/lib/storyforge-local";
+import {
+  forgeNarrativeV03,
+  type NarrativeForgeV03
+} from "@/lib/storyforge-v03";
+import { NarrativeForgeView } from "./narrative-forge-view";
 import { useI18n } from "./i18n";
 
 const STORAGE_KEY = "tehkne:storyforge:workspace:v0.2";
 const LEGACY_STORAGE_KEY = "tehkne:storyforge:workspace:v0.1";
+const FORGE_STORAGE_KEY = "tehkne:storyforge:narrative-forge:v0.3";
 
 const targets: Array<{ id: MediaTarget; label: string }> = [
   { id: "PROSE_SHORT", label: "Conto / Short Story" },
@@ -80,6 +86,7 @@ function migrate(
 export function StoryWorkspace() {
   const { locale, t } = useI18n();
   const [state, setState] = useState<StoryWorkspaceState>(() => fresh(locale));
+  const [forgeV03, setForgeV03] = useState<NarrativeForgeV03 | null>(null);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -94,6 +101,11 @@ export function StoryWorkspace() {
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
       } else {
         setState(fresh(locale));
+      }
+
+      const advanced = window.localStorage.getItem(FORGE_STORAGE_KEY);
+      if (advanced) {
+        setForgeV03(JSON.parse(advanced) as NarrativeForgeV03);
       }
     } catch {
       setState(fresh(locale));
@@ -115,6 +127,19 @@ export function StoryWorkspace() {
     );
   }, [state, hydrated]);
 
+  useEffect(() => {
+    if (!hydrated) return;
+
+    if (forgeV03) {
+      window.localStorage.setItem(
+        FORGE_STORAGE_KEY,
+        JSON.stringify(forgeV03)
+      );
+    } else {
+      window.localStorage.removeItem(FORGE_STORAGE_KEY);
+    }
+  }, [forgeV03, hydrated]);
+
   const words = useMemo(() => {
     const normalized = state.idea.trim();
     return normalized ? normalized.split(/\s+/).length : 0;
@@ -124,6 +149,7 @@ export function StoryWorkspace() {
     const idea = state.idea.trim();
     if (!idea) return;
 
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       storyDNA: forgeStoryDNA(idea, locale),
@@ -138,6 +164,7 @@ export function StoryWorkspace() {
     const approved = { ...state.storyDNA, status: "APPROVED_LOCAL" as const };
     const universe = createUniverseDraft(approved, locale);
 
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       storyDNA: approved,
@@ -160,6 +187,7 @@ export function StoryWorkspace() {
       locale
     );
 
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       universe,
@@ -171,6 +199,7 @@ export function StoryWorkspace() {
   function approveNarrative() {
     if (!state.narrativeDraft) return;
 
+    setForgeV03(null);
     setState((current) => ({
       ...current,
       narrativeDraft: current.narrativeDraft
@@ -184,8 +213,17 @@ export function StoryWorkspace() {
   }
 
   function compile() {
-    if (!state.universe || !state.narrativeDraft) return;
+    if (!state.storyDNA || !state.universe || !state.narrativeDraft) return;
 
+    const advanced = forgeNarrativeV03({
+      storyDNA: state.storyDNA,
+      universe: state.universe,
+      narrative: state.narrativeDraft,
+      targetMedia: state.targetMedia,
+      locale
+    });
+
+    setForgeV03(advanced);
     setState((current) => ({
       ...current,
       mediaPlan:
@@ -201,25 +239,51 @@ export function StoryWorkspace() {
   }
 
   function reset() {
+    setForgeV03(null);
     setState(fresh(locale));
     window.localStorage.removeItem(STORAGE_KEY);
     window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+    window.localStorage.removeItem(FORGE_STORAGE_KEY);
   }
 
-  function exportJson() {
-    const exportState = {
-      ...state,
-      updatedAt: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(exportState, null, 2)], {
+  function downloadJson(value: unknown, prefix: string) {
+    const blob = new Blob([JSON.stringify(value, null, 2)], {
       type: "application/json"
     });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `storyforge-workspace-${Date.now()}.json`;
+    anchor.download = `${prefix}-${Date.now()}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
+  }
+
+  function exportJson() {
+    downloadJson(
+      {
+        workspace: {
+          ...state,
+          updatedAt: new Date().toISOString()
+        },
+        narrativeForgeV03: forgeV03
+      },
+      "storyforge-workspace"
+    );
+  }
+
+  function exportForge() {
+    if (!forgeV03) return;
+    downloadJson(forgeV03, "storyforge-narrative-forge-v0.3");
+  }
+
+  function exportTnir() {
+    if (!forgeV03) return;
+    downloadJson(forgeV03.tnir, "storyforge-tnir-v0.5");
+  }
+
+  function exportWebtoon() {
+    if (!forgeV03?.webtoon) return;
+    downloadJson(forgeV03.webtoon, "storyforge-webtoon-episode-001");
   }
 
   return (
@@ -230,7 +294,7 @@ export function StoryWorkspace() {
           <h2 id="workspace-title">{t("workspace.title")}</h2>
           <p className="muted">{t("workspace.body")}</p>
         </div>
-        <span className="status candidate">LOCAL-FIRST V0.2</span>
+        <span className="status candidate">NARRATIVE FORGE V0.3</span>
       </div>
 
       <div className="workspace-step">
@@ -450,7 +514,8 @@ export function StoryWorkspace() {
                     ...current,
                     targetMedia: target.id,
                     mediaPlan: null
-                  }))
+                  }));
+                  setForgeV03(null)
                 }
               >
                 {target.label}
@@ -458,7 +523,7 @@ export function StoryWorkspace() {
             ))}
           </div>
           <button type="button" onClick={compile}>
-            {t("workspace.compile")}
+            {t("forge.compile")}
           </button>
         </div>
       ) : null}
@@ -506,15 +571,24 @@ export function StoryWorkspace() {
             </button>
           </div>
         </div>
-      ) : (
-        state.idea ? (
+      ) : null}
+
+      {forgeV03 ? (
+        <NarrativeForgeView
+          forge={forgeV03}
+          onExportForge={exportForge}
+          onExportTnir={exportTnir}
+          onExportWebtoon={exportWebtoon}
+        />
+      ) : null}
+
+      {!state.mediaPlan && state.idea ? (
           <div className="workspace-secondary-actions">
             <button className="secondary" type="button" onClick={reset}>
               {t("workspace.reset")}
             </button>
           </div>
-        ) : null
-      )}
+      ) : null}
     </section>
   );
 }
