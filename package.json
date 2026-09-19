@@ -9,7 +9,7 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5",
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6",
     "compile:reference": "node scripts/compile-reference.mjs",
     "validate:compiler": "node scripts/validate-compiler.mjs",
     "validate:runtime-contracts": "node scripts/validate-runtime-contracts.mjs",
@@ -23,7 +23,12 @@
     "realize:reference": "node scripts/realize-reference.mjs",
     "simulate:event": "node scripts/simulate-event-proposal.mjs",
     "review:canon": "node scripts/review-canon-proposal.mjs",
-    "validate:v0.5": "node scripts/validate-v0.5.mjs"
+    "validate:v0.5": "node scripts/validate-v0.5.mjs",
+    "dev:story-lab": "npm run dev --workspace @tehkne/story-lab",
+    "build:story-lab": "npm run build --workspace @tehkne/story-lab",
+    "typecheck:story-lab": "npm run typecheck --workspace @tehkne/story-lab",
+    "export:game": "node scripts/export-game-reference.mjs",
+    "validate:v0.6": "node scripts/validate-v0.6.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -36,5 +41,8 @@
   },
   "engines": {
     "node": ">=22"
-  }
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }
