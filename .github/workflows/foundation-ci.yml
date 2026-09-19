@@ -1,10 +1,9 @@
 name: Storyforge Foundation CI
 
+# TEMPORARY: automatic triggers are disabled while GitHub-hosted jobs fail
+# before step execution (runner_id=0, steps=[]). Tracked in Issue #2.
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
