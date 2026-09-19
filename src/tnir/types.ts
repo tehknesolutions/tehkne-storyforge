@@ -138,9 +138,12 @@ export interface Plan {
   owner: string;
   goalId: string;
   status: "DRAFT" | "ACTIVE" | "BLOCKED" | "COMPLETED" | "ABANDONED" | "FAILED";
+  revision: number;
   steps: PlanStep[];
   currentStepId?: string;
   createdAtEventId?: string;
+  dependsOnBeliefIds?: string[];
+  supersedesPlanId?: string;
 }
 
 export interface Secret {
@@ -271,12 +274,52 @@ export interface StateTransition {
   patches: StatePatch[];
 }
 
+export interface Evidence {
+  id: string;
+  discoveredAtEventId: string;
+  proposition: string;
+  sourceEntityIds: string[];
+  strength: number;
+  affectsBeliefIds: string[];
+}
+
+export interface BeliefRevision {
+  id: string;
+  evidenceId: string;
+  beliefId: string;
+  holder: string;
+  previousConfidence: number;
+  newConfidence: number;
+  newTruthRelation?: "TRUE" | "FALSE" | "UNKNOWN" | "PARTIAL";
+  newStatus?: "ACTIVE" | "REVISED" | "ABANDONED";
+  rationale: string;
+}
+
+export interface ReplanRule {
+  id: string;
+  owner: string;
+  goalId: string;
+  whenBeliefIdsChanged: string[];
+  supersedePlanId: string;
+  activatePlanId: string;
+}
+
+export type RuleCondition =
+  | { type: "EVENT_OCCURRED"; eventId: string }
+  | { type: "FACT_EQUALS"; factId: string }
+  | { type: "STATE_EQUALS"; targetId: string; path: string; value: unknown };
+
+export type RuleEffect =
+  | { type: "ALLOW_EVENT"; eventId: string }
+  | { type: "DENY_EVENT"; eventId: string; reason: string }
+  | { type: "SET_STATE"; targetId: string; path: string; value: unknown };
+
 export interface WorldRule {
   id: string;
   domain: string;
   description: string;
-  when: string[];
-  then: string[];
+  conditions: RuleCondition[];
+  effects: RuleEffect[];
   authority: CanonAuthority;
   provenance: Provenance;
 }
@@ -373,6 +416,9 @@ export interface Universe {
   causalLinks: CausalLink[];
   choices: Choice[];
   stateTransitions: StateTransition[];
+  evidence: Evidence[];
+  beliefRevisions: BeliefRevision[];
+  replanRules: ReplanRule[];
   worldRules: WorldRule[];
   branches: NarrativeBranch[];
   stories: Story[];
