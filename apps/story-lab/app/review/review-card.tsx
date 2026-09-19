@@ -1,22 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-type ReviewStatus = "PENDING" | "APPROVED" | "EDIT_REQUIRED" | "REJECTED";
+type ReviewStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "EDIT_REQUIRED"
+  | "REJECTED"
+  | "COMMITTED";
+
+type ReviewItem = {
+  id: string;
+  status: ReviewStatus;
+  decision?: "APPROVE" | "EDIT" | "REJECT";
+  notes?: string;
+  updatedAt: string;
+  proposal?: {
+    subject?: string;
+    predicate?: string;
+    object?: unknown;
+    rationale?: string;
+    authority?: string;
+  };
+};
 
 export function ReviewCard() {
-  const proposalId = "canon-proposal:grandmother-authored-lantern";
-  const [status, setStatus] = useState<ReviewStatus>("PENDING");
-  const [message, setMessage] = useState(
-    "No canon mutation has occurred."
+  const [items, setItems] = useState<ReviewItem[]>([]);
+  const [durability, setDurability] = useState<"EPHEMERAL" | "DURABLE">(
+    "EPHEMERAL"
   );
-  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("Loading review queue…");
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [confirmations, setConfirmations] = useState<Record<string, string>>({});
 
-  async function decide(decision: "APPROVE" | "EDIT" | "REJECT") {
-    setBusy(true);
+  const load = useCallback(async () => {
+    const response = await fetch("/api/review/_all", { cache: "no-store" });
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.error ?? "Review queue unavailable.");
+      return;
+    }
+
+    setItems(data.items ?? []);
+    setDurability(data.durability ?? "EPHEMERAL");
+    setMessage(
+      data.items?.length
+        ? "Creator Authority queue loaded."
+        : "No CanonProposals are waiting for review."
+    );
+  }, []);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
+  async function decide(
+    item: ReviewItem,
+    decision: "APPROVE" | "EDIT" | "REJECT"
+  ) {
+    setBusyId(item.id);
+
     try {
       const response = await fetch(
-        `/api/review/${encodeURIComponent(proposalId)}`,
+        `/api/review/${encodeURIComponent(item.id)}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -24,83 +71,177 @@ export function ReviewCard() {
         }
       );
 
-      const data = (await response.json()) as {
-        state?: { status?: ReviewStatus };
-        canonMutationEnabled?: boolean;
-        nextRequiredStep?: string | null;
-        error?: string;
-      };
+      const data = await response.json();
 
-      if (!response.ok || !data.state?.status) {
-        throw new Error(data.error ?? "Review update failed");
+      if (!response.ok || !data.state) {
+        setMessage(data.error ?? "Review update failed.");
+        return;
       }
 
-      setStatus(data.state.status);
-      setMessage(
-        data.nextRequiredStep === "EXPLICIT_CANON_COMMIT_NOT_IMPLEMENTED"
-          ? "Review approved. Canon commit remains disabled and requires a future explicit authority step."
-          : "Review state updated. Canon remains unchanged."
+      setItems((current) =>
+        current.map((candidate) =>
+          candidate.id === item.id ? data.state : candidate
+        )
       );
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Review update failed");
+
+      setDurability(data.durability ?? durability);
+      setMessage(
+        data.nextRequiredStep === "EXPLICIT_CANON_COMMIT_REQUIRED"
+          ? "Review approved. A separate explicit Canon commit is now available."
+          : data.nextRequiredStep === "DURABLE_BACKEND_REQUIRED_FOR_CANON_COMMIT"
+            ? "Review approved in preview only. Durable backend is required for Canon commit."
+            : "Review state updated. Canon remains unchanged."
+      );
     } finally {
-      setBusy(false);
+      setBusyId(null);
+    }
+  }
+
+  async function commit(item: ReviewItem) {
+    setBusyId(item.id);
+
+    try {
+      const response = await fetch("/api/canon/commit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reviewId: item.id,
+          expectedUpdatedAt: item.updatedAt,
+          confirmation: confirmations[item.id] ?? ""
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.canonMutationPerformed) {
+        setMessage(data.error ?? "Canon commit failed.");
+        return;
+      }
+
+      setMessage(
+        `CANON committed transactionally: ${data.result?.canonFactId ?? "fact created"}.`
+      );
+      await load();
+    } finally {
+      setBusyId(null);
     }
   }
 
   return (
-    <article className="review-card">
+    <div className="job-list">
       <div className="review-head">
-        <span className={`status ${status === "PENDING" ? "candidate" : "canon"}`}>
-          {status}
+        <span className={`status ${durability === "DURABLE" ? "canon" : "candidate"}`}>
+          REVIEW STORE:{durability}
         </span>
-        <code>{proposalId}</code>
+        <span className="muted">{message}</span>
       </div>
 
-      <div className="triple">
-        <div><small>SUBJECT</small><strong>Memory Lantern</strong></div>
-        <div><small>PREDICATE</small><strong>wasCreatedBy</strong></div>
-        <div><small>OBJECT</small><strong>Grandmother</strong></div>
-      </div>
+      {items.map((item) => {
+        const proposal = item.proposal ?? {};
+        const busy = busyId === item.id;
+        const commitReady =
+          durability === "DURABLE" && item.status === "APPROVED";
 
-      <p>
-        The current canon establishes that Grandmother hid the lantern, not
-        that she created it.
-      </p>
+        return (
+          <article className="review-card" key={item.id}>
+            <div className="review-head">
+              <span
+                className={`status ${
+                  item.status === "PENDING" ||
+                  item.status === "EDIT_REQUIRED"
+                    ? "candidate"
+                    : "canon"
+                }`}
+              >
+                {item.status}
+              </span>
+              <code>{item.id}</code>
+            </div>
 
-      <div className="canon-warning">
-        Existing CANON: Memory Lantern → wasHiddenBy → Grandmother
-      </div>
+            <div className="triple">
+              <div>
+                <small>SUBJECT</small>
+                <strong>{String(proposal.subject ?? "—")}</strong>
+              </div>
+              <div>
+                <small>PREDICATE</small>
+                <strong>{String(proposal.predicate ?? "—")}</strong>
+              </div>
+              <div>
+                <small>OBJECT</small>
+                <strong>{JSON.stringify(proposal.object ?? null)}</strong>
+              </div>
+            </div>
 
-      <div className="review-actions">
-        <button
-          className="secondary"
-          type="button"
-          disabled={busy}
-          onClick={() => decide("REJECT")}
-        >
-          Reject
-        </button>
-        <button
-          className="secondary"
-          type="button"
-          disabled={busy}
-          onClick={() => decide("EDIT")}
-        >
-          Edit
-        </button>
-        <button
-          type="button"
-          disabled={busy}
-          onClick={() => decide("APPROVE")}
-        >
-          Approve candidate
-        </button>
-      </div>
+            <p>{String(proposal.rationale ?? "No rationale supplied.")}</p>
 
-      <p className="muted footnote" role="status">
-        {message}
-      </p>
-    </article>
+            {item.status !== "COMMITTED" ? (
+              <div className="review-actions">
+                <button
+                  className="secondary"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => decide(item, "REJECT")}
+                >
+                  Reject
+                </button>
+                <button
+                  className="secondary"
+                  type="button"
+                  disabled={busy}
+                  onClick={() => decide(item, "EDIT")}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => decide(item, "APPROVE")}
+                >
+                  Approve review
+                </button>
+              </div>
+            ) : null}
+
+            {commitReady ? (
+              <div className="canon-commit-zone">
+                <div className="eyebrow">EXPLICIT CANON COMMIT</div>
+                <p className="muted">
+                  Type <code>COMMIT TO CANON</code>. This is a separate,
+                  transactional authority action.
+                </p>
+                <input
+                  value={confirmations[item.id] ?? ""}
+                  onChange={(event) =>
+                    setConfirmations((current) => ({
+                      ...current,
+                      [item.id]: event.target.value
+                    }))
+                  }
+                  autoComplete="off"
+                  placeholder="COMMIT TO CANON"
+                />
+                <button
+                  type="button"
+                  disabled={
+                    busy ||
+                    confirmations[item.id] !== "COMMIT TO CANON"
+                  }
+                  onClick={() => commit(item)}
+                >
+                  Commit approved proposal to CANON
+                </button>
+              </div>
+            ) : null}
+          </article>
+        );
+      })}
+
+      {!items.length ? (
+        <article className="review-card">
+          <p>No review items are currently available.</p>
+        </article>
+      ) : null}
+    </div>
   );
 }
