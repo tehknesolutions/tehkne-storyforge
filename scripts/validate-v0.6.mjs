@@ -18,7 +18,10 @@ const [
   openaiAdapter,
   providerRegistry,
   storyLabPage,
-  reviewPage
+  ideaIntake,
+  reviewPage,
+  healthRoute,
+  tpirSource
 ] = await Promise.all([
   readJson("examples/micro-universe.json"),
   readJson("config/providers.example.json"),
@@ -32,7 +35,10 @@ const [
   readText("src/generation/adapters/openai-responses.ts"),
   readText("src/generation/provider-registry.ts"),
   readText("apps/story-lab/app/page.tsx"),
-  readText("apps/story-lab/app/review/page.tsx")
+  readText("apps/story-lab/app/idea-intake.tsx"),
+  readText("apps/story-lab/app/review/page.tsx"),
+  readText("apps/story-lab/app/api/health/route.ts"),
+  readText("src/production/tpir.ts")
 ]);
 
 const errors = [];
@@ -116,7 +122,9 @@ expect(storyLabPackage.dependencies.react === "19.2.0", "Story Lab React version
 expect(rootPackage.workspaces?.includes("apps/*"), "Root package is not configured as Story Lab workspace");
 expect(Boolean(rootPackage.scripts["build:story-lab"]), "Root package missing Story Lab build script");
 
-expect(storyLabPage.includes("What do you imagine?"), "Story Lab lacks ALEF idea intake");
+expect(storyLabPage.includes("STORYFORGE V0.6"), "Story Lab product version label mismatch");
+expect(storyLabPage.includes("T-NIR V0.5 · T-PIR V0.1"), "Story Lab architecture version label mismatch");
+expect(ideaIntake.includes("What do you imagine?"), "Story Lab lacks ALEF idea intake");
 expect(storyLabPage.includes("Review candidates"), "Story Lab lacks canon review navigation");
 expect(storyLabPage.includes("Manga"), "Story Lab lacks Manga target");
 expect(storyLabPage.includes("Webtoon"), "Story Lab lacks Webtoon target");
@@ -124,6 +132,13 @@ expect(storyLabPage.includes("Anime"), "Story Lab lacks Anime target");
 expect(reviewPage.includes("Canon Review"), "Canon Review route missing");
 expect(reviewPage.includes("Approve candidate"), "Canon Review route lacks approve action");
 expect(reviewPage.includes("intentionally not wired"), "Canon Review UI must declare mutation disabled");
+expect(healthRoute.includes('storyforge: "0.6.0"'), "Health route Storyforge version mismatch");
+expect(healthRoute.includes('tnir: "0.5.0"'), "Health route T-NIR version mismatch");
+expect(healthRoute.includes('tpir: "0.1.0"'), "Health route T-PIR version mismatch");
+expect(healthRoute.includes("automaticCanonPromotion: false"), "Health route must expose canon promotion disabled");
+expect(tpirSource.includes('narrativeCanonSource: "T-NIR"'), "T-PIR must use T-NIR as narrative canon source");
+expect(tpirSource.includes("providersCanPromoteCanon: false"), "T-PIR must prohibit provider canon promotion");
+expect(tpirSource.includes("generatedAssetsAreCanonByDefault: false"), "T-PIR assets must be non-canon by default");
 
 if (errors.length) {
   console.error("Storyforge V0.6 production foundation validation failed.");
@@ -143,7 +158,12 @@ console.log(JSON.stringify({
   storyLab: {
     next: storyLabPackage.dependencies.next,
     react: storyLabPackage.dependencies.react,
-    routes: ["/", "/review", "/api/health"]
+    routes: ["/", "/review", "/api/health"],
+    versions: {
+      storyforge: "0.6.0",
+      tnir: "0.5.0",
+      tpir: "0.1.0"
+    }
   },
   canonReviewAutomaticPromotion: reviewBatch.automaticPromotionAllowed
 }, null, 2));
