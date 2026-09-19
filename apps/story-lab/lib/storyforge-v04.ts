@@ -299,13 +299,9 @@ export function reviseScene(
     createdAt: new Date().toISOString(),
     rationale,
     alternative: false,
-    dialogue: (patch.dialogue ?? current.dialogue).map((line) => ({
-      ...clone(line),
-      status:
-        line.status === "REJECTED"
-          ? "REJECTED"
-          : "CANDIDATE"
-    }))
+    dialogue: (patch.dialogue ?? current.dialogue).map((line) =>
+      clone(line)
+    )
   };
 
   return addRevision(workspace, sceneId, nextRevision);
