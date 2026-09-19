@@ -1,0 +1,52 @@
+{
+  "format": "STORYFORGE_GAME_JSON",
+  "version": "0.1.0",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.5.0",
+    "storyId": "story:first-light"
+  },
+  "nodes": [
+    {"id":"game-node:event:001","eventId":"event:001","type":"DISCOVERY","participants":["entity:lia","entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:002","eventId":"event:002","type":"ACTIVATION","participants":["entity:lia","entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:003","eventId":"event:003","type":"INSPECTION","participants":["entity:lia"],"locationId":"entity:house"},
+    {"id":"game-node:event:004","eventId":"event:004","type":"REACTION_TEST","participants":["entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:005","eventId":"event:005","type":"SIBLING_CONFLICT","participants":["entity:lia","entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:006","eventId":"event:006","type":"PASSAGE_REVEAL","participants":["entity:lia","entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:007","eventId":"event:007","type":"DECISION","participants":["entity:lia","entity:leo"],"locationId":"entity:house"},
+    {"id":"game-node:event:008","eventId":"event:008","type":"CLUE_DISCOVERY","participants":["entity:lia","entity:leo"],"locationId":"entity:tunnel"},
+    {"id":"game-node:event:009a","eventId":"event:009a","type":"BRANCH_DESCEND_TOGETHER","participants":["entity:lia","entity:leo"],"locationId":"entity:tunnel"},
+    {"id":"game-node:event:009b","eventId":"event:009b","type":"BRANCH_SEAL_AND_RETURN","participants":["entity:lia","entity:leo"],"locationId":"entity:tunnel"}
+  ],
+  "choices": [
+    {
+      "id": "choice:after-grandmother-mark",
+      "atEventId": "event:008",
+      "prompt": "What should Lia and Leo do after finding Grandmother's mark?",
+      "options": [
+        {"id":"choice-option:descend","label":"Descend together","outcomeEventId":"event:009a","transitionId":"transition:descend-trust","branchId":"branch:descend"},
+        {"id":"choice-option:return","label":"Seal the passage and return","outcomeEventId":"event:009b","transitionId":"transition:return-defer","branchId":"branch:return"}
+      ]
+    }
+  ],
+  "transitions": [
+    {"id":"transition:descend-trust","triggeredBy":{"type":"CHOICE_OPTION","id":"choice-option:descend"},"targetId":"relationship:siblings","patches":[{"op":"INCREMENT","path":"intensity","value":0.1}]},
+    {"id":"transition:return-defer","triggeredBy":{"type":"CHOICE_OPTION","id":"choice-option:return"},"targetId":"WORLD","patches":[{"op":"SET","path":"mysteryDeferred","value":true}]}
+  ],
+  "rules": [
+    {
+      "id":"rule:lantern-reveals-passage",
+      "domain":"MYSTERY_TECH",
+      "description":"The Memory Lantern may reveal the protected passage only after activation and confirmed wall resonance.",
+      "conditions":[{"type":"EVENT_OCCURRED","eventId":"event:002"},{"type":"EVENT_OCCURRED","eventId":"event:004"}],
+      "effects":[{"type":"ALLOW_EVENT","eventId":"event:006"}],
+      "authority":"CANON",
+      "provenance":{"createdBy":"CREATOR","createdAt":"2026-09-19T14:55:00Z"},
+      "expression":{"type":"ALL","children":[{"type":"ATOM","condition":{"type":"EVENT_OCCURRED","eventId":"event:002"}},{"type":"ATOM","condition":{"type":"EVENT_OCCURRED","eventId":"event:004"}}]}
+    }
+  ],
+  "authority": {
+    "eventProposalsIncluded": false,
+    "canonProposalsIncluded": false
+  }
+}
