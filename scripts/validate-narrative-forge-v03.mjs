@@ -3,12 +3,13 @@ import fs from "node:fs/promises";
 const read = async (path) =>
   fs.readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-const [core, view, workspace, i18n, tnirTypes] = await Promise.all([
+const [core, view, workspace, i18n, tnirTypes, generalityProbe] = await Promise.all([
   read("apps/story-lab/lib/storyforge-v03.ts"),
   read("apps/story-lab/app/narrative-forge-view.tsx"),
   read("apps/story-lab/app/story-workspace.tsx"),
   read("apps/story-lab/app/i18n.tsx"),
-  read("src/tnir/types.ts")
+  read("src/tnir/types.ts"),
+  read("apps/story-lab/app/api/self-test/narrative-forge/route.ts")
 ]);
 
 const errors = [];
@@ -77,6 +78,13 @@ for (const key of [
   const count = (i18n.match(new RegExp(`"${key.replace(/\\./g, "\\\\.")}"`, "g")) || []).length;
   expect(count === 3, `i18n key must exist in PT-BR, EN and ES: ${key} (found ${count})`);
 }
+
+expect(
+  generalityProbe.includes("noSpecializedLeakage") &&
+    generalityProbe.includes("fortyPanels") &&
+    generalityProbe.includes("tnirV05"),
+  "Runtime generality probe is missing required invariants"
+);
 
 expect(
   tnirTypes.includes("export interface Scene") &&
