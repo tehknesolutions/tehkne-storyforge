@@ -509,14 +509,14 @@ export function StoryWorkspace() {
                 className={state.targetMedia === target.id ? "" : "secondary"}
                 type="button"
                 key={target.id}
-                onClick={() =>
+                onClick={() => {
                   setState((current) => ({
                     ...current,
                     targetMedia: target.id,
                     mediaPlan: null
                   }));
-                  setForgeV03(null)
-                }
+                  setForgeV03(null);
+                }}
               >
                 {target.label}
               </button>
