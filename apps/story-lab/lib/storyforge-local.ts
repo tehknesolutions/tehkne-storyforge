@@ -457,7 +457,7 @@ function genericEventText(
 ): Array<[string, string, string, LocalAuthority, number]> {
   if (locale === "en") {
     return [
-      ["Hook", "The impossible situation", `Open on the most unusual image or consequence implied by the premise: ${premise}`, "SOURCE", 2],
+      ["Hook", "The impossible situation", `The central situation described by the premise becomes perceptible in the story: ${premise}`, "SOURCE", 2],
       ["Contact", "First undeniable contact", "Make another character recognize that the central phenomenon is real, not coincidence.", "CANDIDATE", 3],
       ["Proof", "Evidence changes the reading", "Reveal a piece of evidence that forces the characters to reinterpret what is happening.", "CANDIDATE", 4],
       ["Goal", "A temporary alliance", "The protagonist forms a concrete short-term goal and chooses who to trust.", "CANDIDATE", 4],
@@ -469,7 +469,7 @@ function genericEventText(
   }
   if (locale === "es") {
     return [
-      ["Gancho", "La situación imposible", `Abrir con la imagen o consecuencia más inusual de la premisa: ${premise}`, "SOURCE", 2],
+      ["Gancho", "La situación imposible", `La situación central descrita por la premisa se vuelve perceptible en la historia: ${premise}`, "SOURCE", 2],
       ["Contacto", "Primer contacto innegable", "Hacer que otro personaje reconozca que el fenómeno central es real y no una coincidencia.", "CANDIDATE", 3],
       ["Prueba", "La evidencia cambia la lectura", "Revelar una evidencia que obligue a reinterpretar lo que ocurre.", "CANDIDATE", 4],
       ["Objetivo", "Una alianza temporal", "El protagonista forma un objetivo concreto y decide en quién confiar.", "CANDIDATE", 4],
@@ -480,7 +480,7 @@ function genericEventText(
     ];
   }
   return [
-    ["Gancho", "A situação impossível", `Abrir com a imagem ou consequência mais incomum contida na premissa: ${premise}`, "SOURCE", 2],
+    ["Gancho", "A situação impossível", `A situação central descrita pela premissa torna-se perceptível na história: ${premise}`, "SOURCE", 2],
     ["Contato", "Primeiro contato inegável", "Fazer outro personagem reconhecer que o fenômeno central é real, não coincidência.", "CANDIDATE", 3],
     ["Prova", "A evidência muda a leitura", "Revelar uma evidência que obrigue os personagens a reinterpretar o que está acontecendo.", "CANDIDATE", 4],
     ["Objetivo", "Uma aliança temporária", "O protagonista forma um objetivo concreto de curto prazo e decide em quem confiar.", "CANDIDATE", 4],
@@ -496,35 +496,35 @@ function cockroachExperimentEvents(
 ): Array<[string, string, string, LocalAuthority, number]> {
   if (locale === "en") {
     return [
-      ["Hook", "A human thought inside an insect body", "Open at floor level: the cockroach reacts with unmistakably human intention while a nearby human notices something impossible.", "SOURCE", 2],
+      ["Hook", "A human thought inside an insect body", "The cockroach acts with unmistakably human intention during its encounter with a human capable of understanding it.", "SOURCE", 2],
       ["Contact", "He understands it", "The human realizes the cockroach is not behaving randomly and can be understood as if it were trying to speak.", "SOURCE", 3],
       ["Proof", "No ordinary insect knows this", "The cockroach demonstrates memory, reasoning or knowledge that an ordinary insect could not possess.", "CANDIDATE", 5],
       ["Goal", "Find out who it was", "The pair form a fragile alliance: identify the human consciousness inside the cockroach and reconstruct what happened.", "CANDIDATE", 5],
       ["Complication", "The body is a prison", "The cockroach's physical limits turn ordinary human environments into lethal obstacles and make communication fragile.", "CANDIDATE", 6],
-      ["Reveal", "The experiment is real", "Evidence ties the transferred mind directly to a scientific experiment rather than mutation, magic or coincidence.", "SOURCE", 8],
+      ["Reveal", "Proof of the experiment", "The characters find concrete evidence connecting the mind transfer to the scientific experiment already established by the premise.", "CANDIDATE", 8],
       ["Crisis", "The experiment may not be over", "A clue suggests the transfer was part of something larger, putting both the cockroach and the human who understands it at risk.", "CANDIDATE", 9],
       ["Cliffhanger", "A fragment of the old identity returns", "The cockroach remembers one concrete detail from its former human life — enough to identify a person, place or project in the next episode.", "CANDIDATE", 10]
     ];
   }
   if (locale === "es") {
     return [
-      ["Gancho", "Un pensamiento humano dentro de un insecto", "Abrir a ras del suelo: la cucaracha actúa con una intención inequívocamente humana mientras un humano cercano percibe algo imposible.", "SOURCE", 2],
+      ["Gancho", "Un pensamiento humano dentro de un insecto", "La cucaracha actúa con una intención inequívocamente humana durante su encuentro con un ser humano capaz de comprenderla.", "SOURCE", 2],
       ["Contacto", "Él puede entenderla", "El humano comprende que la cucaracha no actúa al azar y que puede entenderla como si intentara hablar.", "SOURCE", 3],
       ["Prueba", "Ningún insecto normal sabe esto", "La cucaracha demuestra memoria, razonamiento o conocimiento imposible para un insecto común.", "CANDIDATE", 5],
       ["Objetivo", "Descubrir quién era", "Ambos forman una alianza frágil: identificar la conciencia humana dentro de la cucaracha y reconstruir lo ocurrido.", "CANDIDATE", 5],
       ["Complicación", "El cuerpo es una prisión", "Las limitaciones físicas de la cucaracha convierten espacios humanos normales en obstáculos letales y vuelven frágil la comunicación.", "CANDIDATE", 6],
-      ["Revelación", "El experimento es real", "Una evidencia conecta directamente la mente transferida con un experimento científico, no con mutación, magia o coincidencia.", "SOURCE", 8],
+      ["Revelación", "Una prueba del experimento", "Los personajes encuentran una evidencia concreta que conecta la transferencia mental con el experimento científico ya establecido por la premisa.", "CANDIDATE", 8],
       ["Crisis", "El experimento puede continuar", "Una pista sugiere que la transferencia era parte de algo mayor, poniendo en riesgo a la cucaracha y al humano que puede entenderla.", "CANDIDATE", 9],
       ["Cliffhanger", "Regresa un fragmento de la antigua identidad", "La cucaracha recuerda un detalle concreto de su vida humana anterior, suficiente para identificar a una persona, lugar o proyecto en el próximo episodio.", "CANDIDATE", 10]
     ];
   }
   return [
-    ["Gancho", "Um pensamento humano dentro de um inseto", "Abrir no nível do chão: a barata reage com intenção inequivocamente humana enquanto um ser humano próximo percebe algo impossível.", "SOURCE", 2],
+    ["Gancho", "Um pensamento humano dentro de um inseto", "A barata age com intenção inequivocamente humana durante o encontro com um ser humano capaz de compreendê-la.", "SOURCE", 2],
     ["Contato", "Ele consegue entendê-la", "O humano percebe que a barata não age ao acaso e consegue entendê-la como se ela estivesse tentando falar.", "SOURCE", 3],
     ["Prova", "Nenhum inseto comum sabe disso", "A barata demonstra memória, raciocínio ou conhecimento que um inseto comum jamais poderia possuir.", "CANDIDATE", 5],
     ["Objetivo", "Descobrir quem ela era", "Os dois formam uma aliança frágil: identificar a consciência humana dentro da barata e reconstruir o que aconteceu.", "CANDIDATE", 5],
     ["Complicação", "O corpo é uma prisão", "As limitações físicas da barata transformam ambientes humanos comuns em obstáculos letais e tornam a comunicação frágil.", "CANDIDATE", 6],
-    ["Revelação", "O experimento é real", "Uma evidência liga diretamente a mente transferida a um experimento científico, e não a mutação, magia ou coincidência.", "SOURCE", 8],
+    ["Revelação", "Uma prova do experimento", "Os personagens encontram uma evidência concreta que conecta a transferência de mente ao experimento científico já estabelecido na premissa.", "CANDIDATE", 8],
     ["Crise", "O experimento pode não ter terminado", "Uma pista sugere que a transferência fazia parte de algo maior, colocando a barata e o humano que a entende em risco.", "CANDIDATE", 9],
     ["Cliffhanger", "Um fragmento da identidade antiga retorna", "A barata se lembra de um detalhe concreto da vida humana anterior — suficiente para identificar uma pessoa, lugar ou projeto no próximo episódio.", "CANDIDATE", 10]
   ];
