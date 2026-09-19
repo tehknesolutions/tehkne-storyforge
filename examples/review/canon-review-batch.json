@@ -1,0 +1,22 @@
+{
+  "id": "canon-review-batch:reference",
+  "universeId": "universe:lantern-below",
+  "universeVersion": "0.5.0",
+  "sourceArtifactId": "artifact:model:reference",
+  "automaticPromotionAllowed": false,
+  "items": [
+    {
+      "status": "PENDING",
+      "proposal": {
+        "id": "canon-proposal:model:reference:1",
+        "subject": "entity:lantern",
+        "predicate": "wasCreatedBy",
+        "object": "entity:grandmother",
+        "authority": "CANDIDATE",
+        "proposedFromArtifactId": "artifact:model:reference",
+        "conflictsWithFactIds": [],
+        "rationale": "Generated assertion is unsupported by current CANON."
+      }
+    }
+  ]
+}
