@@ -51,8 +51,8 @@ export default function HomePage() {
           </p>
         </div>
         <div className="runtime-card">
-          <div className="runtime-title">T-NIR V0.6 FOUNDATION</div>
-          <strong>Creator Authority</strong>
+          <div className="runtime-title">STORYFORGE V0.6</div>
+          <strong>T-NIR V0.5 · T-PIR V0.1</strong>
           <code>AI → CANDIDATE → REVIEW → CANON</code>
           <span>Automatic canon promotion: OFF</span>
         </div>
