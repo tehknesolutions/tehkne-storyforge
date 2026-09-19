@@ -15,7 +15,7 @@ const [
   read("apps/story-lab/app/scene-authority-editor.tsx"),
   read("apps/story-lab/app/story-workspace.tsx"),
   read("apps/story-lab/app/i18n.tsx"),
-  read("scripts/probe-scene-authority-v04.ts"),
+  read("apps/story-lab/scripts/probe-scene-authority-v04.ts"),
   read("apps/story-lab/package.json")
 ]);
 

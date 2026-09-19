@@ -2,8 +2,8 @@ import {
   createNarrativeDraft,
   createUniverseDraft,
   forgeStoryDNA
-} from "../apps/story-lab/lib/storyforge-local";
-import { forgeNarrativeV03 } from "../apps/story-lab/lib/storyforge-v03";
+} from "../lib/storyforge-local";
+import { forgeNarrativeV03 } from "../lib/storyforge-v03";
 import {
   approveSceneRevision,
   buildV04TnirExport,
@@ -14,7 +14,7 @@ import {
   reviseScene,
   selectedSceneRevision,
   updateDialogueLine
-} from "../apps/story-lab/lib/storyforge-v04";
+} from "../lib/storyforge-v04";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);

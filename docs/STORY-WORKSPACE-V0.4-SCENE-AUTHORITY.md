@@ -135,10 +135,10 @@ Production prebuild is configured to run:
 
 ```text
 tsx scripts/probe-narrative-generality.ts
-tsx ../../scripts/probe-scene-authority-v04.ts
+tsx scripts/probe-scene-authority-v04.ts
 ```
 
-The Scene Authority probe intentionally lives at repository root under `/scripts`, outside the Story Lab TypeScript include set.
+The Scene Authority probe lives at `apps/story-lab/scripts/probe-scene-authority-v04.ts`, inside the Vercel Root Directory. It is explicitly excluded from the Next.js TypeScript project while still executed by `tsx` during prebuild.
 
 Runtime invariants include:
 

@@ -197,7 +197,7 @@ Implemented:
 - local V0.4 persistence;
 - PT-BR / EN / ES editor coverage;
 - static Scene Authority regression gate;
-- executable V0.4 prebuild probe stored outside the Next.js TypeScript include set.
+- executable V0.4 prebuild probe stored inside the Story Lab Vercel root and explicitly excluded from the Next.js TypeScript include set.
 
 Current deployment state:
 
