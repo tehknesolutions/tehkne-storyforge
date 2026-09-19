@@ -76,39 +76,53 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**T-NIR V0.4 — Deterministic Narrative Runtime + Canon-Safe Generation**
+**T-NIR V0.5 — Decision, Narrative Resolution & Governed Media Realization**
 
 Implemented:
 
-- character cognition and agency: Belief, Knowledge, Goal, Intention, Plan, Secret and CharacterState;
-- evidence-driven BeliefRevision;
-- belief-dependent Plan revisions and deterministic ReplanRules;
-- explicit Choice / ChoiceOption;
-- StateTransition and branch-state reduction;
-- executable WorldRule conditions/effects;
-- NarrativeBranch with temporal sequencing;
-- JSON Schema V0.1–V0.4;
-- semantic, runtime-contract, canon/timeline and media validation;
-- first-class Manga, Webtoon, Manhwa, Manhua, Light Novel and Anime profiles;
-- deterministic Media Plan compiler;
-- formal traceability contract back to Events, Choices, Rules and Evidence;
-- runtime snapshots for both reference branches;
-- Generation Brief compiler with Creator Authority guardrails.
+- evidence-driven character cognition and deterministic replanning;
+- composable WorldRule expressions: `ATOM / ALL / ANY / NOT`;
+- ActionProposal + deterministic DecisionScore;
+- EventProposal simulation without canon mutation;
+- creator-gated CanonProposal workflow;
+- linear vs interactive Narrative Resolution;
+- model-agnostic ModelAdapter contract;
+- deterministic Media Plans with traceability;
+- first realized Prose, Manga, Webtoon and Anime outputs;
+- output assertion classification: CANON_RESTATEMENT / UNSUPPORTED_NEW_FACT / CANON_CONTRADICTION;
+- comprehensive `validate-v0.5.mjs` gate.
 
-Reference audit: **PASS / 0 errors**.
+Reference audits: **PASS / 0 errors** in two independent repository audits.
 
-Current transmedia preservation:
+Current compiler preservation:
 
-- Prose: 10/10 story events mapped;
+- Prose: 10/10 source events mapped;
 - Manga: 10/10;
 - Webtoon: 10/10;
 - Anime Episode: 10/10;
 - Visual Novel: 10/10;
 - unmapped events: **0**.
 
-Generation contract: `mayInventCanon = false`; new unapproved facts become `CANDIDATE`.
+Current linear realization uses `branch:descend`:
 
-Next research/engineering milestone: **T-NIR V0.5 — decision scoring, rule expression engine, plan repair, model adapters and first realized media outputs.**
+- Prose: readable realized narrative;
+- Manga: 9 RTL pages;
+- Webtoon: 9 vertical panels with scroll pacing;
+- Anime: 9 shots / 90 seconds.
+
+Creator Authority remains enforced:
+
+```text
+generated inference
+→ CANDIDATE
+→ creator review
+→ approve / edit / reject
+→ CANON
+```
+
+Automatic canon promotion is not allowed.
+
+Next research/engineering milestone: **T-NIR V0.6 — provider adapters, structured generation, multimodal assets and Story Lab application foundation.**
 
 ## License
 
