@@ -411,3 +411,39 @@ button.secondary {
     flex-direction: column;
   }
 }
+
+
+.game-events {
+  margin: 28px 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: game-event;
+}
+
+.game-events li {
+  counter-increment: game-event;
+  padding: 14px 0 14px 42px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+.game-events li::before {
+  content: counter(game-event, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.game-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .game-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
