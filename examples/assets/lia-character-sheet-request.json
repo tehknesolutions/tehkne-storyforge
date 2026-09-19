@@ -1,0 +1,21 @@
+{
+  "id": "asset-request:lia-character-sheet",
+  "kind": "CHARACTER_SHEET",
+  "targetMedia": "MANGA",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.5.0",
+    "entityIds": ["entity:lia"],
+    "eventIds": ["event:001", "event:008"]
+  },
+  "prompt": "Character continuity sheet for Lia. Preserve only approved visual traits and leave unknown traits unspecified.",
+  "negativeConstraints": [
+    "Do not infer family insignia from Grandmother's tunnel mark.",
+    "Do not add powers, scars, uniforms or lineage symbols not present in canon."
+  ],
+  "styleProfileId": "style:reference-manga",
+  "continuityKeys": ["entity:lia"],
+  "dimensions": {
+    "aspectRatio": "3:2"
+  }
+}
