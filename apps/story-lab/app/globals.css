@@ -1098,3 +1098,241 @@ button.secondary {
     grid-template-columns: 1fr;
   }
 }
+
+
+.scene-authority-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0 24px;
+}
+
+.scene-authority-summary > div {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b0d12;
+}
+
+.scene-authority-summary small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.scene-authority-summary strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.25rem;
+}
+
+.scene-revision-list {
+  display: grid;
+  gap: 16px;
+}
+
+.scene-revision-list > article {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #0b0d12;
+}
+
+.scene-revision-head,
+.scene-status-stack,
+.scene-event-lock,
+.dialogue-revision-row,
+.scene-revision-actions,
+.scene-compile-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scene-revision-head {
+  justify-content: space-between;
+}
+
+.scene-revision-head > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.scene-revision-head h3 {
+  margin: 0 0 4px;
+}
+
+.scene-status-stack {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.revision-pill {
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--accent-2);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.scene-event-lock {
+  justify-content: space-between;
+  margin: 16px 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--accent);
+  background: rgba(166, 255, 203, 0.04);
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.revision-history {
+  margin: 14px 0 18px;
+}
+
+.revision-history > small,
+.scene-source-claims > small {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.revision-history > div,
+.scene-source-claims > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.revision-button,
+.micro-button {
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.revision-button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(166, 255, 203, 0.06);
+}
+
+.scene-edit-form {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid var(--warning);
+  border-radius: 14px;
+  background: rgba(255, 214, 107, 0.03);
+}
+
+.scene-edit-form label > span {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.scene-edit-form input,
+.scene-edit-form textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #090a0f;
+  color: var(--text);
+  padding: 11px 12px;
+  resize: vertical;
+}
+
+.scene-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.scene-source-claims {
+  margin-top: 16px;
+}
+
+.scene-source-claims code {
+  display: inline-block;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.dialogue-revision-row {
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dialogue-revision-row:last-child {
+  border-bottom: 0;
+}
+
+.dialogue-revision-row > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.micro-button {
+  min-height: 0;
+}
+
+.scene-revision-actions {
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.danger-button {
+  border-color: #ff7b7b;
+  background: rgba(255, 123, 123, 0.06);
+  color: #ff9b9b;
+}
+
+.scene-compile-zone {
+  justify-content: space-between;
+  margin-top: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #0b0d12;
+}
+
+.scene-compile-zone p {
+  max-width: 720px;
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  .scene-authority-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scene-revision-head,
+  .scene-event-lock,
+  .scene-compile-zone,
+  .dialogue-revision-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .scene-status-stack {
+    justify-content: flex-start;
+  }
+}
