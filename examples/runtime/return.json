@@ -1,0 +1,109 @@
+{
+  "runtimeVersion": "0.4.0",
+  "source": {
+    "universeId": "universe:lantern-below",
+    "universeVersion": "0.4.0"
+  },
+  "input": {
+    "choiceId": "choice:after-grandmother-mark",
+    "selectedOptionId": "choice-option:return"
+  },
+  "activeBranchId": "branch:return",
+  "occurredEventIds": [
+    "event:001",
+    "event:002",
+    "event:003",
+    "event:004",
+    "event:005",
+    "event:006",
+    "event:007",
+    "event:008",
+    "event:009b"
+  ],
+  "evidenceApplied": [
+    "evidence:grandmother-mark"
+  ],
+  "beliefRevisionsApplied": [
+    "belief-revision:lia-grandmother-evidence",
+    "belief-revision:leo-grandmother-evidence"
+  ],
+  "changedBeliefIds": [
+    "belief:lia-father-hid-lantern",
+    "belief:leo-stranger-trap"
+  ],
+  "replansApplied": [
+    "replan-rule:lia-after-mark",
+    "replan-rule:leo-after-mark"
+  ],
+  "ruleEvaluations": [
+    {
+      "ruleId": "rule:lantern-reveals-passage",
+      "passed": true,
+      "effectsApplied": [
+        {
+          "type": "ALLOW_EVENT",
+          "eventId": "event:006"
+        }
+      ]
+    }
+  ],
+  "allowedEventIds": [
+    "event:006"
+  ],
+  "worldState": {
+    "mysteryDeferred": true
+  },
+  "relationshipState": {
+    "relationship:siblings": {
+      "intensity": 0.9
+    }
+  },
+  "characters": {
+    "entity:lia": {
+      "beliefs": {
+        "belief:lia-father-hid-lantern": {
+          "confidence": 0.2,
+          "truthRelation": "FALSE",
+          "status": "REVISED"
+        }
+      },
+      "plans": {
+        "plan:lia-investigate": {
+          "revision": 1,
+          "status": "ABANDONED",
+          "goalId": "goal:lia-find-truth"
+        },
+        "plan:lia-follow-grandmother-clue": {
+          "revision": 2,
+          "status": "ACTIVE",
+          "goalId": "goal:lia-find-truth"
+        }
+      }
+    },
+    "entity:leo": {
+      "beliefs": {
+        "belief:leo-stranger-trap": {
+          "confidence": 0.25,
+          "truthRelation": "FALSE",
+          "status": "REVISED"
+        }
+      },
+      "plans": {
+        "plan:leo-control-risk": {
+          "revision": 1,
+          "status": "ABANDONED",
+          "goalId": "goal:leo-protect-lia"
+        },
+        "plan:leo-protect-and-verify": {
+          "revision": 2,
+          "status": "ACTIVE",
+          "goalId": "goal:leo-protect-lia"
+        }
+      }
+    },
+    "entity:grandmother": {
+      "beliefs": {},
+      "plans": {}
+    }
+  }
+}
