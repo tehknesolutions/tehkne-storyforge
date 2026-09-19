@@ -189,7 +189,17 @@ const ptBR = {
   "vn.observableActions": "Ações observáveis",
   "vn.beats": "Beats dramatizados",
   "vn.dialogueExchange": "Troca de diálogo",
-  "vn.export": "Exportar Visual Novel V0.4.1"
+  "vn.export": "Exportar Visual Novel V0.4.1",
+  "semantic.title": "Autoridade Semântica V0.4.2",
+  "semantic.body": "Autoridade é avaliada por afirmação e por campo. Aprovar Story DNA ou Universo não transforma automaticamente interpretações do sistema em IDEA.",
+  "semantic.total": "Afirmações",
+  "semantic.createdBy": "Criado por",
+  "semantic.sourceClaims": "Claims de origem",
+  "semantic.entityTypeReview": "Tipos de entidade não resolvidos",
+  "semantic.entityTypeBody": "Quando a descrição permite mais de um tipo de entidade, o Storyforge sinaliza a lacuna em vez de fingir certeza.",
+  "semantic.currentType": "Tipo atual",
+  "semantic.candidateTypes": "Tipos candidatos",
+  "semantic.export": "Exportar Semantic Assertion Ledger V0.4.2"
 
   "workspace.localApprovalNotice":
     "Aprovação local do workspace. Não é commit no CÂNONE.",
@@ -469,7 +479,17 @@ const en: Record<TranslationKey, string> = {
   "vn.observableActions": "Observable actions",
   "vn.beats": "Dramatized beats",
   "vn.dialogueExchange": "Dialogue exchange",
-  "vn.export": "Export Visual Novel V0.4.1"
+  "vn.export": "Export Visual Novel V0.4.1",
+  "semantic.title": "Semantic Authority V0.4.2",
+  "semantic.body": "Authority is evaluated per assertion and field. Approving Story DNA or Universe does not automatically turn system interpretations into IDEA.",
+  "semantic.total": "Assertions",
+  "semantic.createdBy": "Created by",
+  "semantic.sourceClaims": "Source claims",
+  "semantic.entityTypeReview": "Unresolved entity types",
+  "semantic.entityTypeBody": "When a description permits more than one entity type, Storyforge surfaces the gap instead of pretending certainty.",
+  "semantic.currentType": "Current type",
+  "semantic.candidateTypes": "Candidate types",
+  "semantic.export": "Export Semantic Assertion Ledger V0.4.2"
 
   "workspace.localApprovalNotice":
     "Local workspace approval. This is not a CANON commit.",
@@ -739,7 +759,17 @@ const es: Record<TranslationKey, string> = {
   "vn.observableActions": "Acciones observables",
   "vn.beats": "Beats dramatizados",
   "vn.dialogueExchange": "Intercambio de diálogo",
-  "vn.export": "Exportar Visual Novel V0.4.1"
+  "vn.export": "Exportar Visual Novel V0.4.1",
+  "semantic.title": "Autoridad Semántica V0.4.2",
+  "semantic.body": "La autoridad se evalúa por afirmación y por campo. Aprobar Story DNA o Universo no convierte automáticamente las interpretaciones del sistema en IDEA.",
+  "semantic.total": "Afirmaciones",
+  "semantic.createdBy": "Creado por",
+  "semantic.sourceClaims": "Claims de origen",
+  "semantic.entityTypeReview": "Tipos de entidad no resueltos",
+  "semantic.entityTypeBody": "Cuando una descripción permite más de un tipo de entidad, Storyforge señala la laguna en lugar de fingir certeza.",
+  "semantic.currentType": "Tipo actual",
+  "semantic.candidateTypes": "Tipos candidatos",
+  "semantic.export": "Exportar Semantic Assertion Ledger V0.4.2"
 
   "workspace.localApprovalNotice":
     "Aprobación local del workspace. No es un commit al CANON.",

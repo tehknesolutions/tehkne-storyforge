@@ -1448,3 +1448,69 @@ button.secondary {
     grid-column: auto;
   }
 }
+
+
+.semantic-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 22px;
+}
+
+.semantic-summary > div {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b0d12;
+}
+
+.semantic-summary small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.semantic-summary strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.2rem;
+}
+
+.semantic-assertion-list,
+.semantic-entity-review {
+  display: grid;
+  gap: 12px;
+}
+
+.semantic-assertion-list > article,
+.semantic-entity-review > article {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b0d12;
+}
+
+.semantic-meta {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.status.governance {
+  border-color: var(--warning);
+  color: var(--warning);
+  background: rgba(255, 214, 107, 0.05);
+}
+
+.semantic-entity-review {
+  margin-top: 22px;
+}
+
+@media (max-width: 800px) {
+  .semantic-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

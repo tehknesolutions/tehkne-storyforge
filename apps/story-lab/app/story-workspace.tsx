@@ -20,13 +20,18 @@ import {
   type V04WebtoonRealization
 } from "@/lib/storyforge-v04";
 import {
-  buildV041TnirExport,
   realizeNativeVisualNovel,
   type NativeVisualNovelRealization
 } from "@/lib/storyforge-v041";
+import {
+  buildSemanticAssertionLedger,
+  buildV042TnirExport,
+  type SemanticAssertionLedger
+} from "@/lib/storyforge-v042";
 import { NarrativeForgeView } from "./narrative-forge-view";
 import { SceneAuthorityEditor } from "./scene-authority-editor";
 import { VisualNovelView } from "./visual-novel-view";
+import { SemanticAuthorityView } from "./semantic-authority-view";
 import { useI18n } from "./i18n";
 
 const STORAGE_KEY = "tehkne:storyforge:workspace:v0.2";
@@ -237,6 +242,29 @@ export function StoryWorkspace() {
     return normalized ? normalized.split(/\s+/).length : 0;
   }, [state.idea]);
 
+  const semanticLedgerV042 = useMemo<SemanticAssertionLedger | null>(() => {
+    if (
+      !state.storyDNA ||
+      !state.universe ||
+      !state.narrativeDraft ||
+      !forgeV03
+    ) {
+      return null;
+    }
+
+    return buildSemanticAssertionLedger({
+      storyDNA: state.storyDNA,
+      universe: state.universe,
+      narrative: state.narrativeDraft,
+      forgeV03
+    });
+  }, [
+    state.storyDNA,
+    state.universe,
+    state.narrativeDraft,
+    forgeV03
+  ]);
+
   function clearAdvancedAuthoring() {
     setForgeV03(null);
     setSceneAuthority(null);
@@ -407,7 +435,8 @@ export function StoryWorkspace() {
         narrativeForgeV03: forgeV03,
         sceneAuthorityV04: sceneAuthority,
         webtoonRealizationV04: webtoonV04,
-        visualNovelRealizationV041: visualNovelV041
+        visualNovelRealizationV041: visualNovelV041,
+        semanticAssertionLedgerV042: semanticLedgerV042
       },
       "storyforge-workspace"
     );
@@ -433,7 +462,7 @@ export function StoryWorkspace() {
     }
 
     downloadJson(
-      buildV041TnirExport({
+      buildV042TnirExport({
         storyDNA: state.storyDNA,
         universe: state.universe,
         narrative: state.narrativeDraft,
@@ -442,7 +471,7 @@ export function StoryWorkspace() {
         targetMedia: state.targetMedia,
         locale
       }),
-      "storyforge-tnir-v0.5-scene-expansion"
+      "storyforge-tnir-v0.5-semantic-authority"
     );
   }
 
@@ -451,6 +480,14 @@ export function StoryWorkspace() {
     downloadJson(
       webtoonV04,
       "storyforge-webtoon-v0.4-episode-001"
+    );
+  }
+
+  function exportSemanticLedgerV042() {
+    if (!semanticLedgerV042) return;
+    downloadJson(
+      semanticLedgerV042,
+      "storyforge-semantic-assertions-v0.4.2"
     );
   }
 
@@ -470,7 +507,7 @@ export function StoryWorkspace() {
           <h2 id="workspace-title">{t("workspace.title")}</h2>
           <p className="muted">{t("workspace.body")}</p>
         </div>
-        <span className="status candidate">SCENE EXPANSION V0.4.1</span>
+        <span className="status candidate">SEMANTIC AUTHORITY V0.4.2</span>
       </div>
 
       <div className="workspace-step">
@@ -752,6 +789,13 @@ export function StoryWorkspace() {
 
       {forgeV03 ? (
         <NarrativeForgeView forge={forgeV03} />
+      ) : null}
+
+      {semanticLedgerV042 ? (
+        <SemanticAuthorityView
+          ledger={semanticLedgerV042}
+          onExport={exportSemanticLedgerV042}
+        />
       ) : null}
 
       {forgeV03 && sceneAuthority ? (
