@@ -176,8 +176,19 @@ const conditionPasses = (condition) => {
   return false;
 };
 
+const expressionPasses = (expression) => {
+  if (!expression) return true;
+  if (expression.type === "ATOM") return conditionPasses(expression.condition);
+  if (expression.type === "ALL") return expression.children.every(expressionPasses);
+  if (expression.type === "ANY") return expression.children.some(expressionPasses);
+  if (expression.type === "NOT") return !expressionPasses(expression.child);
+  return false;
+};
+
 for (const rule of universe.worldRules) {
-  const passed = rule.conditions.every(conditionPasses);
+  const passed = rule.expression
+    ? expressionPasses(rule.expression)
+    : rule.conditions.every(conditionPasses);
   const effectsApplied = [];
 
   if (passed) {
