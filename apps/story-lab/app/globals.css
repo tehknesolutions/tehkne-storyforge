@@ -480,3 +480,30 @@ button.secondary {
   font-size: 0.78rem;
   line-height: 1.55;
 }
+
+
+.provider-token-field {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.provider-token-field span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.provider-token-field input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #090a0f;
+  color: var(--text);
+  padding: 12px 14px;
+  outline: none;
+}
+
+.provider-token-field input:focus {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 3px rgba(135, 167, 255, 0.1);
+}
