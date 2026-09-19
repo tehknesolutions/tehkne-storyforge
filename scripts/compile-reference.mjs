@@ -24,10 +24,32 @@ const events = new Map(universe.events.map((x) => [x.id, x]));
 const traceability = [];
 
 const trace = (unitId, eventIds, sceneId) => {
+  const eventSet = new Set(eventIds);
+  const choiceIds = (universe.choices ?? [])
+    .filter((choice) => eventSet.has(choice.atEventId))
+    .map((choice) => choice.id);
+  const evidenceIds = (universe.evidence ?? [])
+    .filter((item) => eventSet.has(item.discoveredAtEventId))
+    .map((item) => item.id);
+  const ruleIds = (universe.worldRules ?? [])
+    .filter((rule) =>
+      rule.conditions?.some((condition) =>
+        condition.type === "EVENT_OCCURRED" && eventSet.has(condition.eventId)
+      ) ||
+      rule.effects?.some((effect) =>
+        (effect.type === "ALLOW_EVENT" || effect.type === "DENY_EVENT") &&
+        eventSet.has(effect.eventId)
+      )
+    )
+    .map((rule) => rule.id);
+
   traceability.push({
     unitId,
     eventIds,
-    ...(sceneId ? { sceneId } : {})
+    ...(sceneId ? { sceneId } : {}),
+    ...(choiceIds.length ? { choiceIds } : {}),
+    ...(ruleIds.length ? { ruleIds } : {}),
+    ...(evidenceIds.length ? { evidenceIds } : {})
   });
 };
 
@@ -163,7 +185,7 @@ if (!compile) {
 
 const artifact = {
   artifactType: "MEDIA_PLAN",
-  compilerVersion: "0.1.0",
+  compilerVersion: "0.2.0",
   targetMedia,
   source: {
     universeId: universe.id,
