@@ -195,6 +195,6 @@ export const MEDIA_PROFILES: Record<string, MediaProfile> = {
   }
 };
 
-export function getMediaProfile(id: keyof typeof MEDIA_PROFILES): MediaProfile {
+export function getMediaProfile(id: keyof typeof MEDIA_PROFILES): MediaProfile | undefined {
   return MEDIA_PROFILES[id];
 }
