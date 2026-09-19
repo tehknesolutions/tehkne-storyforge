@@ -23,23 +23,43 @@ const STATUSES = [
   "COMPLETE"
 ] as const;
 
+function statusFor(error: unknown): number {
+  return error instanceof Error && error.message === "AUTHENTICATION_REQUIRED"
+    ? 401
+    : 404;
+}
+
 export async function GET(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const store = productionStore();
-  const job = await store.getJob(id);
 
-  if (!job) {
-    return Response.json({ error: "PRODUCTION_JOB_NOT_FOUND" }, { status: 404 });
+  try {
+    const store = await productionStore();
+    const job = await store.getJob(id);
+
+    if (!job) {
+      return Response.json(
+        { error: "PRODUCTION_JOB_NOT_FOUND" },
+        { status: 404 }
+      );
+    }
+
+    return Response.json({
+      durability: store.durability,
+      productionSafe: store.durability === "DURABLE",
+      job
+    });
+  } catch (error) {
+    return Response.json(
+      {
+        error: "PRODUCTION_JOB_READ_FAILED",
+        message: error instanceof Error ? error.message : "Unknown error"
+      },
+      { status: statusFor(error) }
+    );
   }
-
-  return Response.json({
-    durability: store.durability,
-    productionSafe: store.durability === "DURABLE",
-    job
-  });
 }
 
 export async function PATCH(
@@ -47,7 +67,6 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  const store = productionStore();
   const payload = (await request.json()) as {
     stage?: string;
     status?: string;
@@ -56,19 +75,30 @@ export async function PATCH(
   };
 
   if (payload.stage && !STAGES.includes(payload.stage as (typeof STAGES)[number])) {
-    return Response.json({ error: "INVALID_PRODUCTION_STAGE" }, { status: 400 });
+    return Response.json(
+      { error: "INVALID_PRODUCTION_STAGE" },
+      { status: 400 }
+    );
   }
 
   if (payload.status && !STATUSES.includes(payload.status as (typeof STATUSES)[number])) {
-    return Response.json({ error: "INVALID_PRODUCTION_STATUS" }, { status: 400 });
+    return Response.json(
+      { error: "INVALID_PRODUCTION_STATUS" },
+      { status: 400 }
+    );
   }
 
   try {
+    const store = await productionStore();
     const job = await store.updateJob(id, {
       ...(payload.stage ? { stage: payload.stage as never } : {}),
       ...(payload.status ? { status: payload.status as never } : {}),
-      ...(payload.providerId !== undefined ? { providerId: payload.providerId } : {}),
-      ...(payload.adapterId !== undefined ? { adapterId: payload.adapterId } : {}),
+      ...(payload.providerId !== undefined
+        ? { providerId: payload.providerId }
+        : {}),
+      ...(payload.adapterId !== undefined
+        ? { adapterId: payload.adapterId }
+        : {}),
       updatedAt: new Date().toISOString()
     });
 
@@ -83,7 +113,7 @@ export async function PATCH(
         error: "PRODUCTION_JOB_UPDATE_FAILED",
         message: error instanceof Error ? error.message : "Unknown error"
       },
-      { status: 404 }
+      { status: statusFor(error) }
     );
   }
 }
