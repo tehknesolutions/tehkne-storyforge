@@ -192,6 +192,39 @@ const cameraFor = (type) => {
   return map[type] ?? { framing: "MEDIUM_SHOT", movement: "STATIC" };
 };
 
+const buildWebtoon = () => ({
+  kind: "WEBTOON_SCROLL_SCRIPT",
+  readingDirection: "VERTICAL_SCROLL",
+  selectedBranchId: profile.selectedBranchId,
+  episode: {
+    id: "episode:1",
+    title: "First Light",
+    panels: eventIds.map((eventId, index) => {
+      const event = events.get(eventId);
+      const dialogue = dialogueByEvent[eventId] ?? [];
+      return {
+        panel: index + 1,
+        sourceEventId: eventId,
+        verticalRole: index === 0
+          ? "OPEN"
+          : event?.type === "PASSAGE_REVEAL"
+            ? "REVEAL"
+            : event?.type === "CLUE_DISCOVERY"
+              ? "PAUSE_AND_DISCOVER"
+              : event?.type === "BRANCH_DESCEND_TOGETHER"
+                ? "EPISODE_HOOK"
+                : "FLOW",
+        visualDirection: (textByEvent[eventId] ?? [event?.type ?? eventId])[0],
+        dialogue,
+        gapAfter: event?.type === "PASSAGE_REVEAL" || event?.type === "CLUE_DISCOVERY"
+          ? "LONG"
+          : "STANDARD",
+        trace: { eventIds: [eventId] }
+      };
+    })
+  }
+});
+
 const buildAnime = () => {
   const seconds = 90;
   const perShot = Number((seconds / eventIds.length).toFixed(2));
@@ -225,6 +258,7 @@ const buildAnime = () => {
 let output;
 if (targetMedia === "PROSE_SHORT") output = buildProse();
 else if (targetMedia === "MANGA") output = buildManga();
+else if (targetMedia === "WEBTOON") output = buildWebtoon();
 else if (targetMedia === "ANIME_EPISODE") output = buildAnime();
 else throw new Error(`Reference realizer not implemented for ${targetMedia}`);
 
