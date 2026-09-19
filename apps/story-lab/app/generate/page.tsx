@@ -16,6 +16,7 @@ export default function GeneratePage() {
     "Provider status is loading…"
   );
   const [busy, setBusy] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
 
   useEffect(() => {
     void fetch("/api/provider-status", { cache: "no-store" })
@@ -39,7 +40,10 @@ export default function GeneratePage() {
 
     try {
       const response = await fetch("/api/generate/reference", {
-        method: "POST"
+        method: "POST",
+        headers: {
+          "x-storyforge-generation-token": accessToken
+        }
       });
       const data = await response.json();
       setResult(JSON.stringify(data, null, 2));
@@ -74,9 +78,20 @@ export default function GeneratePage() {
           <strong>{status.storeResponses === false ? "OFF" : "UNKNOWN"}</strong>
         </p>
 
+        <label className="provider-token-field">
+          <span>Generation access token</span>
+          <input
+            type="password"
+            value={accessToken}
+            onChange={(event) => setAccessToken(event.target.value)}
+            autoComplete="off"
+            placeholder="Enter creator execution token"
+          />
+        </label>
+
         <button
           type="button"
-          disabled={!status.enabled || busy}
+          disabled={!status.enabled || busy || !accessToken}
           onClick={generate}
         >
           {busy ? "Generating…" : "Generate reference Manga panel"}
