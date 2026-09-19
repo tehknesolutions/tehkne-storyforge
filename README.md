@@ -165,47 +165,63 @@ Implemented:
 
 Checkpoint V0.3: `15a428717c1098e2341f2850505e60c4aeffe1da`.
 
-### Story Workspace V0.4 — Scene Authority & Revision
+### Story Workspace V0.4 → V0.4.3 — Governed, Interactive Authoring
 
-Current source checkpoint on `main`:
+Current integration checkpoint on `main`:
 
-`e158104c5ca40dbf14adcf9371bf0730f85ef4f8`
+`781b2dc1cf96989f513a7e41e2853ac11eeb7cdd`
 
-V0.4 adds governed scene authoring above the V0.3 Narrative Forge:
+Development no longer depends on Vercel availability. External deployment is a
+separate release concern; `main` advances through repository contracts,
+structural audits and executable probes prepared in the Story Lab prebuild.
+
+Current integrated flow:
 
 ```text
 EVENT
-→ stable sceneId
-→ scene revision r1/r2/r3...
-→ select revision
-→ approve / edit / reject / regenerate / alternative
-→ selected revision set
-→ media realization
+→ SCENE AUTHORITY / REVISION
+→ SCENE EXPANSION
+→ FIELD-LEVEL SEMANTIC AUTHORITY
+→ NATIVE VISUAL NOVEL
+→ PLAYABLE RUNTIME
+→ T-NIR V0.5 EXPORT
 ```
 
-Implemented:
+Integrated capabilities:
 
-- stable scene IDs with revision ancestry;
+- stable scene IDs and revision ancestry;
 - scene lifecycle `CANDIDATE / APPROVED_LOCAL / REJECTED / SUPERSEDED`;
 - dialogue authority independent from scene authority;
-- editing creates a new revision instead of mutating history;
-- isolated scene regeneration and explicit alternatives;
+- isolated edit/regeneration/alternative flows;
 - source claim provenance per scene revision;
-- rejected scenes preserve their source events;
-- selected revisions compile to Webtoon panels with `sceneRevisionId`;
-- selected-revision authority manifest in T-NIR export;
-- local V0.4 persistence;
-- PT-BR / EN / ES editor coverage;
-- static Scene Authority regression gate;
-- executable V0.4 prebuild probe stored inside the Story Lab Vercel root and explicitly excluded from the Next.js TypeScript include set.
+- 8-beat dramatized Scene Expansion grammar;
+- Goal / Conflict / Entry / Exit state per expanded scene;
+- native Visual Novel Choice / ChoiceOption / StateTransition / Branch data;
+- `RealizationProfile.mode = INTERACTIVE` for Visual Novel;
+- explicit convergence and branch traversal;
+- playable in-browser Visual Novel runtime state machine;
+- field-level `IDEA / CANDIDATE / GOVERNANCE` Semantic Assertion Ledger;
+- unresolved entity-type review instead of false certainty;
+- PT-BR / EN / ES coverage for the integrated authoring layers;
+- V0.3, V0.4, V0.4.1, V0.4.2 and V0.4.3 probe chain prepared;
+- root static validation gates for Scene Authority, Scene Expansion,
+  Semantic Authority and Visual Novel Runtime.
 
-Current deployment state:
+Current engineering state:
 
-`MAIN_READY__VERCEL_BUILD_RATE_LIMITED`
+`MAIN_INTEGRATED__STATIC_GATES_PASS__INDEPENDENT_EXECUTION_QA_PENDING`
 
-The V0.4 source is on `main`, but Vercel is currently rejecting new builds before execution with `build-rate-limit`. Therefore the last **proven green production deployment remains V0.3**. V0.4 must not be reported as deployed until Vercel actually executes both prebuild probes, completes Next.js/TypeScript compilation and returns SUCCESS.
+The connected desktop runner is currently offline and no Storyforge Replit app
+exists, so independent npm/Next execution remains pending. This is **not** a
+blocker for repository development and is not equivalent to a production
+deployment claim.
 
-Tracking: Issue #6 — **Story Workspace V0.4 — Scene Authority & Revision**.
+Tracking:
+
+- Issue #6 — Scene Authority & Revision
+- Issue #7 — Scene Expansion & Native Visual Novel
+- Issue #8 — Semantic Assertion Authority
+- Issue #9 — Playable Visual Novel Runtime
 
 ## License
 
