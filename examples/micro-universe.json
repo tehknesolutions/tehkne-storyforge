@@ -1,20 +1,32 @@
 {
   "id": "universe:lantern-below",
   "title": "The Lantern Below",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "storyDNA": {
-    "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, but each believes a different story about who left it there.",
-    "themes": ["trust", "memory", "curiosity"],
+    "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, while each carries a false belief about who left it and why.",
+    "themes": ["trust", "memory", "curiosity", "family truth"],
     "genres": ["mystery", "adventure"],
     "tone": ["wonder", "suspense"],
     "audience": ["young-adult"],
-    "creatorIntent": "Reference universe for validating transmedia preservation across T-NIR compilers."
+    "emotionalPromise": ["discovery", "sibling tension", "earned trust"],
+    "creatorIntent": "Reference universe for validating character cognition and transmedia preservation across T-NIR compilers."
   },
   "canon": [
     {
       "id": "fact:lantern-hidden",
       "subject": "entity:lantern",
       "predicate": "wasHiddenBy",
+      "object": "entity:grandmother",
+      "authority": "CANON",
+      "provenance": {
+        "createdBy": "CREATOR",
+        "createdAt": "2026-09-19T14:30:00Z"
+      }
+    },
+    {
+      "id": "fact:tunnel-protected",
+      "subject": "entity:tunnel",
+      "predicate": "wasProtectedBy",
       "object": "entity:grandmother",
       "authority": "CANON",
       "provenance": {
@@ -28,6 +40,104 @@
       "id": "entity:lia",
       "type": "CHARACTER",
       "name": "Lia",
+      "traits": ["curious", "persistent"],
+      "values": ["truth", "independence"],
+      "beliefs": [
+        {
+          "id": "belief:lia-father-hid-lantern",
+          "holder": "entity:lia",
+          "claim": "Lia believes her father hid the lantern.",
+          "confidence": 0.78,
+          "truthRelation": "FALSE",
+          "status": "ACTIVE"
+        }
+      ],
+      "knowledge": [
+        {
+          "id": "knowledge:lia-lantern-found",
+          "holder": "entity:lia",
+          "proposition": "The old chest contained the Memory Lantern.",
+          "certainty": 1,
+          "status": "KNOWN",
+          "acquiredAtEventId": "event:001"
+        },
+        {
+          "id": "knowledge:lia-grandmother-mark",
+          "holder": "entity:lia",
+          "proposition": "The tunnel carries the same mark used by Grandmother.",
+          "certainty": 0.95,
+          "status": "KNOWN",
+          "acquiredAtEventId": "event:008",
+          "sourceEntityId": "entity:tunnel"
+        }
+      ],
+      "desires": ["understand why the lantern was hidden"],
+      "needs": ["learn to trust Leo's caution without abandoning curiosity"],
+      "fears": ["the family deliberately erased part of its history"],
+      "intentions": [
+        {
+          "id": "intention:lia-enter-tunnel",
+          "owner": "entity:lia",
+          "action": "enter and investigate the hidden tunnel",
+          "targetId": "entity:tunnel",
+          "goalId": "goal:lia-find-truth",
+          "formedAtEventId": "event:006",
+          "status": "ACTIVE"
+        }
+      ],
+      "secrets": [],
+      "goals": [
+        {
+          "id": "goal:lia-find-truth",
+          "owner": "entity:lia",
+          "desiredState": {
+            "familySecretUnderstood": true
+          },
+          "priority": 0.95,
+          "status": "ACTIVE",
+          "motivatedBy": ["curiosity", "family history"],
+          "createdAtEventId": "event:001"
+        }
+      ],
+      "plans": [
+        {
+          "id": "plan:lia-investigate",
+          "owner": "entity:lia",
+          "goalId": "goal:lia-find-truth",
+          "status": "ACTIVE",
+          "createdAtEventId": "event:003",
+          "currentStepId": "plan-step:lia-enter",
+          "steps": [
+            {
+              "id": "plan-step:lia-inspect",
+              "action": "inspect the lantern engravings",
+              "targetId": "entity:lantern",
+              "status": "COMPLETED",
+              "completedAtEventId": "event:003"
+            },
+            {
+              "id": "plan-step:lia-enter",
+              "action": "enter the revealed passage",
+              "targetId": "entity:tunnel",
+              "requires": ["plan-step:lia-inspect"],
+              "status": "ACTIVE"
+            }
+          ]
+        }
+      ],
+      "capabilities": ["pattern recognition"],
+      "resources": ["Memory Lantern"],
+      "limitations": ["acts before fully evaluating risk"],
+      "currentState": {
+        "atEventId": "event:008",
+        "locationId": "entity:tunnel",
+        "emotional": {
+          "curiosity": 0.92,
+          "fear": 0.42,
+          "trustInLeo": 0.7
+        },
+        "flags": ["grandmother_connection_suspected"]
+      },
       "canonStatus": "CANON",
       "provenance": {
         "createdBy": "SYSTEM",
@@ -38,6 +148,104 @@
       "id": "entity:leo",
       "type": "CHARACTER",
       "name": "Leo",
+      "traits": ["protective", "skeptical"],
+      "values": ["safety", "family"],
+      "beliefs": [
+        {
+          "id": "belief:leo-stranger-trap",
+          "holder": "entity:leo",
+          "claim": "Leo believes a stranger left the lantern as a trap.",
+          "confidence": 0.67,
+          "truthRelation": "FALSE",
+          "status": "ACTIVE"
+        }
+      ],
+      "knowledge": [
+        {
+          "id": "knowledge:leo-lantern-found",
+          "holder": "entity:leo",
+          "proposition": "The old chest contained the Memory Lantern.",
+          "certainty": 1,
+          "status": "KNOWN",
+          "acquiredAtEventId": "event:001"
+        },
+        {
+          "id": "knowledge:leo-lantern-reacts",
+          "holder": "entity:leo",
+          "proposition": "The lantern reacts to the wall beside the cellar stairs.",
+          "certainty": 1,
+          "status": "KNOWN",
+          "acquiredAtEventId": "event:004",
+          "sourceEntityId": "entity:lantern"
+        }
+      ],
+      "desires": ["keep Lia safe"],
+      "needs": ["distinguish caution from avoidance"],
+      "fears": ["losing Lia because of a reckless discovery"],
+      "intentions": [
+        {
+          "id": "intention:leo-protect-lia",
+          "owner": "entity:leo",
+          "action": "stay close enough to protect Lia",
+          "targetId": "entity:lia",
+          "goalId": "goal:leo-protect-lia",
+          "formedAtEventId": "event:005",
+          "status": "ACTIVE"
+        }
+      ],
+      "secrets": [],
+      "goals": [
+        {
+          "id": "goal:leo-protect-lia",
+          "owner": "entity:leo",
+          "desiredState": {
+            "liaSafe": true
+          },
+          "priority": 0.98,
+          "status": "ACTIVE",
+          "motivatedBy": ["sibling bond"],
+          "createdAtEventId": "event:005"
+        }
+      ],
+      "plans": [
+        {
+          "id": "plan:leo-control-risk",
+          "owner": "entity:leo",
+          "goalId": "goal:leo-protect-lia",
+          "status": "ACTIVE",
+          "createdAtEventId": "event:005",
+          "currentStepId": "plan-step:leo-follow",
+          "steps": [
+            {
+              "id": "plan-step:leo-test",
+              "action": "test whether the lantern reacts before anyone enters the passage",
+              "targetId": "entity:lantern",
+              "status": "COMPLETED",
+              "completedAtEventId": "event:006"
+            },
+            {
+              "id": "plan-step:leo-follow",
+              "action": "follow Lia if she enters the tunnel",
+              "targetId": "entity:lia",
+              "requires": ["plan-step:leo-test"],
+              "status": "ACTIVE"
+            }
+          ]
+        }
+      ],
+      "capabilities": ["risk assessment"],
+      "resources": ["flashlight"],
+      "limitations": ["assumes unknown systems are hostile"],
+      "currentState": {
+        "atEventId": "event:008",
+        "locationId": "entity:tunnel",
+        "emotional": {
+          "protectiveness": 0.94,
+          "fear": 0.64,
+          "trustInLia": 0.76
+        },
+        "flags": ["grandmother_connection_suspected"]
+      },
       "canonStatus": "CANON",
       "provenance": {
         "createdBy": "SYSTEM",
@@ -48,6 +256,50 @@
       "id": "entity:grandmother",
       "type": "CHARACTER",
       "name": "Grandmother",
+      "traits": ["protective", "secretive"],
+      "values": ["family safety", "memory"],
+      "beliefs": [],
+      "knowledge": [
+        {
+          "id": "knowledge:grandmother-origin",
+          "holder": "entity:grandmother",
+          "proposition": "Grandmother hid the Memory Lantern to protect the tunnel until the siblings were ready.",
+          "certainty": 1,
+          "status": "KNOWN"
+        }
+      ],
+      "desires": ["preserve the family path without exposing the children too early"],
+      "needs": [],
+      "fears": ["the tunnel being opened before the family is ready"],
+      "intentions": [],
+      "secrets": [
+        {
+          "id": "secret:lantern-origin",
+          "about": ["entity:lantern", "entity:tunnel", "entity:grandmother"],
+          "proposition": "Grandmother hid the Memory Lantern as a deliberate key to the protected tunnel.",
+          "knownBy": ["entity:grandmother"],
+          "hiddenFrom": ["entity:lia", "entity:leo"],
+          "status": "HIDDEN"
+        }
+      ],
+      "goals": [
+        {
+          "id": "goal:grandmother-protect-path",
+          "owner": "entity:grandmother",
+          "desiredState": {
+            "tunnelProtectedUntilReady": true
+          },
+          "priority": 1,
+          "status": "ACHIEVED"
+        }
+      ],
+      "plans": [],
+      "capabilities": ["knowledge of the tunnel"],
+      "resources": [],
+      "limitations": [],
+      "currentState": {
+        "flags": ["absent_from_present_timeline"]
+      },
       "canonStatus": "CANON",
       "provenance": {
         "createdBy": "SYSTEM",
@@ -92,6 +344,7 @@
       "type": "siblingOf",
       "to": "entity:leo",
       "directed": false,
+      "intensity": 0.9,
       "provenance": {
         "createdBy": "SYSTEM",
         "createdAt": "2026-09-19T14:30:00Z"
@@ -110,6 +363,25 @@
           "entityId": "entity:lantern"
         }
       ],
+      "knowledgeEffects": [
+        {
+          "holder": "entity:lia",
+          "op": "LEARN",
+          "knowledgeId": "knowledge:lia-lantern-found"
+        },
+        {
+          "holder": "entity:leo",
+          "op": "LEARN",
+          "knowledgeId": "knowledge:leo-lantern-found"
+        }
+      ],
+      "goalEffects": [
+        {
+          "owner": "entity:lia",
+          "goalId": "goal:lia-find-truth",
+          "op": "CREATE"
+        }
+      ],
       "causes": ["event:002"],
       "canonStatus": "CANON",
       "provenance": {
@@ -124,15 +396,212 @@
       "locationId": "entity:house",
       "effects": [
         {
+          "op": "EMIT_LIGHT_PATTERN",
+          "entityId": "entity:lantern"
+        }
+      ],
+      "causedBy": ["event:001"],
+      "causes": ["event:003", "event:004"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:31:00Z"
+      }
+    },
+    {
+      "id": "event:003",
+      "type": "INSPECTION",
+      "participants": ["entity:lia"],
+      "locationId": "entity:house",
+      "actions": [
+        {
+          "op": "INSPECT",
+          "targetId": "entity:lantern"
+        }
+      ],
+      "effects": [
+        {
+          "op": "FIND_ENGRAVING",
+          "entityId": "entity:lantern"
+        }
+      ],
+      "causedBy": ["event:002"],
+      "causes": ["event:005"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:32:00Z"
+      }
+    },
+    {
+      "id": "event:004",
+      "type": "REACTION_TEST",
+      "participants": ["entity:leo"],
+      "locationId": "entity:house",
+      "actions": [
+        {
+          "op": "MOVE_LANTERN_NEAR_WALL",
+          "targetId": "entity:lantern"
+        }
+      ],
+      "effects": [
+        {
+          "op": "WALL_RESONANCE",
+          "locationId": "entity:house"
+        }
+      ],
+      "knowledgeEffects": [
+        {
+          "holder": "entity:leo",
+          "op": "LEARN",
+          "knowledgeId": "knowledge:leo-lantern-reacts"
+        }
+      ],
+      "causedBy": ["event:002"],
+      "causes": ["event:005"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:33:00Z"
+      }
+    },
+    {
+      "id": "event:005",
+      "type": "SIBLING_CONFLICT",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:house",
+      "effects": [
+        {
+          "op": "RAISE_TENSION",
+          "relationshipId": "relationship:siblings"
+        }
+      ],
+      "goalEffects": [
+        {
+          "owner": "entity:leo",
+          "goalId": "goal:leo-protect-lia",
+          "op": "CREATE"
+        }
+      ],
+      "causedBy": ["event:003", "event:004"],
+      "causes": ["event:006"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:34:00Z"
+      }
+    },
+    {
+      "id": "event:006",
+      "type": "PASSAGE_REVEAL",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:house",
+      "effects": [
+        {
           "op": "REVEAL",
           "entityId": "entity:tunnel"
         }
       ],
-      "causedBy": ["event:001"],
+      "causedBy": ["event:005"],
+      "causes": ["event:007"],
       "canonStatus": "CANON",
       "provenance": {
         "createdBy": "SYSTEM",
-        "createdAt": "2026-09-19T14:30:00Z"
+        "createdAt": "2026-09-19T14:35:00Z"
+      }
+    },
+    {
+      "id": "event:007",
+      "type": "DECISION",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:house",
+      "actions": [
+        {
+          "op": "ENTER",
+          "actorId": "entity:lia",
+          "targetId": "entity:tunnel"
+        },
+        {
+          "op": "FOLLOW",
+          "actorId": "entity:leo",
+          "targetId": "entity:lia"
+        }
+      ],
+      "effects": [
+        {
+          "op": "MOVE_PARTICIPANTS",
+          "locationId": "entity:tunnel"
+        }
+      ],
+      "causedBy": ["event:006"],
+      "causes": ["event:008"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:36:00Z"
+      }
+    },
+    {
+      "id": "event:008",
+      "type": "CLUE_DISCOVERY",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:tunnel",
+      "effects": [
+        {
+          "op": "DISCOVER_SYMBOL",
+          "sourceEntityId": "entity:tunnel",
+          "symbolOwnerId": "entity:grandmother"
+        }
+      ],
+      "knowledgeEffects": [
+        {
+          "holder": "entity:lia",
+          "op": "LEARN",
+          "knowledgeId": "knowledge:lia-grandmother-mark"
+        }
+      ],
+      "causedBy": ["event:007"],
+      "causes": ["event:009a", "event:009b"],
+      "canonStatus": "CANON",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:37:00Z"
+      }
+    },
+    {
+      "id": "event:009a",
+      "type": "BRANCH_DESCEND_TOGETHER",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:tunnel",
+      "effects": [
+        {
+          "op": "CONTINUE_DEEPER",
+          "trustDelta": 0.1
+        }
+      ],
+      "causedBy": ["event:008"],
+      "canonStatus": "ALTERNATE_TIMELINE",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:38:00Z"
+      }
+    },
+    {
+      "id": "event:009b",
+      "type": "BRANCH_SEAL_AND_RETURN",
+      "participants": ["entity:lia", "entity:leo"],
+      "locationId": "entity:tunnel",
+      "effects": [
+        {
+          "op": "RETURN_TO_HOUSE",
+          "mysteryDeferred": true
+        }
+      ],
+      "causedBy": ["event:008"],
+      "canonStatus": "ALTERNATE_TIMELINE",
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T14:38:00Z"
       }
     }
   ],
@@ -141,38 +610,168 @@
       "id": "causal:001-002",
       "fromEventId": "event:001",
       "toEventId": "event:002",
-      "type": "ENABLES",
-      "rationale": "The tunnel can only be revealed after the lantern is found."
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:002-003",
+      "fromEventId": "event:002",
+      "toEventId": "event:003",
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:002-004",
+      "fromEventId": "event:002",
+      "toEventId": "event:004",
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:003-005",
+      "fromEventId": "event:003",
+      "toEventId": "event:005",
+      "type": "MOTIVATES"
+    },
+    {
+      "id": "causal:004-005",
+      "fromEventId": "event:004",
+      "toEventId": "event:005",
+      "type": "MOTIVATES"
+    },
+    {
+      "id": "causal:005-006",
+      "fromEventId": "event:005",
+      "toEventId": "event:006",
+      "type": "TRIGGERS"
+    },
+    {
+      "id": "causal:006-007",
+      "fromEventId": "event:006",
+      "toEventId": "event:007",
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:007-008",
+      "fromEventId": "event:007",
+      "toEventId": "event:008",
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:008-009a",
+      "fromEventId": "event:008",
+      "toEventId": "event:009a",
+      "type": "ENABLES"
+    },
+    {
+      "id": "causal:008-009b",
+      "fromEventId": "event:008",
+      "toEventId": "event:009b",
+      "type": "ENABLES"
     }
   ],
   "stories": [
     {
       "id": "story:first-light",
       "title": "First Light",
-      "premise": "Lia and Leo find the Memory Lantern and reveal the hidden tunnel.",
-      "eventIds": ["event:001", "event:002"]
+      "premise": "Lia and Leo discover the Memory Lantern, expose a hidden tunnel and confront conflicting beliefs about its origin.",
+      "eventIds": [
+        "event:001",
+        "event:002",
+        "event:003",
+        "event:004",
+        "event:005",
+        "event:006",
+        "event:007",
+        "event:008",
+        "event:009a",
+        "event:009b"
+      ],
+      "scenes": [
+        {
+          "id": "scene:discovery",
+          "title": "The Chest",
+          "povEntityId": "entity:lia",
+          "locationId": "entity:house",
+          "eventIds": ["event:001", "event:002"],
+          "dramaticPurpose": "Introduce the object and divergent interpretations.",
+          "beats": [
+            {
+              "id": "beat:lantern-found",
+              "type": "DISCOVERY",
+              "eventIds": ["event:001"]
+            }
+          ]
+        },
+        {
+          "id": "scene:investigation",
+          "title": "Two Theories",
+          "locationId": "entity:house",
+          "eventIds": ["event:003", "event:004", "event:005"],
+          "dramaticPurpose": "Turn different beliefs into conflicting action."
+        },
+        {
+          "id": "scene:opening",
+          "title": "The Wall Opens",
+          "locationId": "entity:house",
+          "eventIds": ["event:006", "event:007"],
+          "dramaticPurpose": "Force a shared decision despite disagreement."
+        },
+        {
+          "id": "scene:mark",
+          "title": "Grandmother's Mark",
+          "locationId": "entity:tunnel",
+          "eventIds": ["event:008", "event:009a", "event:009b"],
+          "dramaticPurpose": "Reveal evidence that destabilizes both false beliefs and creates the branch."
+        }
+      ]
     }
   ],
   "mediaManifests": [
     {
+      "id": "media:first-light-prose",
+      "targetMedia": "PROSE_SHORT",
+      "storyId": "story:first-light",
+      "targetLength": {
+        "words": 1000
+      }
+    },
+    {
       "id": "media:first-light-manga",
       "targetMedia": "MANGA",
-      "storyId": "story:first-light"
+      "storyId": "story:first-light",
+      "format": {
+        "pages": 16,
+        "readingDirection": "RIGHT_TO_LEFT"
+      }
     },
     {
       "id": "media:first-light-webtoon",
       "targetMedia": "WEBTOON",
-      "storyId": "story:first-light"
+      "storyId": "story:first-light",
+      "format": {
+        "episodes": 1,
+        "readingDirection": "VERTICAL_SCROLL"
+      }
     },
     {
       "id": "media:first-light-anime",
       "targetMedia": "ANIME_EPISODE",
-      "storyId": "story:first-light"
+      "storyId": "story:first-light",
+      "targetLength": {
+        "seconds": 90
+      }
+    },
+    {
+      "id": "media:first-light-interactive",
+      "targetMedia": "VISUAL_NOVEL",
+      "storyId": "story:first-light",
+      "interactionModel": {
+        "branchAtEventId": "event:008",
+        "outcomes": ["event:009a", "event:009b"]
+      }
     }
   ],
   "provenance": {
     "createdBy": "SYSTEM",
     "createdAt": "2026-09-19T14:30:00Z",
-    "rationale": "T-NIR V0.1 reference fixture."
+    "rationale": "T-NIR V0.2 reference fixture for cognition, agency, branching and transmedia validation."
   }
 }
