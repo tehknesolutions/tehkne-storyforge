@@ -1,10 +1,10 @@
 {
   "artifactType": "MEDIA_PLAN",
-  "compilerVersion": "0.1.0",
+  "compilerVersion": "0.2.0",
   "targetMedia": "PROSE_SHORT",
   "source": {
     "universeId": "universe:lantern-below",
-    "universeVersion": "0.3.0",
+    "universeVersion": "0.4.0",
     "storyId": "story:first-light",
     "manifestId": "media:first-light-prose"
   },
@@ -136,7 +136,10 @@
         "event:001",
         "event:002"
       ],
-      "sceneId": "scene:discovery"
+      "sceneId": "scene:discovery",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "section:2",
@@ -145,7 +148,10 @@
         "event:004",
         "event:005"
       ],
-      "sceneId": "scene:investigation"
+      "sceneId": "scene:investigation",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "section:3",
@@ -153,7 +159,10 @@
         "event:006",
         "event:007"
       ],
-      "sceneId": "scene:opening"
+      "sceneId": "scene:opening",
+      "ruleIds": [
+        "rule:lantern-reveals-passage"
+      ]
     },
     {
       "unitId": "section:4",
@@ -162,7 +171,13 @@
         "event:009a",
         "event:009b"
       ],
-      "sceneId": "scene:mark"
+      "sceneId": "scene:mark",
+      "choiceIds": [
+        "choice:after-grandmother-mark"
+      ],
+      "evidenceIds": [
+        "evidence:grandmother-mark"
+      ]
     }
   ],
   "validation": {
