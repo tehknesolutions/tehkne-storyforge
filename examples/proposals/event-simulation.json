@@ -1,0 +1,64 @@
+{
+  "simulationVersion": "0.1.0",
+  "proposalId": "event-proposal:trace-grandmother-mark",
+  "authority": "CANDIDATE",
+  "persisted": false,
+  "canonChanged": false,
+  "branchBefore": {
+    "id": "branch:descend",
+    "parentBranchId": "branch:root",
+    "forkEventId": "event:008",
+    "choiceOptionId": "choice-option:descend",
+    "eventIds": [
+      "event:009a"
+    ],
+    "status": "POSSIBLE"
+  },
+  "branchAfter": {
+    "id": "branch:descend",
+    "parentBranchId": "branch:root",
+    "forkEventId": "event:008",
+    "choiceOptionId": "choice-option:descend",
+    "eventIds": [
+      "event:009a",
+      "event:candidate:010a"
+    ],
+    "status": "POSSIBLE"
+  },
+  "simulatedEvent": {
+    "id": "event:candidate:010a",
+    "type": "TRACE_GRANDMOTHER_MARK",
+    "participants": [
+      "entity:lia",
+      "entity:leo"
+    ],
+    "locationId": "entity:tunnel",
+    "actions": [
+      {
+        "op": "TRACE_SYMBOL_PATH",
+        "actorId": "entity:lia",
+        "targetId": "entity:tunnel"
+      }
+    ],
+    "effects": [
+      {
+        "op": "INVESTIGATION_ADVANCES"
+      }
+    ],
+    "time": {
+      "sequence": 10,
+      "branchId": "branch:descend"
+    },
+    "canonStatus": "CANDIDATE",
+    "provenance": {
+      "createdBy": "SYSTEM",
+      "createdAt": "2026-09-19T15:15:00Z",
+      "rationale": "Derived from highest-scoring Lia action proposal."
+    }
+  },
+  "validationNotes": [
+    "Proposal must not be inserted into CANON without creator approval.",
+    "Expected to extend branch:descend only after event:009a."
+  ],
+  "creatorDecisionRequired": true
+}
