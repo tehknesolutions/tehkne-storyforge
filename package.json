@@ -9,7 +9,7 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7 && npm run validate:v0.8 && npm run validate:i18n",
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7 && npm run validate:v0.8 && npm run validate:i18n && npm run validate:narrative-forge",
     "compile:reference": "node scripts/compile-reference.mjs",
     "validate:compiler": "node scripts/validate-compiler.mjs",
     "validate:runtime-contracts": "node scripts/validate-runtime-contracts.mjs",
@@ -31,7 +31,8 @@
     "validate:v0.6": "node scripts/validate-v0.6.mjs",
     "validate:v0.7": "node scripts/validate-v0.7.mjs",
     "validate:v0.8": "node scripts/validate-v0.8.mjs",
-    "validate:i18n": "node scripts/validate-i18n.mjs"
+    "validate:i18n": "node scripts/validate-i18n.mjs",
+    "validate:narrative-forge": "node scripts/validate-narrative-forge-v03.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
