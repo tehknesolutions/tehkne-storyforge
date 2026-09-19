@@ -134,6 +134,21 @@ function sourceClaimIds(
     .map((claim) => claim.id);
 }
 
+function isTransferredCockroachStory(narrative: NarrativeDraft) {
+  const text = narrative.sourceFacts.join(" ").toLocaleLowerCase("pt-BR");
+  const hasCockroach =
+    text.includes("barata") ||
+    text.includes("cockroach") ||
+    text.includes("cucaracha");
+  const hasTransfer =
+    text.includes("transfer") ||
+    text.includes("mente") ||
+    text.includes("mind") ||
+    text.includes("conciencia") ||
+    text.includes("consciência");
+  return hasCockroach && hasTransfer;
+}
+
 function dialogueFor(
   narrative: NarrativeDraft,
   eventIndex: number,
@@ -220,7 +235,53 @@ function dialogueFor(
     [protagonist?.id ?? "NARRATOR", protagonistName, "Recuerdo un nombre."]
   ];
 
-  const script = locale === "en" ? en : locale === "es" ? es : pt;
+  const genericPt: Array<[string, string, string]> = [
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Alguma coisa mudou. Eu preciso entender o que está acontecendo."],
+    [partner?.id ?? "NARRATOR", partnerName, "Você percebeu isso também?"],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Então não foi coincidência."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Temos um objetivo: descobrir o que liga esses acontecimentos."],
+    [partner?.id ?? "NARRATOR", partnerName, "Cada resposta parece criar um problema novo."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Essa pista muda tudo o que sabíamos."],
+    [partner?.id ?? "NARRATOR", partnerName, "Se continuarmos, talvez não dê para voltar atrás."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Então é isso que estava escondido."]
+  ];
+
+  const genericEn: Array<[string, string, string]> = [
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Something changed. I need to understand what is happening."],
+    [partner?.id ?? "NARRATOR", partnerName, "You noticed that too?"],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Then it wasn't a coincidence."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "We have a goal: find out what connects these events."],
+    [partner?.id ?? "NARRATOR", partnerName, "Every answer seems to create a new problem."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "This clue changes everything we thought we knew."],
+    [partner?.id ?? "NARRATOR", partnerName, "If we keep going, there may be no way back."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "So this is what was being hidden."]
+  ];
+
+  const genericEs: Array<[string, string, string]> = [
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Algo cambió. Necesito entender qué está pasando."],
+    [partner?.id ?? "NARRATOR", partnerName, "¿Tú también lo viste?"],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Entonces no fue una coincidencia."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Tenemos un objetivo: descubrir qué conecta estos acontecimientos."],
+    [partner?.id ?? "NARRATOR", partnerName, "Cada respuesta parece crear un problema nuevo."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Esta pista cambia todo lo que creíamos saber."],
+    [partner?.id ?? "NARRATOR", partnerName, "Si seguimos, quizá no haya vuelta atrás."],
+    [protagonist?.id ?? "NARRATOR", protagonistName, "Así que esto era lo que estaba oculto."]
+  ];
+
+  const specialized = isTransferredCockroachStory(narrative);
+  const script =
+    locale === "en"
+      ? specialized
+        ? en
+        : genericEn
+      : locale === "es"
+        ? specialized
+          ? es
+          : genericEs
+        : specialized
+          ? pt
+          : genericPt;
+
   const [speakerId, speakerName, text] =
     script[eventIndex] ?? script[script.length - 1];
 
@@ -303,26 +364,44 @@ function visualText(
   locale: StoryLocale,
   protagonistName: string
 ) {
-  const prefix =
-    locale === "en"
-      ? "Vertical mobile panel"
-      : locale === "es"
-        ? "Panel vertical móvil"
-        : "Painel vertical mobile";
+  const text = {
+    "pt-BR": {
+      establishing: `Painel vertical mobile: estabelecer a situação física por ação visível — ${scene.action}`,
+      detail:
+        "Painel vertical mobile: isolar um detalhe concreto que prove ou complique o evento sem acrescentar novo cânone.",
+      reaction: `Painel vertical mobile: reação aproximada de ${protagonistName}; priorizar linguagem corporal em vez de exposição.`,
+      dialogue:
+        "Painel vertical mobile: manter a composição simples para o diálogo aterrissar com clareza; o fundo não deve competir com a informação.",
+      turn:
+        "Painel vertical mobile: terminar a sequência em um estado alterado ou numa pergunta que puxe o leitor para baixo."
+    },
+    en: {
+      establishing: `Vertical mobile panel: establish the physical situation through visible action — ${scene.action}`,
+      detail:
+        "Vertical mobile panel: isolate one concrete detail that proves or complicates the event without adding new canon.",
+      reaction: `Vertical mobile panel: close reaction on ${protagonistName}; prioritize body language over exposition.`,
+      dialogue:
+        "Vertical mobile panel: keep composition simple so dialogue lands clearly; background information stays subordinate.",
+      turn:
+        "Vertical mobile panel: end the sequence on a changed state or question that pulls the reader downward."
+    },
+    es: {
+      establishing: `Panel vertical móvil: establecer la situación física mediante acción visible — ${scene.action}`,
+      detail:
+        "Panel vertical móvil: aislar un detalle concreto que pruebe o complique el evento sin añadir nuevo canon.",
+      reaction: `Panel vertical móvil: reacción cercana de ${protagonistName}; priorizar lenguaje corporal sobre exposición.`,
+      dialogue:
+        "Panel vertical móvil: mantener la composición simple para que el diálogo llegue con claridad; el fondo queda subordinado.",
+      turn:
+        "Panel vertical móvil: terminar la secuencia en un estado alterado o una pregunta que empuje al lector hacia abajo."
+    }
+  }[locale];
 
-  if (kind === "ESTABLISHING") {
-    return `${prefix}: establish the physical situation through visible action — ${scene.action}`;
-  }
-  if (kind === "DETAIL") {
-    return `${prefix}: isolate one concrete detail that proves or complicates the event without adding new canon.`;
-  }
-  if (kind === "REACTION") {
-    return `${prefix}: close reaction on ${protagonistName}; prioritize body language over exposition.`;
-  }
-  if (kind === "DIALOGUE") {
-    return `${prefix}: hold composition simple so dialogue lands clearly; keep background information subordinate.`;
-  }
-  return `${prefix}: end the sequence on a changed state or question that pulls the reader downward.`;
+  if (kind === "ESTABLISHING") return text.establishing;
+  if (kind === "DETAIL") return text.detail;
+  if (kind === "REACTION") return text.reaction;
+  if (kind === "DIALOGUE") return text.dialogue;
+  return text.turn;
 }
 
 export function realizeWebtoon(
