@@ -1,0 +1,24 @@
+{
+  "name": "@tehkne/storyforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TEHKNÉ STORYFORGE — idea-to-universe-to-media narrative engine",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate:schema": "node scripts/validate-schema.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
