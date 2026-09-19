@@ -9,14 +9,16 @@ const [
   workspace,
   i18n,
   probe,
-  appPackage
+  appPackage,
+  runtimeSelfTest
 ] = await Promise.all([
   read("apps/story-lab/lib/storyforge-v04.ts"),
   read("apps/story-lab/app/scene-authority-editor.tsx"),
   read("apps/story-lab/app/story-workspace.tsx"),
   read("apps/story-lab/app/i18n.tsx"),
   read("apps/story-lab/scripts/probe-scene-authority-v04.ts"),
-  read("apps/story-lab/package.json")
+  read("apps/story-lab/package.json"),
+  read("apps/story-lab/app/api/self-test/scene-authority/route.ts")
 ]);
 
 const errors = [];
@@ -131,6 +133,14 @@ expect(
     probe.includes("Rejected scene must not remove its narrative event") &&
     probe.includes("Dialogue-line approval was not preserved"),
   "Executable V0.4 probe is missing critical invariants"
+);
+
+expect(
+  runtimeSelfTest.includes("thirtyFivePanels") &&
+    runtimeSelfTest.includes("panelRevisionTraceability") &&
+    runtimeSelfTest.includes("tnirPreservesEightEvents") &&
+    runtimeSelfTest.includes("sceneApprovalIndependentFromDialogue"),
+  "Production Scene Authority self-test endpoint is missing critical invariants"
 );
 
 const appPkg = JSON.parse(appPackage);
