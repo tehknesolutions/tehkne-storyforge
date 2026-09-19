@@ -236,6 +236,60 @@ export interface GoalEffect {
   op: "CREATE" | "BLOCK" | "ACHIEVE" | "FAIL" | "ABANDON" | "REACTIVATE";
 }
 
+export interface ChoiceOption {
+  id: string;
+  label: string;
+  outcomeEventId: string;
+  conditions?: string[];
+  transitionId?: string;
+  branchId?: string;
+}
+
+export interface Choice {
+  id: string;
+  atEventId: string;
+  actor: "PLAYER" | string;
+  prompt: string;
+  options: ChoiceOption[];
+  selectedOptionId?: string;
+  visibility?: Record<string, unknown>;
+}
+
+export interface StatePatch {
+  op: "SET" | "UNSET" | "INCREMENT" | "DECREMENT" | "ADD" | "REMOVE";
+  path: string;
+  value?: unknown;
+}
+
+export interface StateTransition {
+  id: string;
+  triggeredBy: {
+    type: "EVENT" | "CHOICE_OPTION";
+    id: string;
+  };
+  targetId: "WORLD" | string;
+  patches: StatePatch[];
+}
+
+export interface WorldRule {
+  id: string;
+  domain: string;
+  description: string;
+  when: string[];
+  then: string[];
+  authority: CanonAuthority;
+  provenance: Provenance;
+}
+
+export interface NarrativeBranch {
+  id: string;
+  parentBranchId?: string;
+  forkEventId?: string;
+  choiceOptionId?: string;
+  eventIds: string[];
+  status: "CANON" | "POSSIBLE" | "ACTIVE" | "ABANDONED";
+}
+
 export interface NarrativeEvent {
   id: string;
   type: string;
@@ -317,6 +371,10 @@ export interface Universe {
   relationships: Relationship[];
   events: NarrativeEvent[];
   causalLinks: CausalLink[];
+  choices: Choice[];
+  stateTransitions: StateTransition[];
+  worldRules: WorldRule[];
+  branches: NarrativeBranch[];
   stories: Story[];
   mediaManifests: MediaManifest[];
   provenance: Provenance;
