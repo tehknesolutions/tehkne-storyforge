@@ -11,6 +11,7 @@ import type {
 import type { NativeVisualNovelRealization } from "./storyforge-v041";
 import type { SemanticAssertionLedger } from "./storyforge-v042";
 import type { NativeMangaChapter } from "./storyforge-v045";
+import type { NativeAnimeEpisode } from "./storyforge-v046";
 
 export const DURABLE_WORKSPACE_VERSION = "0.4.4" as const;
 
@@ -24,6 +25,7 @@ export type DurableStoryWorkspacePayload = {
   webtoonRealizationV04: V04WebtoonRealization | null;
   visualNovelRealizationV041: NativeVisualNovelRealization | null;
   mangaRealizationV045?: NativeMangaChapter | null;
+  animeRealizationV046?: NativeAnimeEpisode | null;
   semanticAssertionLedgerV042: SemanticAssertionLedger | null;
 };
 
