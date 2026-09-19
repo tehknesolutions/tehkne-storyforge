@@ -1,6 +1,6 @@
 {
   "name": "@tehkne/storyforge",
-  "version": "0.7.0",
+  "version": "0.8.0-rc.1",
   "private": true,
   "description": "TEHKNÉ STORYFORGE — idea-to-universe-to-media narrative engine",
   "type": "module",
@@ -9,7 +9,7 @@
     "test": "vitest run",
     "validate:schema": "node scripts/validate-schema.mjs",
     "validate:semantics": "node scripts/validate-semantics.mjs",
-    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7",
+    "validate": "npm run typecheck && npm run validate:schema && npm run validate:semantics && npm run validate:runtime-contracts && npm run validate:canon-timeline && npm run validate:runtime && npm run validate:compiler && npm run validate:media && npm run validate:generation-brief && npm run validate:v0.5 && npm run validate:v0.6 && npm run validate:v0.7 && npm run validate:v0.8",
     "compile:reference": "node scripts/compile-reference.mjs",
     "validate:compiler": "node scripts/validate-compiler.mjs",
     "validate:runtime-contracts": "node scripts/validate-runtime-contracts.mjs",
@@ -29,7 +29,8 @@
     "typecheck:story-lab": "npm run typecheck --workspace @tehkne/story-lab",
     "export:game": "node scripts/export-game-reference.mjs",
     "validate:v0.6": "node scripts/validate-v0.6.mjs",
-    "validate:v0.7": "node scripts/validate-v0.7.mjs"
+    "validate:v0.7": "node scripts/validate-v0.7.mjs",
+    "validate:v0.8": "node scripts/validate-v0.8.mjs"
   },
   "dependencies": {
     "ajv": "^8.17.1",
