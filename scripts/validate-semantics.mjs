@@ -23,10 +23,21 @@ ensureUnique(universe.events, "events");
 ensureUnique(universe.causalLinks, "causalLinks");
 ensureUnique(universe.stories, "stories");
 ensureUnique(universe.mediaManifests, "mediaManifests");
+ensureUnique(universe.choices ?? [], "choices");
+ensureUnique(universe.stateTransitions ?? [], "stateTransitions");
+ensureUnique(universe.worldRules ?? [], "worldRules");
+ensureUnique(universe.branches ?? [], "branches");
 
 const entities = new Map(universe.entities.map((x) => [x.id, x]));
 const events = new Map(universe.events.map((x) => [x.id, x]));
 const stories = new Map(universe.stories.map((x) => [x.id, x]));
+const relationships = new Map(universe.relationships.map((x) => [x.id, x]));
+const transitions = new Map((universe.stateTransitions ?? []).map((x) => [x.id, x]));
+const branches = new Map((universe.branches ?? []).map((x) => [x.id, x]));
+const choiceOptions = new Map();
+for (const choice of universe.choices ?? []) {
+  for (const option of choice.options) choiceOptions.set(option.id, option);
+}
 
 const requireEntity = (id, context) => {
   if (typeof id === "string" && id.startsWith("entity:") && !entities.has(id)) {
@@ -167,6 +178,51 @@ for (const character of universe.entities.filter((x) => x.type === "CHARACTER"))
       }
     }
   }
+}
+
+
+for (const choice of universe.choices ?? []) {
+  requireEvent(choice.atEventId, `choice ${choice.id} atEventId`);
+  if (choice.actor !== "PLAYER") requireEntity(choice.actor, `choice ${choice.id} actor`);
+  ensureUnique(choice.options, `${choice.id}.options`);
+  if (choice.selectedOptionId && !choice.options.some((x) => x.id === choice.selectedOptionId)) {
+    errors.push(`choice ${choice.id}: selectedOptionId ${choice.selectedOptionId} is not an option`);
+  }
+  for (const option of choice.options) {
+    requireEvent(option.outcomeEventId, `choice option ${option.id} outcomeEventId`);
+    if (option.transitionId && !transitions.has(option.transitionId)) {
+      errors.push(`choice option ${option.id}: unknown transition ${option.transitionId}`);
+    }
+    if (option.branchId && !branches.has(option.branchId)) {
+      errors.push(`choice option ${option.id}: unknown branch ${option.branchId}`);
+    }
+  }
+}
+
+for (const transition of universe.stateTransitions ?? []) {
+  if (transition.triggeredBy.type === "EVENT") {
+    requireEvent(transition.triggeredBy.id, `transition ${transition.id} trigger`);
+  } else if (!choiceOptions.has(transition.triggeredBy.id)) {
+    errors.push(`transition ${transition.id}: unknown choice option ${transition.triggeredBy.id}`);
+  }
+
+  if (transition.targetId !== "WORLD") {
+    if (transition.targetId.startsWith("entity:")) requireEntity(transition.targetId, `transition ${transition.id} targetId`);
+    else if (transition.targetId.startsWith("relationship:") && !relationships.has(transition.targetId)) {
+      errors.push(`transition ${transition.id}: unknown relationship ${transition.targetId}`);
+    }
+  }
+}
+
+for (const branch of universe.branches ?? []) {
+  if (branch.parentBranchId && !branches.has(branch.parentBranchId)) {
+    errors.push(`branch ${branch.id}: unknown parent branch ${branch.parentBranchId}`);
+  }
+  requireEvent(branch.forkEventId, `branch ${branch.id} forkEventId`);
+  if (branch.choiceOptionId && !choiceOptions.has(branch.choiceOptionId)) {
+    errors.push(`branch ${branch.id}: unknown choice option ${branch.choiceOptionId}`);
+  }
+  for (const eventId of branch.eventIds) requireEvent(eventId, `branch ${branch.id} eventIds`);
 }
 
 if (errors.length) {
