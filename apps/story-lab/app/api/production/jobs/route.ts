@@ -3,17 +3,32 @@ import type { PreviewProductionJob as ProductionJob } from "@/lib/production-typ
 
 export const runtime = "nodejs";
 
+function statusFor(error: unknown): number {
+  return error instanceof Error && error.message === "AUTHENTICATION_REQUIRED"
+    ? 401
+    : 500;
+}
+
 export async function GET() {
-  const store = productionStore();
-  return Response.json({
-    durability: store.durability,
-    productionSafe: store.durability === "DURABLE",
-    jobs: await store.listJobs()
-  });
+  try {
+    const store = await productionStore();
+    return Response.json({
+      durability: store.durability,
+      productionSafe: store.durability === "DURABLE",
+      jobs: await store.listJobs()
+    });
+  } catch (error) {
+    return Response.json(
+      {
+        error: "PRODUCTION_JOBS_READ_FAILED",
+        message: error instanceof Error ? error.message : "Unknown error"
+      },
+      { status: statusFor(error) }
+    );
+  }
 }
 
 export async function POST(request: Request) {
-  const store = productionStore();
   const payload = (await request.json()) as Partial<ProductionJob>;
 
   if (
@@ -45,6 +60,7 @@ export async function POST(request: Request) {
   } as ProductionJob;
 
   try {
+    const store = await productionStore();
     const created = await store.createJob(job);
     return Response.json(
       {
@@ -60,7 +76,7 @@ export async function POST(request: Request) {
         error: "PRODUCTION_JOB_CREATE_FAILED",
         message: error instanceof Error ? error.message : "Unknown error"
       },
-      { status: 409 }
+      { status: statusFor(error) === 401 ? 401 : 409 }
     );
   }
 }
