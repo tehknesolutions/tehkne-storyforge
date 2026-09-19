@@ -1,0 +1,17 @@
+{
+  "id": "voice-profile:lia",
+  "characterId": "entity:lia",
+  "language": "en",
+  "locale": "en-US",
+  "agePresentation": "young adult",
+  "vocalQualities": [
+    "curious",
+    "clear",
+    "persistent"
+  ],
+  "deliveryRules": [
+    "Do not make Lia sound omniscient.",
+    "Preserve uncertainty before evidence is acquired.",
+    "Increase resolve after event:008 without implying the mystery is solved."
+  ]
+}
