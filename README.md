@@ -76,53 +76,47 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**TEHKNÉ STORYFORGE V0.6 — Production Foundation**
+**TEHKNÉ STORYFORGE V0.7 — Safe Preview Runtime**
 
 Architecture:
 
 ```text
-STORYFORGE V0.6
-├─ T-NIR V0.5 — narrative core
-└─ T-PIR V0.1 — production core
+STORYFORGE V0.7
+├─ Story Lab V0.2
+├─ T-NIR V0.5 — narrative truth
+└─ T-PIR V0.1 — production state
 ```
 
 Implemented:
 
-- provider/adapter registry with environment gates;
-- first OpenAI Responses structured-output adapter;
-- generated assertion gate;
-- creator-gated CanonReviewBatch;
-- multimodal asset and continuity contracts;
-- VoiceProfile / Speech / Audio contracts;
-- provider-agnostic image and speech adapter interfaces;
-- T-PIR ProductionJob / ProductionRun / ProductionManifest;
-- game JSON export;
-- Story Lab Next.js foundation;
-- Canon Review screen;
-- V0.6 production authority validation gate.
+- OpenAI Responses adapter v0.2 with strict Structured Outputs and `store: false`;
+- three-gate provider execution: API key + explicit enable + creator access token;
+- server-side assertion classification and CanonProposal fallback;
+- provider generation console;
+- provider capability selection/fallback;
+- EPHEMERAL ProductionJob store with explicit durability reporting;
+- ProductionJob create/read/update APIs;
+- interactive production dashboard;
+- review-state API with CANON mutation disabled;
+- interactive Canon Review UI;
+- playable reference game branch probe;
+- Vercel-ready self-contained Story Lab root;
+- V0.7 safety/deploy-readiness validation gate.
 
-Independent V0.6 audits: **PASS / 0 errors**.
+Independent audits: **PASS / 0 errors** in two passes.
 
-Provider authority:
+Current safety invariants:
 
 ```text
-provider output
-→ assertions
-→ assertion gate
-→ CANDIDATE CanonProposal
-→ creator review
-→ CANON only after explicit approval
+provider output ≠ CANON
+review approval ≠ CANON commit
+generated asset ≠ CANON
+preview memory ≠ durable storage
 ```
 
-Generated assets are **not canon by default**.
+Vercel preview is **not yet deployed** because the connected server does not expose the advertised deploy write action in this session.
 
-Story Lab foundation routes:
-
-- `/`
-- `/review`
-- `/api/health`
-
-Next milestone: **Storyforge V0.7 — authenticated providers, production jobs, real generation and deployable preview.**
+Next milestone: **Storyforge V0.8 — durable storage, authentication, transactional Canon commit and deployed preview.**
 
 ## License
 
