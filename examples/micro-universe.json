@@ -1,7 +1,7 @@
 {
   "id": "universe:lantern-below",
   "title": "The Lantern Below",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "storyDNA": {
     "premise": "Two siblings discover a lantern that reveals a hidden passage beneath their home, while each carries a false belief about who left it and why.",
     "themes": [
@@ -1047,7 +1047,7 @@
   "provenance": {
     "createdBy": "SYSTEM",
     "createdAt": "2026-09-19T14:30:00Z",
-    "rationale": "T-NIR V0.4 reference fixture for evidence-driven cognition, replanning, executable rules, branching and transmedia validation."
+    "rationale": "T-NIR V0.5 reference fixture for decision scoring, candidate event/canon proposals, narrative resolution and media realization."
   },
   "choices": [
     {
@@ -1229,6 +1229,248 @@
       ],
       "supersedePlanId": "plan:leo-control-risk",
       "activatePlanId": "plan:leo-protect-and-verify"
+    }
+  ],
+  "actionProposals": [
+    {
+      "id": "action-proposal:lia-trace-mark",
+      "actorId": "entity:lia",
+      "action": "trace Grandmother's mark deeper into the tunnel",
+      "targetId": "entity:tunnel",
+      "goalId": "goal:lia-find-truth",
+      "planId": "plan:lia-follow-grandmother-clue",
+      "planStepId": "plan-step:lia-trace-mark",
+      "expectedEffects": [
+        {
+          "op": "CONTINUE_INVESTIGATION"
+        }
+      ],
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T15:15:00Z",
+        "rationale": "Generated from active revised plan."
+      }
+    },
+    {
+      "id": "action-proposal:lia-return",
+      "actorId": "entity:lia",
+      "action": "return to the house and postpone the investigation",
+      "targetId": "entity:house",
+      "goalId": "goal:lia-find-truth",
+      "expectedEffects": [
+        {
+          "op": "DEFER_INVESTIGATION"
+        }
+      ],
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T15:15:00Z",
+        "rationale": "Safety-preserving alternative after evidence discovery."
+      }
+    },
+    {
+      "id": "action-proposal:leo-follow",
+      "actorId": "entity:leo",
+      "action": "stay close to Lia while verifying the tunnel route",
+      "targetId": "entity:lia",
+      "goalId": "goal:leo-protect-lia",
+      "planId": "plan:leo-protect-and-verify",
+      "planStepId": "plan-step:leo-stay-close",
+      "expectedEffects": [
+        {
+          "op": "MAINTAIN_PROXIMITY"
+        }
+      ],
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T15:15:00Z",
+        "rationale": "Generated from active revised plan."
+      }
+    },
+    {
+      "id": "action-proposal:leo-return",
+      "actorId": "entity:leo",
+      "action": "insist that both siblings return to the house",
+      "targetId": "entity:lia",
+      "goalId": "goal:leo-protect-lia",
+      "expectedEffects": [
+        {
+          "op": "REDUCE_IMMEDIATE_RISK"
+        }
+      ],
+      "provenance": {
+        "createdBy": "SYSTEM",
+        "createdAt": "2026-09-19T15:15:00Z",
+        "rationale": "Conservative alternative consistent with protection goal."
+      }
+    }
+  ],
+  "decisionScores": [
+    {
+      "id": "decision-score:lia-trace-mark",
+      "actionProposalId": "action-proposal:lia-trace-mark",
+      "goalAlignment": 0.98,
+      "beliefSupport": 0.9,
+      "valueAlignment": 0.95,
+      "feasibility": 0.82,
+      "risk": 0.55,
+      "relationshipImpact": 0.1,
+      "dramaticPressure": 0.85,
+      "totalScore": 0.79,
+      "rationale": [
+        "Directly advances Lia's truth goal.",
+        "Supported by Grandmother-mark evidence.",
+        "Carries moderate physical uncertainty."
+      ]
+    },
+    {
+      "id": "decision-score:lia-return",
+      "actionProposalId": "action-proposal:lia-return",
+      "goalAlignment": 0.35,
+      "beliefSupport": 0.5,
+      "valueAlignment": 0.55,
+      "feasibility": 0.98,
+      "risk": 0.1,
+      "relationshipImpact": 0.05,
+      "dramaticPressure": 0.35,
+      "totalScore": 0.48,
+      "rationale": [
+        "Highly feasible and low risk.",
+        "Weakly advances Lia's active truth goal."
+      ]
+    },
+    {
+      "id": "decision-score:leo-follow",
+      "actionProposalId": "action-proposal:leo-follow",
+      "goalAlignment": 0.92,
+      "beliefSupport": 0.8,
+      "valueAlignment": 0.95,
+      "feasibility": 0.88,
+      "risk": 0.45,
+      "relationshipImpact": 0.2,
+      "dramaticPressure": 0.8,
+      "totalScore": 0.79,
+      "rationale": [
+        "Preserves protective proximity.",
+        "Fits Leo's revised plan.",
+        "Accepts controlled rather than avoided risk."
+      ]
+    },
+    {
+      "id": "decision-score:leo-return",
+      "actionProposalId": "action-proposal:leo-return",
+      "goalAlignment": 0.85,
+      "beliefSupport": 0.45,
+      "valueAlignment": 0.9,
+      "feasibility": 0.9,
+      "risk": 0.1,
+      "relationshipImpact": -0.2,
+      "dramaticPressure": 0.4,
+      "totalScore": 0.57,
+      "rationale": [
+        "Reduces immediate danger.",
+        "Conflicts with Lia's truth-seeking goal and may reduce trust."
+      ]
+    }
+  ],
+  "eventProposals": [
+    {
+      "id": "event-proposal:trace-grandmother-mark",
+      "sourceActionProposalId": "action-proposal:lia-trace-mark",
+      "authority": "CANDIDATE",
+      "validationNotes": [
+        "Proposal must not be inserted into CANON without creator approval.",
+        "Expected to extend branch:descend only after event:009a."
+      ],
+      "proposedEvent": {
+        "id": "event:candidate:010a",
+        "type": "TRACE_GRANDMOTHER_MARK",
+        "participants": [
+          "entity:lia",
+          "entity:leo"
+        ],
+        "locationId": "entity:tunnel",
+        "actions": [
+          {
+            "op": "TRACE_SYMBOL_PATH",
+            "actorId": "entity:lia",
+            "targetId": "entity:tunnel"
+          }
+        ],
+        "effects": [
+          {
+            "op": "INVESTIGATION_ADVANCES"
+          }
+        ],
+        "time": {
+          "sequence": 10,
+          "branchId": "branch:descend"
+        },
+        "canonStatus": "CANDIDATE",
+        "provenance": {
+          "createdBy": "SYSTEM",
+          "createdAt": "2026-09-19T15:15:00Z",
+          "rationale": "Derived from highest-scoring Lia action proposal."
+        }
+      }
+    }
+  ],
+  "canonProposals": [
+    {
+      "id": "canon-proposal:grandmother-authored-lantern",
+      "subject": "entity:lantern",
+      "predicate": "wasCreatedBy",
+      "object": "entity:grandmother",
+      "authority": "CANDIDATE",
+      "proposedFromEventId": "event:008",
+      "conflictsWithFactIds": [],
+      "rationale": "The existing canon only says Grandmother hid the lantern; authorship is not established and must remain a candidate."
+    }
+  ],
+  "realizationProfiles": [
+    {
+      "id": "realization:prose-descend",
+      "targetMedia": "PROSE_SHORT",
+      "storyId": "story:first-light",
+      "mode": "LINEAR",
+      "selectedBranchId": "branch:descend",
+      "includeRootBranch": true,
+      "styleProfileId": "style:reference-prose"
+    },
+    {
+      "id": "realization:manga-descend",
+      "targetMedia": "MANGA",
+      "storyId": "story:first-light",
+      "mode": "LINEAR",
+      "selectedBranchId": "branch:descend",
+      "includeRootBranch": true,
+      "styleProfileId": "style:reference-manga"
+    },
+    {
+      "id": "realization:webtoon-descend",
+      "targetMedia": "WEBTOON",
+      "storyId": "story:first-light",
+      "mode": "LINEAR",
+      "selectedBranchId": "branch:descend",
+      "includeRootBranch": true,
+      "styleProfileId": "style:reference-webtoon"
+    },
+    {
+      "id": "realization:anime-descend",
+      "targetMedia": "ANIME_EPISODE",
+      "storyId": "story:first-light",
+      "mode": "LINEAR",
+      "selectedBranchId": "branch:descend",
+      "includeRootBranch": true,
+      "styleProfileId": "style:reference-anime"
+    },
+    {
+      "id": "realization:visual-novel",
+      "targetMedia": "VISUAL_NOVEL",
+      "storyId": "story:first-light",
+      "mode": "INTERACTIVE",
+      "includeRootBranch": true,
+      "styleProfileId": "style:reference-vn"
     }
   ]
 }
