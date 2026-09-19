@@ -35,6 +35,8 @@ export default function HomePage() {
         </div>
         <div className="status-row">
           <span className="status canon">CANON-FIRST</span>
+          <a className="review-link" href="/login">Sign in</a>
+          <a className="review-link" href="/authority-audit">Audit</a>
           <a className="review-link" href="/generate">Generate</a>
           <a className="review-link" href="/production">Production</a>
           <a className="review-link" href="/game">Play probe</a>
