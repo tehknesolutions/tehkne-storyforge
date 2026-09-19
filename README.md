@@ -76,17 +76,25 @@ These are **media profiles**, not interchangeable labels. Manga, Webtoon and Ani
 
 ## Repository status
 
-**Foundation V0.1 — Research → Executable Specification**
+**T-NIR V0.3 — Executable Narrative Semantics + Deterministic Media Plans**
 
-Initial goals:
+Implemented:
 
-- formalize T-NIR;
-- define TypeScript domain types;
-- define JSON Schema validation;
-- define first-class Media Profiles;
-- build a reference micro-universe;
-- compile it to prose, interactive narrative and storyboard/anime-style sequence;
-- measure canonical and causal preservation.
+- character cognition and agency: Belief, Knowledge, Goal, Intention, Plan, Secret and CharacterState;
+- explicit Choice / ChoiceOption;
+- StateTransition;
+- WorldRule;
+- NarrativeBranch;
+- JSON Schema V0.1–V0.3;
+- semantic integrity validation;
+- first-class Manga, Webtoon, Manhwa, Manhua, Light Novel and Anime profiles;
+- deterministic Media Plan compiler;
+- traceability from media units back to source Events;
+- compiled fixtures for Prose, Manga, Webtoon, Anime Episode and Visual Novel.
+
+Reference result: **10/10 story events mapped in every current compiler target, 0 unmapped events.**
+
+Next research/engineering milestone: T-NIR V0.4 — rule execution, belief revision, replanning, branch-state reduction, canon/timeline validation and the first generative layer above deterministic Media Plans.
 
 ## License
 
