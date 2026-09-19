@@ -167,6 +167,17 @@ function classify(assertion: ProviderAssertion) {
 
 export async function POST(request: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
+  const requestedLocale = request.headers.get("x-storyforge-locale");
+  const locale =
+    requestedLocale === "en" || requestedLocale === "es"
+      ? requestedLocale
+      : "pt-BR";
+  const outputLanguage =
+    locale === "en"
+      ? "English"
+      : locale === "es"
+        ? "Spanish"
+        : "Brazilian Portuguese (pt-BR)";
   const generationEnabled =
     process.env.STORYFORGE_GENERATION_ENABLED === "true";
   const accessToken = process.env.STORYFORGE_GENERATION_ACCESS_TOKEN;
@@ -233,13 +244,15 @@ export async function POST(request: Request) {
             "Any new factual claim must also be returned as a canonProposal.",
             "The mark links Grandmother to the passage but does not prove lantern authorship.",
             "Use the provided sourceUnitId for every assertion.",
-            "Encode contentJson and objectJson fields as valid JSON strings."
+            "Encode contentJson and objectJson fields as valid JSON strings.",
+            `Write all user-facing generated media content in ${outputLanguage}. PT-BR is the product default when no supported locale is supplied.`
           ].join("\n")
         },
         {
           role: "user",
           content: JSON.stringify({
             targetMedia: "MANGA",
+            locale,
             task: "Create one concise manga panel realization for the reference unit.",
             authorityContract: {
               mayInventCanon: false,
@@ -376,6 +389,7 @@ export async function POST(request: Request) {
   return Response.json({
     provider: "provider:openai:text",
     providerResponseId,
+    locale,
     adapter: "openai:responses:v0.2",
     model,
     storeResponses: false,
