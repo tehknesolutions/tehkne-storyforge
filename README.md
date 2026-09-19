@@ -169,7 +169,7 @@ Checkpoint V0.3: `15a428717c1098e2341f2850505e60c4aeffe1da`.
 
 Current integration checkpoint on `main`:
 
-`781b2dc1cf96989f513a7e41e2853ac11eeb7cdd`
+`289dc0216afc093f59aea03788a99e799523ac8b`
 
 Development no longer depends on Vercel availability. External deployment is a
 separate release concern; `main` advances through repository contracts,
@@ -184,6 +184,7 @@ EVENT
 → FIELD-LEVEL SEMANTIC AUTHORITY
 → NATIVE VISUAL NOVEL
 → PLAYABLE RUNTIME
+→ DURABLE WORKSPACE PERSISTENCE
 → T-NIR V0.5 EXPORT
 ```
 
@@ -205,11 +206,17 @@ Integrated capabilities:
 - PT-BR / EN / ES coverage for the integrated authoring layers;
 - V0.3, V0.4, V0.4.1, V0.4.2 and V0.4.3 probe chain prepared;
 - root static validation gates for Scene Authority, Scene Expansion,
-  Semantic Authority and Visual Novel Runtime.
+  Semantic Authority and Visual Novel Runtime;
+- Supabase-backed durable Story Workspace persistence;
+- owner-scoped RLS with optimistic revision locking;
+- cloud save / save-as-new / list / load UI;
+- localStorage retained as offline/local-first fallback;
+- live durable workspace RLS + locking validation: **11/11 PASS**;
+- Supabase Security Advisor after workspace migrations: **0 findings**.
 
 Current engineering state:
 
-`MAIN_INTEGRATED__STATIC_GATES_PASS__INDEPENDENT_EXECUTION_QA_PENDING`
+`MAIN_INTEGRATED__LIVE_BACKEND_VALIDATED__INDEPENDENT_EXECUTION_QA_PENDING`
 
 The connected desktop runner is currently offline and no Storyforge Replit app
 exists, so independent npm/Next execution remains pending. This is **not** a
@@ -222,6 +229,7 @@ Tracking:
 - Issue #7 — Scene Expansion & Native Visual Novel
 - Issue #8 — Semantic Assertion Authority
 - Issue #9 — Playable Visual Novel Runtime
+- Issue #10 — Durable Workspace Persistence
 
 ## License
 
