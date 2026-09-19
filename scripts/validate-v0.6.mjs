@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 
 const readJson = async (path) =>
-  JSON.parse(await fs.readFile(new URL(`../${path}`, import.meta.url), "utf8");
+  JSON.parse(await fs.readFile(new URL(`../${path}`, import.meta.url), "utf8"));
 const readText = async (path) =>
   fs.readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
