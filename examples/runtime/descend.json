@@ -1,8 +1,8 @@
 {
-  "runtimeVersion": "0.4.0",
+  "runtimeVersion": "0.5.0",
   "source": {
     "universeId": "universe:lantern-below",
-    "universeVersion": "0.4.0"
+    "universeVersion": "0.5.0"
   },
   "input": {
     "choiceId": "choice:after-grandmother-mark",
