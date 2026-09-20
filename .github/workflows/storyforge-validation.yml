@@ -25,8 +25,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install
+      - name: Environment diagnostics
+        run: |
+          node --version
+          npm --version
+          pwd
+          ls -la
+          test -f package.json
+      - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Verify workspace install
+        run: |
+          npm ls --depth=0
+          npm run typecheck:story-lab --if-present
       - name: Root static validation
         run: npm run validate
       - name: Story Lab executable probes
