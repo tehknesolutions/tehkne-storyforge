@@ -40,7 +40,9 @@
     "validate:workspace-persistence": "node scripts/validate-workspace-persistence-v044.mjs",
     "validate:native-manga": "node scripts/validate-native-manga-v045.mjs",
     "validate:native-anime": "node scripts/validate-native-anime-v046.mjs",
-    "validate:media-equivalence": "node scripts/validate-media-equivalence-v047.mjs"
+    "validate:media-equivalence": "node scripts/validate-media-equivalence-v047.mjs",
+    "validate:story-lab-probes": "npm run validate:probes --workspace=@tehkne/story-lab",
+    "quality:story-lab": "npm run validate && npm run validate:story-lab-probes && npm run typecheck:story-lab && npm run build:story-lab"
   },
   "dependencies": {
     "ajv": "^8.17.1",
