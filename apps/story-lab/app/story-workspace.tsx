@@ -33,8 +33,10 @@ import { SceneAuthorityEditor } from "./scene-authority-editor";
 import { VisualNovelView } from "./visual-novel-view";
 import { MangaView } from "./manga-view";
 import { AnimeEpisodeView } from "./anime-episode-view";
+import { MediaEquivalenceView } from "./media-equivalence-view";
 import { realizeNativeManga, type NativeMangaChapter } from "@/lib/storyforge-v045";
 import { realizeNativeAnimeEpisode, type NativeAnimeEpisode } from "@/lib/storyforge-v046";
+import { buildMediaEquivalenceMap } from "@/lib/storyforge-v047";
 import { SemanticAuthorityView } from "./semantic-authority-view";
 import { DurableWorkspacePanel } from "./durable-workspace-panel";
 import {
@@ -325,6 +327,11 @@ export function StoryWorkspace() {
     state.narrativeDraft,
     forgeV03
   ]);
+
+  const mediaEquivalenceV047 = useMemo(
+    () => buildMediaEquivalenceMap({ manga: mangaV045, anime: animeV046, visualNovel: visualNovelV041 }),
+    [mangaV045, animeV046, visualNovelV041]
+  );
 
   useEffect(() => {
     if (!hydrated) return;
@@ -973,6 +980,10 @@ export function StoryWorkspace() {
           onExportTnir={exportTnirV04}
           onExportWebtoon={exportWebtoonV04}
         />
+      ) : null}
+
+      {mediaEquivalenceV047.events.length > 0 ? (
+        <MediaEquivalenceView map={mediaEquivalenceV047} />
       ) : null}
 
       {animeV046 ? (
