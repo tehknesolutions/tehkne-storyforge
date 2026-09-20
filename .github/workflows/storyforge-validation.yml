@@ -1,0 +1,31 @@
+name: Storyforge Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Root validation
+        run: npm run validate
+      - name: Story Lab typecheck
+        run: npm run typecheck --workspace=@tehkne/story-lab
+      - name: Story Lab build
+        run: npm run build --workspace=@tehkne/story-lab
