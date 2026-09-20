@@ -1,0 +1,23 @@
+import { createNarrativeDraft,createUniverseDraft,forgeStoryDNA } from "../lib/storyforge-local";
+import { forgeNarrativeV03 } from "../lib/storyforge-v03";
+import { createSceneAuthorityWorkspace } from "../lib/storyforge-v04";
+import { realizeNativeVisualNovel } from "../lib/storyforge-v041";
+import { realizeNativeManga } from "../lib/storyforge-v045";
+import { realizeNativeAnimeEpisode } from "../lib/storyforge-v046";
+import { buildMediaEquivalenceMap } from "../lib/storyforge-v047";
+function assert(x:unknown,m:string):asserts x{if(!x)throw new Error(m);}
+const dna=forgeStoryDNA("Uma menina encontra uma cidade onde ninguém consegue mentir, mas descobre que sua mãe vive escondida ali há vinte anos.","pt-BR");dna.status="APPROVED_LOCAL";
+const universe=createUniverseDraft(dna,"pt-BR");universe.status="APPROVED_LOCAL";
+const narrative=createNarrativeDraft(dna,universe,"pt-BR");narrative.status="APPROVED_LOCAL";
+const forge=forgeNarrativeV03({storyDNA:dna,universe,narrative,targetMedia:"MANGA",locale:"pt-BR"});
+const authority=createSceneAuthorityWorkspace(forge);const before=JSON.stringify(authority);
+const manga=realizeNativeManga(authority,"pt-BR");const anime=realizeNativeAnimeEpisode(authority,"pt-BR");const vn=realizeNativeVisualNovel(authority,narrative,"pt-BR");
+const map=buildMediaEquivalenceMap({manga,anime,visualNovel:vn});
+assert(before===JSON.stringify(authority),"Equivalence projections must not mutate Scene Authority.");
+assert(map.canonicalEventGraphMutated===false&&map.authority==="CANDIDATE","Equivalence authority invariant failed.");
+assert(map.events.length>0,"Equivalence map empty.");
+const shared=map.events.filter(e=>e.projections.some(p=>p.target==="MANGA")&&e.projections.some(p=>p.target==="ANIME_EPISODE")&&e.projections.some(p=>p.target==="VISUAL_NOVEL"));
+assert(shared.length>0,"No event shared across Manga, Anime and Visual Novel.");
+for(const e of shared) assert(e.sceneRevisionIds.length>0,"Shared event missing scene revision provenance.");
+console.log("Story Workspace V0.4.7 Media Equivalence probe passed.");
+console.log(JSON.stringify({events:map.events.length,sharedAcrossThree:shared.length,canonicalEventGraphMutated:map.canonicalEventGraphMutated},null,2));
