@@ -66,3 +66,32 @@ export function buildMediaEquivalenceMap(input: {
     createdAt:new Date().toISOString()
   };
 }
+
+
+export function buildV047TnirMediaEquivalence(input: {
+  baseTnir: Record<string, unknown>;
+  manga?: NativeMangaChapter | null;
+  anime?: NativeAnimeEpisode | null;
+  visualNovel?: NativeVisualNovelRealization | null;
+}) {
+  const mediaEquivalence = buildMediaEquivalenceMap({
+    manga: input.manga,
+    anime: input.anime,
+    visualNovel: input.visualNovel
+  });
+  return {
+    ...input.baseTnir,
+    mediaEquivalence,
+    nativeMedia: {
+      ...(input.manga ? { manga: input.manga } : {}),
+      ...(input.anime ? { animeEpisode: input.anime } : {}),
+      ...(input.visualNovel ? { visualNovel: input.visualNovel } : {})
+    },
+    provenance: {
+      ...((input.baseTnir.provenance as Record<string, unknown>) ?? {}),
+      mediaEquivalenceVersion: "0.4.7",
+      mediaProjectionAuthority: "CANDIDATE",
+      canonicalEventGraphMutated: false
+    }
+  };
+}
