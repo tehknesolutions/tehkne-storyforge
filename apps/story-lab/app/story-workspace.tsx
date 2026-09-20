@@ -36,7 +36,7 @@ import { AnimeEpisodeView } from "./anime-episode-view";
 import { MediaEquivalenceView } from "./media-equivalence-view";
 import { realizeNativeManga, type NativeMangaChapter } from "@/lib/storyforge-v045";
 import { realizeNativeAnimeEpisode, type NativeAnimeEpisode } from "@/lib/storyforge-v046";
-import { buildMediaEquivalenceMap } from "@/lib/storyforge-v047";
+import { buildMediaEquivalenceMap, buildV047TnirMediaEquivalence } from "@/lib/storyforge-v047";
 import { SemanticAuthorityView } from "./semantic-authority-view";
 import { DurableWorkspacePanel } from "./durable-workspace-panel";
 import {
@@ -600,8 +600,7 @@ export function StoryWorkspace() {
       return;
     }
 
-    downloadJson(
-      buildV042TnirExport({
+    const baseTnir = buildV042TnirExport({
         storyDNA: state.storyDNA,
         universe: state.universe,
         narrative: state.narrativeDraft,
@@ -609,8 +608,16 @@ export function StoryWorkspace() {
         sceneAuthority,
         targetMedia: state.targetMedia,
         locale
+      });
+
+    downloadJson(
+      buildV047TnirMediaEquivalence({
+        baseTnir: baseTnir as Record<string, unknown>,
+        manga: mangaV045,
+        anime: animeV046,
+        visualNovel: visualNovelV041
       }),
-      "storyforge-tnir-v0.5-semantic-authority"
+      "storyforge-tnir-v0.4.7-media-equivalence"
     );
   }
 
