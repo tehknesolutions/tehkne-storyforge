@@ -26,5 +26,11 @@ jobs:
           node-version: 22
       - name: Install
         run: npm install --no-audit --no-fund
-      - name: Storyforge quality gate
-        run: npm run quality:story-lab
+      - name: Root static validation
+        run: npm run validate
+      - name: Story Lab executable probes
+        run: npm run validate:story-lab-probes
+      - name: Story Lab typecheck
+        run: npm run typecheck:story-lab
+      - name: Story Lab build
+        run: npm run build:story-lab
